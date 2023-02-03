@@ -12,7 +12,7 @@ class MenuNav extends Component {
       <Container>
         <Menu.Item as='a' header>
           <Image size='mini' src={logo} style={{ marginRight: '1.5em' }} />
-          FISIO APP
+          UBICU
         </Menu.Item>
         <Menu.Item><Link to="/HomeAdmin">Inicio</Link></Menu.Item>
 

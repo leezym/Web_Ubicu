@@ -1,25 +1,25 @@
-import {CREAR_EJERCICIO, ELIMINAR_EJERCICIO, ACTUALIZAR_EJERCICIO, MOSTRAR_EJERCICIOS} from "./types.js";
+import { CREAR_EJERCICIO, ELIMINAR_EJERCICIO, ACTUALIZAR_EJERCICIO, MOSTRAR_EJERCICIOS } from "./types.js";
 import axios from "axios";
 
 //json online
 const urlOnline = "https://my-json-server.typicode.com/carsua/productosTest/productos/";
 // json local json server
 /*const urlLocal = "http://127.0.0.1:5000/";*/
-const urlLocal = "https://d2yaaz8bde1qj3.cloudfront.net/";
+const urlLocal = "https://server.ubicu.co/";
 
 
 
 const urlApi = urlLocal;
 
-const optionHeaders = { 
-        headers: {
-            'Content-Type': 'application/json',
-            'x-access-token': localStorage.getItem('token')
-        }
-    };
+const optionHeaders = {
+    headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': localStorage.getItem('token')
+    }
+};
 
-export const allEjerciciosByUser = (id_ejercicio) => async dispatch  => {
-    const respuesta = await axios.post(urlApi+"allEjerciciosByUser",id_ejercicio);
+export const allEjerciciosByUser = (id_ejercicio) => async dispatch => {
+    const respuesta = await axios.post(urlApi + "allEjerciciosByUser", id_ejercicio);
     console.log(respuesta);
     dispatch({
         type: MOSTRAR_EJERCICIOS,
@@ -27,8 +27,8 @@ export const allEjerciciosByUser = (id_ejercicio) => async dispatch  => {
     });
 };
 
-export const crearEjercicio = (ejercicio) => async dispatch  => {
-    const respuesta = await axios.post(urlApi+"createEjercicio",ejercicio,optionHeaders);
+export const crearEjercicio = (ejercicio) => async dispatch => {
+    const respuesta = await axios.post(urlApi + "createEjercicio", ejercicio, optionHeaders);
     console.log(respuesta);
     dispatch({
         type: CREAR_EJERCICIO,
@@ -36,9 +36,9 @@ export const crearEjercicio = (ejercicio) => async dispatch  => {
     });
 };
 
-export const deleteEjercicio = (cedula) => async dispatch  => {
+export const deleteEjercicio = (cedula) => async dispatch => {
     console.log(cedula);
-    const respuesta = await axios.post(urlApi+"deleteEjercicio",cedula,optionHeaders);
+    const respuesta = await axios.post(urlApi + "deleteEjercicio", cedula, optionHeaders);
     console.log(respuesta.data);
     dispatch({
         type: ELIMINAR_EJERCICIO,
@@ -46,10 +46,10 @@ export const deleteEjercicio = (cedula) => async dispatch  => {
     });
 };
 
-export const updateEjercicio = (ejercicio) => async dispatch  => {
+export const updateEjercicio = (ejercicio) => async dispatch => {
     console.log(ejercicio);
     let datos;
-    const respuesta = await axios.put(urlApi+ejercicio.id, ejercicio,optionHeaders).then(
+    const respuesta = await axios.put(urlApi + ejercicio.id, ejercicio, optionHeaders).then(
         datos = await axios.get(urlApi)
     );
     console.log(datos);
@@ -58,6 +58,3 @@ export const updateEjercicio = (ejercicio) => async dispatch  => {
         payload: datos.data
     });
 };
-
-
-

@@ -50,7 +50,7 @@ class VerResultados extends Component {
         console.log(respuesta) // undefined
      })*/
 
-     fetch('https://d2yaaz8bde1qj3.cloudfront.net/allResultsByEjercicio', {
+     fetch('https://server.ubicu.co/allResultsByEjercicio', {
       method: 'POST',
       body: JSON.stringify({id_ejercicio:this.props.id_ejercicio}),
       headers: {

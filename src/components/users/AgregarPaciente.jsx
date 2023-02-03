@@ -11,11 +11,11 @@ class Agregar extends Component {
     state ={
         nombre: "",
         cedula: "",
-        ciudad: "",
         telefono: "",
         email: "",
+        id_patient: "",
         password:"",
-        type:"fisioterapeuta"
+        type:""
     };
     handleSave = (e) => {
         e.preventDefault();
@@ -24,12 +24,18 @@ class Agregar extends Component {
             cedula: this.state.cedula,
             telefono: this.state.telefono,
             email: this.state.email,
+            id_patient: this.state.id_patient,
             password:this.state.password,
             type:this.state.type
         }).then(resp => {
-           
             console.log(resp);
             this.props.history.push("/Users");
+            /*if(sessionStorage.getItem('tipo_user') == "fisio"){
+                this.props.history.push("/Users");
+            }
+            if(sessionStorage.getItem('tipo_user') == "paciente"){
+              this.props.history.push('/');
+            }*/
           })
           .catch(err => {
             console.log(err);
@@ -56,6 +62,42 @@ class Agregar extends Component {
                     <input  name="nombre" placeholder='Nombre' onChange={this.changeInput} />
                     </Form.Field>
                     <Form.Field>
+                    <label>Ciudad</label>
+                    <input  name="ciudad" placeholder='ciudad' onChange={this.changeInput} />
+                    </Form.Field>
+                    <Form.Field>
+                    <label>Edad</label>
+                    <input 
+                        name="edad"
+                        placeholder='Edad'
+                        type='number'
+                        onChange={this.changeInput} />
+                    </Form.Field>
+                    <Form.Field>
+                    <label>Sexo</label>
+                    <select name="sexo" onChange={this.changeInput}>
+                        <option value="-">Select option</option>
+                        <option value="M">Masculino</option>
+                        <option value="F">Femenino</option>
+                    </select>
+                    </Form.Field>
+                    <Form.Field>
+                    <label>Peso</label>
+                    <input 
+                        name="peso"
+                        placeholder='peso'
+                        type='number'
+                        onChange={this.changeInput} />
+                    </Form.Field>
+                    <Form.Field>
+                    <label>Altura</label>
+                    <input 
+                        name="altura"
+                        placeholder='Altura'
+                        type='number'
+                        onChange={this.changeInput} />
+                    </Form.Field>
+                    <Form.Field>
                     <label>Telefono</label>
                     <input 
                         name="telefono"
@@ -71,12 +113,24 @@ class Agregar extends Component {
                         onChange={this.changeInput} />
                     </Form.Field>
                     <Form.Field>
+                    <label>Direccion</label>
+                    <input  name="direccion" placeholder='Direccion' onChange={this.changeInput} />
+                    </Form.Field>
+                    <Form.Field>
                     <label>Cedula</label>
                     <input 
                         name="cedula"
-                        placeholder='Cédula'
+                        placeholder='Cedula'
                         type='number'
                         onChange={this.changeInput} />
+                    </Form.Field>
+                    <Form.Field>
+                    <label>Tipo usuario</label>
+                    <select name="type" onChange={this.changeInput}>
+                        <option value="-">Select option</option>
+                        <option value="paciente">Paciente</option>
+                        <option value="fisio">Fisio</option>
+                    </select>
                     </Form.Field>
                     <Form.Field>
                     <label>Password</label>

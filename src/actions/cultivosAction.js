@@ -1,4 +1,4 @@
-import {CREAR_CULTIVO, ELIMINAR_CULTIVO, ACTUALIZAR_CULTIVO, MOSTRAR_CULTIVOS} from "./types.js";
+import { CREAR_CULTIVO, ELIMINAR_CULTIVO, ACTUALIZAR_CULTIVO, MOSTRAR_CULTIVOS } from "./types.js";
 import axios from "axios";
 
 //json online
@@ -6,19 +6,19 @@ import axios from "axios";
 // json local json server
 /*const urlLocal = "http://127.0.0.1:5000/";*/
 /*const urlLocal = "https://d2zqc0bdtc11lv.cloudfront.net/";*/
-const urlLocal = "https://d2yaaz8bde1qj3.cloudfront.net/";
+const urlLocal = "https://server.ubicu.co/";
 
 const urlApi = urlLocal;
 
-const optionHeaders = { 
-        headers: {
-            'Content-Type': 'application/json',
-            'x-access-token': localStorage.getItem('token')
-        }
-    };
+const optionHeaders = {
+    headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': localStorage.getItem('token')
+    }
+};
 
-export const allCultivosByUser = (id_user) => async dispatch  => {
-    const respuesta = await axios.post(urlApi+"allCultivosByUser",id_user);
+export const allCultivosByUser = (id_user) => async dispatch => {
+    const respuesta = await axios.post(urlApi + "allCultivosByUser", id_user);
     console.log(respuesta);
     dispatch({
         type: MOSTRAR_CULTIVOS,
@@ -26,8 +26,8 @@ export const allCultivosByUser = (id_user) => async dispatch  => {
     });
 };
 
-export const crearUser = (user) => async dispatch  => {
-    const respuesta = await axios.post(urlApi+"createUser",user,optionHeaders);
+export const crearUser = (user) => async dispatch => {
+    const respuesta = await axios.post(urlApi + "createUser", user, optionHeaders);
     console.log(respuesta);
     dispatch({
         type: CREAR_CULTIVO,
@@ -35,9 +35,9 @@ export const crearUser = (user) => async dispatch  => {
     });
 };
 
-export const deleteUser = (cedula) => async dispatch  => {
+export const deleteUser = (cedula) => async dispatch => {
     console.log(cedula);
-    const respuesta = await axios.post(urlApi+"deleteUser",cedula,optionHeaders);
+    const respuesta = await axios.post(urlApi + "deleteUser", cedula, optionHeaders);
     console.log(respuesta.data);
     dispatch({
         type: ELIMINAR_CULTIVO,
@@ -45,10 +45,10 @@ export const deleteUser = (cedula) => async dispatch  => {
     });
 };
 
-export const updateUser = (product) => async dispatch  => {
+export const updateUser = (product) => async dispatch => {
     console.log(product);
     let datos;
-    const respuesta = await axios.put(urlApi+product.id, product,optionHeaders).then(
+    const respuesta = await axios.put(urlApi + product.id, product, optionHeaders).then(
         datos = await axios.get(urlApi)
     );
     console.log(datos);
@@ -57,6 +57,3 @@ export const updateUser = (product) => async dispatch  => {
         payload: datos.data
     });
 };
-
-
-

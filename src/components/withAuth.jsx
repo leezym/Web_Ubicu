@@ -15,7 +15,7 @@ export default function withAuth(ComponentToProtect) {
     }
     componentDidMount() {
       /*fetch('http://127.0.0.1:5000/checkToken', {*/
-      fetch('https://d2yaaz8bde1qj3.cloudfront.net/checkToken', {
+      fetch('https://server.ubicu.co/checkToken', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

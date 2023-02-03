@@ -8,7 +8,7 @@ import {Link} from "react-router-dom";
 
 class LoginForm extends Component{
   state = {
-    cedula: "1061234234",
+    cedula: "",
     password: ""
   };
   changeInput = (event) => {
@@ -20,7 +20,7 @@ class LoginForm extends Component{
   onSubmit = (event) => {
     event.preventDefault();
     /*fetch('http://127.0.0.1:5000/authenticateUser', {*/
-    fetch('https://d2yaaz8bde1qj3.cloudfront.net/authenticateUser', {
+    fetch('https://server.ubicu.co/authenticateUser', {
       method: 'POST',
       body: JSON.stringify(this.state),
       headers: {
@@ -28,7 +28,6 @@ class LoginForm extends Component{
       }
     })
     .then(res => {
-
       if (res.status === 200) {
         return res.json();
       } else {
@@ -39,29 +38,12 @@ class LoginForm extends Component{
     .then(resp => {
       localStorage.setItem('token', resp.token);
       console.log(resp);
-      sessionStorage.setItem('tipo_user', resp.user.type);
-      if(resp.user.type == "fisio"){
-        this.props.history.push('/HomeAdmin');
-      }
-      if(resp.user.type == "paciente"){
-        this.props.history.push('/HomePaciente');
-      }
+      this.props.history.push('/HomeAdmin');
     })
     .catch(err => {
       console.log(err);
       alert('Error logging in please try again');
     });
-    /*this.props.authenticateUser({
-      cedula: this.state.cedula,
-      password:this.state.password
-    }).then(()=>{
-      this.props.history.push('/HomeAdmin');
-    }
-     
-    ).catch(err => {
-      console.error(err);
-      alert('Error logging in please try again');
-    });*/
   }
 
   render() {

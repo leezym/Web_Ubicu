@@ -5,7 +5,6 @@ import "semantic-ui-css/semantic.min.css";
 import LoginForm from "./users/LoginForm";
 import NoRuta from "./pages/NoRuta";
 import HomeAdmin from "./pages/HomeAdmin";
-import HomePaciente from "./pages/HomePaciente";
 import Users from "./users/Users";
 import Agregar from "./users/Agregar";
 import Ver from "./users/Ver";
@@ -39,10 +38,6 @@ class Router extends Component {
             <Route
                 exact path="/HomeAdmin"
                 component ={withAuth(HomeAdmin)}/>
-            
-            <Route
-                exact path="/HomePaciente"
-                component ={withAuth(HomePaciente)}/>
             
             <Route
                 exact path="/Users"

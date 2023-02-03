@@ -25,7 +25,7 @@ class Ejercicios extends Component {
     console.log(this.state);
   
 
-  fetch('https://d2yaaz8bde1qj3.cloudfront.net/getUserbyId', {
+  fetch('https://server.ubicu.co/getUserbyId', {
       method: 'POST',
       body: JSON.stringify({id_user:this.props.id_user}),
       headers: {

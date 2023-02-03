@@ -67,7 +67,7 @@ class Ver extends Component {
                     </List.Content>
                     <List.Content>
                         <List.Header>Telefono</List.Header>
-                        <List.Description>{this.state.tel}</List.Description>
+                        <List.Description>{this.state.telefono}</List.Description>
                     </List.Content>
                     </List.Item>
                     <List.Item>    

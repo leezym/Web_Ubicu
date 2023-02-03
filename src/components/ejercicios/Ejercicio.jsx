@@ -32,7 +32,7 @@ class Ejercicio extends Component {
 
     componentDidMount(){
         //this.props.deleteUser();
-        fetch('https://d2yaaz8bde1qj3.cloudfront.net/allResultsByEjercicio', {
+        fetch('https://server.ubicu.co/allResultsByEjercicio', {
       method: 'POST',
       body: JSON.stringify({id_ejercicio:this.props.ejercicio._id}),
       headers: {
