@@ -7,6 +7,7 @@ import NoRuta from "./pages/NoRuta";
 import HomeAdmin from "./pages/HomeAdmin";
 import Users from "./users/Users";
 import Agregar from "./users/Agregar";
+import AgregarPaciente from "./users/AgregarPaciente";
 import Ver from "./users/Ver";
 import VerCultivo from './cultivos/Ver';
 
@@ -28,7 +29,7 @@ class Router extends Component {
     render() {
 
         return (
-       <Container>     
+        <Container>     
         <BrowserRouter>
         <Switch>
             <Route
@@ -44,8 +45,12 @@ class Router extends Component {
                 component ={withAuth(Users)}/>
             
             <Route
-                exact path="/AgregarUser"
+                exact path="/AgregarFisio"
                 component ={Agregar}/>
+            
+            <Route
+                exact path="/AgregarPaciente"
+                component ={AgregarPaciente}/>
             
             <Route
                 exact path="/VerUser/:cc"
@@ -55,7 +60,7 @@ class Router extends Component {
                     ? parseInt(match.params.cc)
                     : 0;
                     return <Ver cc={cc} />;
-                  }} />
+                }} />
             
             <Route
                 exact path="/AgregarEjercicio/:id"
@@ -63,7 +68,7 @@ class Router extends Component {
                     const { match } = props;
                     let id = match.params.id;
                     return <AgregarEjercicio id={id} />;
-                  }} />
+                }} />
             
             <Route
                 exact path="/VerCultivos/:id_user"

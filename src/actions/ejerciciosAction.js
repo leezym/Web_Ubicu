@@ -1,13 +1,9 @@
 import { CREAR_EJERCICIO, ELIMINAR_EJERCICIO, ACTUALIZAR_EJERCICIO, MOSTRAR_EJERCICIOS } from "./types.js";
 import axios from "axios";
 
-//json online
-const urlOnline = "https://my-json-server.typicode.com/carsua/productosTest/productos/";
 // json local json server
-/*const urlLocal = "http://127.0.0.1:5000/";*/
-const urlLocal = "https://server.ubicu.co/";
-
-
+const urlLocal = "http://localhost:5000/";
+//const urlLocal = "https://server.ubicu.co/";
 
 const urlApi = urlLocal;
 

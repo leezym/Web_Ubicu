@@ -1,12 +1,10 @@
 import { CREAR_CULTIVO, ELIMINAR_CULTIVO, ACTUALIZAR_CULTIVO, MOSTRAR_CULTIVOS } from "./types.js";
 import axios from "axios";
 
-//json online
-/*const urlOnline = "https://my-json-server.typicode.com/carsua/productosTest/productos/";*/
+
 // json local json server
-/*const urlLocal = "http://127.0.0.1:5000/";*/
-/*const urlLocal = "https://d2zqc0bdtc11lv.cloudfront.net/";*/
-const urlLocal = "https://server.ubicu.co/";
+const urlLocal = "http://localhost:5000/";
+//const urlLocal = "https://server.ubicu.co/";
 
 const urlApi = urlLocal;
 

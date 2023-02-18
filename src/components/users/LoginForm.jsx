@@ -19,8 +19,8 @@ class LoginForm extends Component{
   }
   onSubmit = (event) => {
     event.preventDefault();
-    /*fetch('http://127.0.0.1:5000/authenticateUser', {*/
-    fetch('https://server.ubicu.co/authenticateUser', {
+    fetch('http://localhost:5000/authenticateUser', {
+    //fetch('https://server.ubicu.co/authenticateUser', {
       method: 'POST',
       body: JSON.stringify(this.state),
       headers: {
@@ -37,12 +37,11 @@ class LoginForm extends Component{
     })
     .then(resp => {
       localStorage.setItem('token', resp.token);
-      console.log(resp);
-      this.props.history.push('/HomeAdmin');
+      this.props.history.push('/Users');
     })
     .catch(err => {
       console.log(err);
-      alert('Error logging in please try again');
+      alert('Error al iniciar sesión');
     });
   }
 
@@ -82,7 +81,7 @@ class LoginForm extends Component{
         </Segment>
       </Form>
       <Message>
-        ¿Nuevo Usuario? <Link to="/AgregarUser">Registrarse</Link>
+        ¿Nuevo Usuario? <Link to="/AgregarFisio">Registrarse</Link>
       </Message>
     </Grid.Column>
   </Grid>

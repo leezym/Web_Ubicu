@@ -1,13 +1,9 @@
 import { CREAR_USER, ELIMINAR_USER, ACTUALIZAR_USER, MOSTRAR_USERS, AUTHENTICATE_USER, CHECKTOKEN_USER, GET_USER } from "./types.js";
 import axios from "axios";
 
-//json online
-const urlOnline = "https://my-json-server.typicode.com/carsua/productosTest/productos/";
 // json local json server
-/*const urlLocal = "http://127.0.0.1:5000/";*/
-const urlLocal = "https://server.ubicu.co/";
-
-
+const urlLocal = "http://localhost:5000/";
+//const urlLocal = "https://server.ubicu.co/";
 
 const urlApi = urlLocal;
 
@@ -28,9 +24,8 @@ export const mostrarUsers = () => async dispatch => {
 };
 
 export const crearUser = (user) => async dispatch => {
-    console.log("crear user action");
-    const respuesta = await axios.post(urlApi + "createUser", user, optionHeaders);
-    console.log("rs: " + respuesta);
+    const respuesta = await axios.post(urlApi + "createUser", user);
+    console.log(respuesta);
     dispatch({
         type: CREAR_USER,
         payload: respuesta.data

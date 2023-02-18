@@ -1,26 +1,23 @@
 import React, { Component } from 'react';
 import {Table,Button,Icon} from 'semantic-ui-react'
 import {Link,withRouter} from "react-router-dom";
-import {deleteUser} from "../../actions/usersAction";
+import {deletePatient} from "../../actions/patientsAction";
 import {connect} from "react-redux";
-
-
-
 
 class User extends Component {
 
     componentDidMount(){
-        this.props.deleteUser();
+        this.props.deletePatient();
     }
 
     handleDelete = (e) => {
         e.preventDefault();
-        console.log(this.props.mostrarUsers());
-       
-        this.props.deleteUser({
-          cedula: e.target.value
+        console.log(this.props.mostrarPatients());
+
+        this.props.deletePatient({
+            cedula: e.target.value
         }).then(()=>{
-            this.props.mostrarUsers();
+            this.props.mostrarPatients();
         });;
     }
     render() {
@@ -49,7 +46,7 @@ class User extends Component {
 }
 const mapStateToProp =(state)=>{
     return{
-      users: state.users.users
+        users: state.users.users
     };
 }
-export default connect(mapStateToProp,{deleteUser})(withRouter(User));
+export default connect(mapStateToProp,{deletePatient})(withRouter(User));

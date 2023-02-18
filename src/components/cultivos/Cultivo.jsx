@@ -15,7 +15,7 @@ class Cultivo extends Component {
         this.props.deleteUser({
           cedula: e.target.value
         }).then(()=>{
-            this.props.mostrarUsers()
+            this.props.mostrarPatients()
         });;
     */
     }

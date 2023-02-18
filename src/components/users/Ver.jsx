@@ -8,11 +8,11 @@ import {connect} from "react-redux";
 class Ver extends Component {
     state ={};
     componentDidMount(){
-     const users = this.props.users.filter(p=>p.cedula == this.props.cc );    
-     this.setState(users[0]);
-     console.log(this.props.users);
-     console.log(this.props.cc);
-     console.log(users);
+    const users = this.props.users.filter(p=>p.cedula == this.props.cc );    
+    this.setState(users[0]);
+    console.log(this.props.users);
+    console.log(this.props.cc);
+    console.log(users);
 
     }
     render() {
@@ -29,53 +29,66 @@ class Ver extends Component {
                 <span>Datos del paciente</span>
                 <List>
                     <List.Item>
-                    <List.Content>
-                        <List.Header>Nombre</List.Header>
-                        <List.Description>{this.state.nombre}</List.Description>
-                    </List.Content>
+                        <List.Content>
+                            <List.Header>Nombre</List.Header>
+                            <List.Description>{this.state.nombre}</List.Description>
+                        </List.Content>
                     </List.Item>
                     <List.Item>    
-                    <List.Content>
-                        <List.Header>Ciudad</List.Header>
-                        <List.Description>{this.state.ciudad}</List.Description>
-                    </List.Content>
+                        <List.Content>
+                            <List.Header>Cédula</List.Header>
+                            <List.Description>{this.state.cedula}</List.Description>
+                        </List.Content>
+                    </List.Item>
+                    <List.Item>
+                        <List.Content>
+                            <List.Header>Edad</List.Header>
+                            <List.Description>{this.state.edad}</List.Description>
+                        </List.Content>
+                    </List.Item>    
+                    <List.Item>
+                        <List.Content>
+                            <List.Header>Sexo</List.Header>
+                            <List.Description>{this.state.sexo}</List.Description>
+                        </List.Content>
+                    </List.Item>
+                    <List.Item>
+                        <List.Content>
+                            <List.Header>Peso (kg)</List.Header>
+                            <List.Description>{this.state.peso}</List.Description>
+                        </List.Content>
+                    </List.Item>
+                    <List.Item>
+                        <List.Content>
+                            <List.Header>Altura (cm)</List.Header>
+                            <List.Description>{this.state.altura}</List.Description>
+                        </List.Content>
                     </List.Item>
                     <List.Item>    
-                    <List.Content>
-                        <List.Header>Dirección</List.Header>
-                        <List.Description>{this.state.direccion}</List.Description>
-                    </List.Content>
-                    <List.Content>
-                        <List.Header>Peso</List.Header>
-                        <List.Description>{this.state.peso}</List.Description>
-                    </List.Content>
-                    <List.Content>
-                        <List.Header>Altura</List.Header>
-                        <List.Description>{this.state.altura}</List.Description>
-                    </List.Content>
-                    <List.Content>
-                        <List.Header>Edad</List.Header>
-                        <List.Description>{this.state.edad}</List.Description>
-                    </List.Content>
-                    <List.Content>
-                        <List.Header>Sexo</List.Header>
-                        <List.Description>{this.state.sexo}</List.Description>
-                    </List.Content>
-                    <List.Content>
-                        <List.Header>Email</List.Header>
-                        <List.Description>{this.state.email}</List.Description>
-                    </List.Content>
-                    <List.Content>
-                        <List.Header>Telefono</List.Header>
-                        <List.Description>{this.state.telefono}</List.Description>
-                    </List.Content>
+                        <List.Content>
+                            <List.Header>Teléfono</List.Header>
+                            <List.Description>{this.state.telefono}</List.Description>
+                        </List.Content>
+                    </List.Item>
+                    <List.Item>
+                        <List.Content>
+                            <List.Header>Email</List.Header>
+                            <List.Description>{this.state.email}</List.Description>
+                        </List.Content>
                     </List.Item>
                     <List.Item>    
-                    <List.Content>
-                        <List.Header>Cedula</List.Header>
-                        <List.Description>{this.state.cedula}</List.Description>
-                    </List.Content>
+                        <List.Content>
+                            <List.Header>Dirección</List.Header>
+                            <List.Description>{this.state.direccion}</List.Description>
+                        </List.Content>
+                    </List.Item>                    
+                    <List.Item>    
+                        <List.Content>
+                            <List.Header>Ciudad</List.Header>
+                            <List.Description>{this.state.ciudad}</List.Description>
+                        </List.Content>
                     </List.Item>
+                    
                     <List.Item style={{ marginTop: '1em' }}>    
                     <List.Content>
                         <List.Header></List.Header>
@@ -89,34 +102,6 @@ class Ver extends Component {
                 </List>
             </Segment>
             </Grid.Column>
-            <Grid.Column>
-                
-            
-
-                <Card>
-                    <Image src='https://react.semantic-ui.com/images/avatar/large/matthew.png' wrapped ui={false} />
-                        <Card.Content>
-                        <Card.Header>{this.state.nombre}</Card.Header>
-                        <Card.Description>
-                        Usuario en Fisioterapia Respiratoria
-                        </Card.Description>
-                            
-                        </Card.Content>
-                        <Card.Content extra>
-                                    <a>
-                                        <Icon name='weight' /> 
-                                        {this.state.peso}
-                                    </a>
-                        </Card.Content>
-                </Card>
-
-
-
-                
-                
-            </Grid.Column>
-
-
         </Grid> 
         </Segment>   
         </div>
@@ -127,7 +112,5 @@ const mapStateToProp =(state)=>{
     return{
         users: state.users.users
     };
-  }
-  export default connect(mapStateToProp,null)(Ver);
-  
-  
+}
+export default connect(mapStateToProp,null)(Ver);  

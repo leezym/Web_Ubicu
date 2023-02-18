@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import User from "./User"
 import {Table,Button,Icon,Grid,Segment,Label} from 'semantic-ui-react'
-import{mostrarUsers} from "../../actions/usersAction";
+import{mostrarPatients} from "../../actions/patientsAction";
 import MenuNav from '../pages/MenuNav';
 import {Link,withRouter} from "react-router-dom";
 import {connect} from "react-redux";
@@ -11,7 +11,7 @@ import {connect} from "react-redux";
 class Users extends Component {
 
   componentDidMount(){
-    this.props.mostrarUsers();
+    this.props.mostrarPatients();
   }
 
     render() {
@@ -28,24 +28,24 @@ class Users extends Component {
                 <Table  celled compact definition>
                   <Table.Header  fullWidth>
                   <Table.Row>
-                    <Table.HeaderCell>Cedula</Table.HeaderCell>
+                    <Table.HeaderCell>Cédula</Table.HeaderCell>
                     <Table.HeaderCell>Nombre</Table.HeaderCell>
                     <Table.HeaderCell>Acciones</Table.HeaderCell>
                   </Table.Row>
                   </Table.Header>
                   {users.map((user,index)=>{
                     return (<User 
-                      mostrarUsers={()=>{this.props.mostrarUsers()}}
+                      mostrarPatients={()=>{this.props.mostrarPatients()}}
                       key={index} user={user}></User>)
                   })}
                   <Table.Footer fullWidth>
                   <Table.Row>
                     <Table.HeaderCell />
                     <Table.HeaderCell colSpan='3'>
-                    <Link to="/AgregarUser">
+                    <Link to="/AgregarPaciente">
                       <Button floated='right' icon labelPosition='left' primary  size='small'>
                       <Icon name='user' />
-                      Agregar>
+                      Agregar
                       </Button>
                     </Link>
                     </Table.HeaderCell>
@@ -64,4 +64,4 @@ const mapStateToProp =(state)=>{
     users: state.users.users 
   };
 }
-export default connect(mapStateToProp,{mostrarUsers})(withRouter(Users));
+export default connect(mapStateToProp,{mostrarPatients})(withRouter(Users));
