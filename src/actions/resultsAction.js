@@ -2,8 +2,8 @@ import { MOSTRAR_RESULTS } from "./types.js";
 import axios from "axios";
 
 // json local json server
-//const urlLocal = "http://127.0.0.1:5000/";
-const urlLocal = "https://server.ubicu.co/";
+const urlLocal = "http://localhost:5000/";
+//const urlLocal = "https://server.ubicu.co/";
 
 
 

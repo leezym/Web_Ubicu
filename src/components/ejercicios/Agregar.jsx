@@ -5,6 +5,13 @@ import {crearEjercicio} from "../../actions/ejerciciosAction";
 import {Link,withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
 
+const optionsHours = {
+    '1': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    '2': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+    '3': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+    '4': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+    '6': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+}
 
 class Agregar extends Component {    
     
@@ -36,7 +43,7 @@ class Agregar extends Component {
             series: this.state.series,
             periodos_descanso: this.state.periodos_descanso,
             fecha_inicio: this.state.fecha_inicio,
-            fecha_fin: date + date.setDate(date.getDate() + this.state.frecuencia_dias), // fecha_inicio + frecuencia dias
+            fecha_fin: (date + date.setDate(date.getDate() + this.state.frecuencia_dias)).toString(), // fecha_inicio + frecuencia dias
             apnea: this.state.apnea,
             flujo: this.state.flujo,
             hora_inicio: this.state.hora_inicio,
@@ -48,7 +55,13 @@ class Agregar extends Component {
     }
     changeInput = (event) => {
         this.setState({[event.target.name]:event.target.value});
+        //frecuencia_horas_select.addEventListener('change', updateCarByBrand);
     }
+
+    /*updateCarByBrand = () => {
+        hora_inicio_select.innerHTmL = "";
+        optionsHours[frecuencia_horas_select.value].forEach(e => hora_inicio_select.innerHTmL += `<option value=${e}">${e+"h"}</option>`)
+    }*/
     
     render() {
         return (
@@ -70,19 +83,27 @@ class Agregar extends Component {
                     </Form.Field>
                     <Form.Field>
                     <label>Frecuencia (cuantos días a la semana)</label>
-                    <input 
-                        name="frecuencia_dias"
-                        placeholder='Frecuencia en días'
-                        type='number'
-                        onChange={this.changeInput} />
+                    <select name="frecuencia_dias" onChange={this.changeInput}>
+                        <option value="-">Select option</option>
+                        <option value="1">1 día</option>
+                        <option value="2">2 días</option>
+                        <option value="3">3 días</option>
+                        <option value="4">4 días</option>
+                        <option value="5">5 días</option>
+                        <option value="6">6 días</option>
+                        <option value="7">7 días</option>
+                    </select>
                     </Form.Field>
                     <Form.Field>
-                    <label>Frecuencia (cuantas horas al día)</label>
-                    <input 
-                        name="frecuencia_horas"
-                        placeholder='Frecuencia en horas'
-                        type='number'
-                        onChange={this.changeInput} />
+                    <label>Frecuencia (cada cuantas horas al día)</label>
+                        <select id="frecuencia_horas_select" name="frecuencia_horas" onChange={this.changeInput}>
+                        <option value="-">Select option</option>
+                        <option value="1">Cada 1h</option>
+                        <option value="2">Cada 2h</option>
+                        <option value="3">Cada 3h</option>
+                        <option value="4">Cada 4h</option>
+                        <option value="6">Cada 6h</option>
+                    </select>
                     </Form.Field>
                     <Form.Field>
                     <label>Repeticiones</label>
@@ -110,53 +131,53 @@ class Agregar extends Component {
                     <Form.Field>
                     <label>Fecha de inicio</label>
                     <input  name="fecha_inicio"
-                        placeholder='Fecha de inicio'
+                        placeholder='DD/MM/AAAA'
                         onChange={this.changeInput} />
                     </Form.Field>
                     <Form.Field>
                     <label>Apnea (seg)</label>
-                        <select name="apnea" onChange={this.changeInput}>
-                            <option value="-">Select option</option>
-                            <option value="1">1 seg</option>
-                            <option value="2">2 seg</option>
-                            <option value="3">3 seg</option>
-                        </select>
+                    <select name="apnea" onChange={this.changeInput}>
+                        <option value="-">Select option</option>
+                        <option value="1">1 seg</option>
+                        <option value="2">2 seg</option>
+                        <option value="3">3 seg</option>
+                    </select>
                     </Form.Field>                    
                     <Form.Field>
-                    <label>Flujo (ml)</label>
-                        <select name="apnea" onChange={this.changeInput}>
-                            <option value="-">Select option</option>
-                            <option value="600">600 ml</option>
-                            <option value="900">900 ml</option>
-                            <option value="1200">1200 ml</option>
-                            <option value="1500">1500 ml</option>
-                            <option value="1800">1800 ml</option>
-                            <option value="2100">2100 ml</option>
-                            <option value="2400">2400 ml</option>
-                        </select>
+                    <label>Flujo (mL)</label>
+                    <select name="flujo" onChange={this.changeInput}>
+                        <option value="-">Select option</option>
+                        <option value="600">600 mL</option>
+                        <option value="900">900 mL</option>
+                        <option value="1200">1200 mL</option>
+                        <option value="1500">1500 mL</option>
+                        <option value="1800">1800 mL</option>
+                        <option value="2100">2100 mL</option>
+                        <option value="2400">2400 mL</option>
+                    </select>
                     </Form.Field>
                     <Form.Field>
                     <label>Hora de inicio de la terapia</label>
-                        <select name="hora_inicio" onChange={this.changeInput}>
-                            <option value="-">Select option</option>
-                            <option value="1">1 am</option>
-                            <option value="2">2 am</option>
-                            <option value="3">3 am</option>
-                            <option value="4">4 am</option>
-                            <option value="5">5 am</option>
-                            <option value="6">6 am</option>
-                            <option value="7">7 am</option>
-                            <option value="8">8 am</option>
-                            <option value="9">9 am</option>
-                            <option value="10">10 am</option>
-                            <option value="11">11 am</option>
-                            <option value="12">12 pm</option>
-                            <option value="13">1 pm</option>
-                            <option value="14">2 pm</option>
-                            <option value="15">3 pm</option>
-                            <option value="16">4 pm</option>
-                            <option value="17">5 pm</option>
-                        </select>
+                    <select id="hora_inicio_select" name="hora_inicio" onChange={this.changeInput}>
+                        <option value="-">Select option</option>
+                        <option value="1">1 am</option>
+                        <option value="2">2 am</option>
+                        <option value="3">3 am</option>
+                        <option value="4">4 am</option>
+                        <option value="5">5 am</option>
+                        <option value="6">6 am</option>
+                        <option value="7">7 am</option>
+                        <option value="8">8 am</option>
+                        <option value="9">9 am</option>
+                        <option value="10">10 am</option>
+                        <option value="11">11 am</option>
+                        <option value="12">12 pm</option>
+                        <option value="13">1 pm</option>
+                        <option value="14">2 pm</option>
+                        <option value="15">3 pm</option>
+                        <option value="16">4 pm</option>
+                        <option value="17">5 pm</option>
+                    </select>
                     </Form.Field>
                     <Button onClick={this.handleSave} primary type='submit'>Agregar</Button>
                     <Link to={`/VerUser/${this.props.id}`}><Button type='submit'>Regresar</Button></Link>

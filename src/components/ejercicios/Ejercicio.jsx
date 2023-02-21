@@ -3,84 +3,41 @@ import {Item,Button,Icon,Dropdown, Image, Form, Input,Card} from 'semantic-ui-re
 import {Link,withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
 
-
-const stateOptions = [
-    {key: ""},
-    {text: ""},
-    {value: ""}
-];
-
-const enlace = "";
-
-const initialState = {
-    stateOptions,
-    enlace
-};
-    
-
 class Ejercicio extends Component {
-    state = initialState;
-    handleChange = (e, { value }) => {
-        const newState = {
-            stateOptions:this.state.stateOptions,
-            enlace:value
-            }; 
-        console.log(value);
-       this.setState(newState);
-       console.log(this.state);
-    }
+    
+    state = {};
 
     componentDidMount(){
+        this.setState(this.props.ejercicio);
+        console.log(this.state);
+
         //this.props.deleteUser();
-        fetch('https://server.ubicu.co/allResultsByEjercicio', {
-      method: 'POST',
-      body: JSON.stringify({id_ejercicio:this.props.ejercicio._id}),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(res => {
+        //fetch('https://server.ubicu.co/allResultsByEjercicio', {
+        fetch('http://localhost:5000/allResultsByEjercicio', {
+            method: 'POST',
+            body: JSON.stringify({id_ejercicio:this.props.ejercicio._id}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => {
 
-      if (res.status === 200) {
-        return res.json();
-      } else {
-        const error = new Error(res.error);
-        throw error;
-      }
-    })
-    .then(resp => {
-      
-      console.log(resp);
-      let count = 0;
-      let arrayVol = new Array();
-      resp.forEach(element => {
-        arrayVol[count] = {"key":  count, 'text' :  element['last_update'], 'value' : count}  
-        count++;
-      });
-      const newState = {
-        stateOptions:arrayVol,
-        enlace:this.state.enlace
-        };
-      this.setState(newState);
-      console.log(this.state);
+        if (res.status === 200) {
+            return res.json();
+        } else {
+            const error = new Error(res.error);
+            throw error;
+        }
+        })
+        .then(resp => {        
+            console.log(resp);               
+            console.log(this.state);
+        })
+        .catch(err => {
+            console.error(err);
+        });
+    }
 
-    })
-    .catch(err => {
-          console.error(err);
-          //this.setState({ loading: false, redirect: true });
-    });
-    
-    const handleDelete = (e) => {
-    /*    e.preventDefault();
-       
-        this.props.deleteUser({
-          cedula: e.target.value
-        }).then(()=>{
-            this.props.mostrarPatients()
-        });;
-    */
-    }
-    }
     render() {
         const {ejercicio} = this.props;
         const { enlace } = this.state;
@@ -94,141 +51,137 @@ class Ejercicio extends Component {
                 <Card.Description width="60%">
                 <Form>
                 <Form.Group >
-                {ejercicio.last_update == null ? '' :
                     <Form.Field
-                        id='form-input-control-last_update'
+                        id='form-input-control-nombre'
                         control={Input}
                         editable = {false}
-                        label='Last update'
-                        placeholder='last update'
-                        value={ejercicio.last_update}
+                        label='Nombre ejercicio'
+                        placeholder='Nombre ejercicio'
+                        value={ejercicio.nombre}
                         width={6}
                     />
-                }    
-                {ejercicio.nombreEjercicio== null ? '' :
                     <Form.Field
-                        id='form-input-control-nombreEjercicio'
+                        id='form-input-control-duracion-total'
                         control={Input}
                         editable = {false}
-                        label='Nombre Ejercicio'
-                        placeholder='nombre'
-                        value={ejercicio.nombreEjercicio}
+                        label='Duración total (días)'
+                        placeholder='Duración total'
+                        value={ejercicio.duracion_total}
                         width={6}
                     />
-                }  
-                {ejercicio.apnea == null ? '' :
                     <Form.Field
-                        id='form-input-control-apnea'
+                        id='form-input-control-frecuencia-dias'
                         control={Input}
-                        label='apnea'
-                        placeholder='apnea'
-                        value={ejercicio.apnea}
+                        editable = {false}
+                        label='Frecuencia días'
+                        placeholder='Frecuencia días'
+                        value={ejercicio.frecuencia_dias}
                         width={6}
                     />
-                }
-                {ejercicio.duracion == null ? '' :
                     <Form.Field
-                        id='form-input-control-duracion'
+                        id='form-input-control-frecuencia-horas'
                         control={Input}
-                        label='duracion'
-                        placeholder='duracion'
-                        value={ejercicio.duracion}
+                        editable = {false}
+                        label='Frecuencia horas'
+                        placeholder='Frecuencia horas'
+                        value={ejercicio.frecuencia_horas}
                         width={6}
                     />
-                }
-                {ejercicio.fraccion == null ? '' :
-                     <Form.Field
-                        id='form-input-control-fraccion'
-                        control={Input}
-                        label='fraccion'
-                        placeholder='fraccion'
-                        value={ejercicio.fraccion}
-                        width={6}
-                    />
-                }
-                {ejercicio.frecuencia == null ? '' :
-                     <Form.Field
-                        id='form-input-control-frecuencia'
-                        control={Input}
-                        label='frecuencia'
-                        placeholder='frecuencia'
-                        value={ejercicio.frecuencia}
-                        width={6}
-                    />
-                }
-                {ejercicio.repeticion == null ? '' :
+                </Form.Group>
+                <Form.Group >
                     <Form.Field
-                        id='form-input-control-repeticion'
+                        id='form-input-control-repeticiones'
                         control={Input}
-                        label='repeticion'
-                        placeholder='repeticion'
-                        value={ejercicio.repeticion}
+                        editable = {false}
+                        label='Repeticiones'
+                        placeholder='Repeticiones'
+                        value={ejercicio.repeticiones}
                         width={6}
                     />
-                }
-                {ejercicio.series == null ? '' :
                     <Form.Field
                         id='form-input-control-series'
                         control={Input}
-                        label='series'
-                        placeholder='series'
+                        editable = {false}
+                        label='Series'
+                        placeholder='Series'
                         value={ejercicio.series}
                         width={6}
                     />
-                }
-                {ejercicio.flujo == null ? '' :
+                    <Form.Field
+                        id='form-input-control-periodos-descanso'
+                        control={Input}
+                        editable = {false}
+                        label='Periodo de descanso (seg)'
+                        placeholder='Periodo de descanso'
+                        value={ejercicio.periodos_descanso}
+                        width={6}
+                    />
+                    <Form.Field
+                        id='form-input-control-fecha-inicio'
+                        control={Input}
+                        editable = {false}
+                        label='Fecha inicio'
+                        placeholder='Fecha inicio'
+                        value={ejercicio.fecha_inicio}
+                        width={6}
+                    />
+                </Form.Group>
+                <Form.Group >
+                    <Form.Field
+                        id='form-input-control-fecha-fin'
+                        control={Input}
+                        editable = {false}
+                        label='Fecha fin'
+                        placeholder='Fecha fin'
+                        value={ejercicio.fecha_fin}
+                        width={6}
+                    />
+                    <Form.Field
+                        id='form-input-control-apnea'
+                        control={Input}
+                        editable = {false}
+                        label='Apnea (seg)'
+                        placeholder='Apnea'
+                        value={ejercicio.apnea}
+                        width={6}
+                    />
                     <Form.Field
                         id='form-input-control-flujo'
                         control={Input}
-                        label='flujo'
-                        placeholder='flujo'
+                        editable = {false}
+                        label='Flujo (mL)'
+                        placeholder='Flujo'
                         value={ejercicio.flujo}
                         width={6}
                     />
-                }
-                {ejercicio.sesiones == null ? '' :
                     <Form.Field
-                        id='form-input-control-sesiones'
+                        id='form-input-control-hora-inicio'
                         control={Input}
-                        label='sesiones'
-                        placeholder='sesiones'
-                        value={ejercicio.sesiones}
+                        editable = {false}
+                        label='Hora inicio'
+                        placeholder='Hora inicio'
+                        value={ejercicio.hora_inicio}
                         width={6}
                     />
-                }
-                {ejercicio.type == "cicloActivo" ?
-                    <Form.Field
-                        id='form-input-control-sesiones'
-                        control={Input}
-                        label='Ejercicio anterior'
-                        placeholder='Ejercicio anterior'
-                        value={ejercicio.id_user}
-                        width={6}
-                    /> : ''
-                }
-                    </Form.Group>
+                </Form.Group>
                 </Form>
                 </Card.Description>
                 <Card.Content extra>
-                <Link to={`/updateEjercicio/${ejercicio._id}`}>
+                {/*<Link to={`/updateEjercicio/${ejercicio._id}`}>
                 <Button primary floated='right'>
                     Actualizar
                 <Icon name='right chevron' />
                 </Button>
-                </Link>
-                <Link to={`/verResultados/${ejercicio._id}/${ejercicio.id_user}/${enlace}`}>
+                </Link>*/}
+                <Link to={`/verResultados/${ejercicio.id_user}/${ejercicio._id}`}>
                 <Button secundary floated='right'>
                     Ver Grafica
                 <Icon name='right chevron' />
                 </Button>
                 </Link>
-                <Dropdown direction='right' placeholder='Seleccione datos' selection options={this.state.stateOptions} onChange={this.handleChange}/>
                 </Card.Content>
             </Card.Content>
-            </Card>
-          
-   
-       
+            </Card>       
         );
     }
 }

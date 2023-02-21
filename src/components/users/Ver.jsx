@@ -22,7 +22,6 @@ class Ver extends Component {
         <Segment>
         <Grid style={{ marginTop: '9em' }} columns={2} stackable>
             <Grid.Column>
-            <Segment>
                 <Label color='blue' ribbon>
                 Paciente
                 </Label>
@@ -91,7 +90,6 @@ class Ver extends Component {
                     
                     <List.Item style={{ marginTop: '1em' }}>    
                     <List.Content>
-                        <List.Header></List.Header>
                         <List.Description>
                             <Link to={`/VerEjercicios/${this.state._id}`}><Button primary  size='small' > Ejercicios</Button></Link>
                             <Link to={`/AgregarEjercicio/${this.state._id}`}><Button floated='left' icon labelPosition='left' primary  size='small'><Icon name='clipboard' />Agregar</Button></Link>
@@ -100,7 +98,6 @@ class Ver extends Component {
                     </List.Content>
                     </List.Item>
                 </List>
-            </Segment>
             </Grid.Column>
         </Grid> 
         </Segment>   

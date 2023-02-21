@@ -125,19 +125,16 @@ class Router extends Component {
                   }} />
             
             <Route
-                exact path="/VerResultados/:id_ejercicio/:id_user/:dato"
+                exact path="/VerResultados/:id_user/:id_ejercicio"
                 render={ props => {
                     const { match } = props;
-                    let id_ejercicio = !isNull(match.params.id_ejercicio)
-                    ? match.params.id_ejercicio
-                    : 0;
                     let id_user = !isNull(match.params.id_user)
                     ? match.params.id_user
                     : 0;
-                    let dato = !isNull(match.params.dato)
-                    ? match.params.dato
-                    : null;
-                    return <VerResultados id_ejercicio={id_ejercicio} id_user={id_user} dato={dato} />;
+                    let id_ejercicio = !isNull(match.params.id_ejercicio)
+                    ? match.params.id_ejercicio
+                    : 0;
+                    return <VerResultados id_user={id_user} id_ejercicio={id_ejercicio} />;
                   }} />
             
             <Route

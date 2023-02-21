@@ -12,9 +12,11 @@ class MenuNav extends Component {
       <Container>
         <Menu.Item as='a' header>
           <Image size='mini' src={logo} style={{ marginRight: '1.5em' }} />
-          UBICU
+          <Link to="/Users">
+            UBICU
+          </Link>
         </Menu.Item>
-        <Menu.Item><Link to="/HomeAdmin">Inicio</Link></Menu.Item>
+        <Menu.Item><Link to="/Users">Inicio</Link></Menu.Item>
 
         <Dropdown item simple text='Mi Cuenta'>
           <Dropdown.Menu>

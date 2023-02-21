@@ -22,10 +22,11 @@ class Ejercicios extends Component {
   state = initialState;
   componentDidMount(){
     this.props.allEjerciciosByUser({id_user:this.props.id_user});
-    console.log(this.state);
+    console.log("state: ",this.state);
   
 
-  fetch('https://server.ubicu.co/getUserbyId', {
+  //fetch('https://server.ubicu.co/getUserbyId', {
+  fetch('http://localhost:5000/getUserbyId', {
       method: 'POST',
       body: JSON.stringify({id_user:this.props.id_user}),
       headers: {
@@ -34,7 +35,8 @@ class Ejercicios extends Component {
     })
     .then(res => {
       if (res.status === 200) {
-        return res.json();
+        console.log("res.json: ", res)
+        //return res.json();
       } else {
         const error = new Error(res.error);
         throw error;
@@ -42,7 +44,7 @@ class Ejercicios extends Component {
     })
     .then(resp => {
       
-      console.log(resp);
+      console.log("resp: ",resp);
       const user = resp;
       const capacidad_vital = getCapacidadVital(resp);
       const newState = {
@@ -50,7 +52,9 @@ class Ejercicios extends Component {
         capacidad_vital
       };
       this.setState(newState);
-      console.log(this.state.user.nombre);
+      //console.log(this.state.user.nombre);
+      console.log("state: ",this.state);
+
     })
     .catch(err => {
           console.error(err);
@@ -64,8 +68,6 @@ class Ejercicios extends Component {
     }
 
   }
-
-  
 
     render() {
       const {ejercicios} = this.props;
@@ -112,28 +114,6 @@ class Ejercicios extends Component {
                   })}
                   </Card.Group>
           </Segment>
-          {/* <Segment raised>
-                <Label color='blue' ribbon>
-                Resultados de Presicripción                </Label>
-            <Card.Group>
-                <Card fluid color="blue" >
-            <Card.Content >
-           
-                <Card.Header></Card.Header>
-                <Card.Description width="60%">
-                </Card.Description>
-                <Card.Content extra>
-                <Link to={`/VerResultados/${this.props.id_user}`}>                    
-                <Button primary floated='right'>
-                    Ver Resultados
-                <Icon name='right chevron' />
-                </Button>
-                </Link>
-                </Card.Content>
-                </Card.Content>
-                </Card>
-                  </Card.Group>
-          </Segment> */}
           </Grid.Column>
           </Grid>
           
