@@ -4,50 +4,49 @@ import {Link,withRouter} from "react-router-dom";
 import MenuNav from '../pages/MenuNav';
 import {connect} from "react-redux";
 import{allResultsByUser} from "../../actions/resultsAction";
-import ReactApexChart from 'react-apexcharts'
+import Chart from 'react-apexcharts'
 
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, ReferenceLine, ReferenceArea,
-    ReferenceDot, Tooltip, CartesianGrid, Legend, Brush, ErrorBar, AreaChart, Area, LabelList } from 'recharts';
-
-import { PureComponent } from 'react';
-import { ComposedChart, Bar } from 'recharts';    
+import { PureComponent } from 'react';    
 
   const initialState = {
     series: [
       {
         name: 'Serie 1',
-        data: ('16:55:54', 1, {
+        data: [16, 1, { // valores eje X
           min: 0, 
           max: 5 //this.props.ejercicio.flujo
-        })
+        }],
+        color: '#008FFB'
       },
       {
         name: 'Serie 2',
-        data: ('18:55:54', 2, {
+        data: [18, 2, {
           min: 0, 
           max: 5 //this.props.ejercicio.flujo
-        })
+        }],
+        color: '#00E396'
       },
       {
         name: 'Serie 3',
-        data: ('20:55:54', 3, {
+        data: [20, 3, {
           min: 0, 
           max: 5 //this.props.ejercicio.flujo
-        })
+        }],
+        color: '#CED4DC'
       }
-    ],
-    options: {
+    ],    
+    options:{
       chart: {
-        type: 'area',
-        height: 350,
-        stacked: true,
+        stacked: false,
         events: {
           selection: function (chart, e) {
             console.log(new Date(e.xaxis.min))
           }
         },
       },
-      colors: ['#008FFB', '#00E396', '#CED4DC'],
+      tooltip:{
+        followCursor: true
+      },
       dataLabels: {
         enabled: false
       },
@@ -66,12 +65,19 @@ import { ComposedChart, Bar } from 'recharts';
         horizontalAlign: 'left'
       },
       xaxis: {
-        type: 'datetime'
+        labels: {
+          datetimeFormatter: {
+            hour: 'HH:mm:ss'
+          }
+        }
       }
     }
   };
+
+  /*var chart = new ApexCharts(document.querySelector("#chart"), options);
+  chart.render();*/
       
-class VerResultados extends Component {
+class VerResultados extends React.Component {
   state = initialState;
   
   componentDidMount(){
@@ -111,37 +117,30 @@ class VerResultados extends Component {
   render() {
     return (
       <div>
-      <MenuNav/>
-      <Grid style={{ marginTop: '7em' }} columns={1}>
-        <Grid.Column>
-          <Segment raised>
-            <Label color='green' ribbon>
-              Resultados
-            </Label>
-              
-            {/* <div align= "center">
-            <p>Gráficas de Flujo Respiratorio</p>
-            </div> */}
-            <p>Curva Flujo-Tiempo</p>
-              
+        <MenuNav/>
+        <Grid style={{ marginTop: '7em' }} columns={1}>
+          <Grid.Column>
+            <Segment raised>
+              <Label color='green' ribbon>
+                Resultados
+              </Label>             
 
-            <div id="chart">
-            <ReactApexChart options={this.state.options} series={this.state.series} type="area" height={350} />
-            </div>
+              <Chart type="area" height={350} series={this.state.series} options={this.state.options}>
+              </Chart>
 
-            <List>
-              <List.Item style={{ marginTop: '1em' }}>    
-                <List.Content>
-                    <List.Header></List.Header>
-                    <List.Description>
-                        <Link to={`/VerEjercicios/${this.props.id_user}`}><Button >Regresar</Button></Link>
-                    </List.Description>
-                </List.Content>
-                </List.Item>
-            </List>
-          </Segment>
-        </Grid.Column>
-      </Grid>    
+              <List>
+                <List.Item style={{ marginTop: '1em' }}>    
+                  <List.Content>
+                      <List.Header></List.Header>
+                      <List.Description>
+                          <Link to={`/VerEjercicios/${this.props.id_user}`}><Button >Regresar</Button></Link>
+                      </List.Description>
+                  </List.Content>
+                  </List.Item>
+              </List>
+            </Segment>
+          </Grid.Column>
+        </Grid>    
       </div>        
     );
   }
