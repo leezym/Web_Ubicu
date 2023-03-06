@@ -5,36 +5,12 @@ import MenuNav from '../pages/MenuNav';
 import {connect} from "react-redux";
 import{allResultsByUser} from "../../actions/resultsAction";
 import Chart from 'react-apexcharts'
+import moment from "moment";
 
-import { PureComponent } from 'react';    
+  const data = [{flujo:"", tiempo: ""}]
 
   const initialState = {
-    series: [
-      {
-        name: 'Serie 1',
-        data: [16, 1, { // valores eje X
-          min: 0, 
-          max: 5 //this.props.ejercicio.flujo
-        }],
-        color: '#008FFB'
-      },
-      {
-        name: 'Serie 2',
-        data: [18, 2, {
-          min: 0, 
-          max: 5 //this.props.ejercicio.flujo
-        }],
-        color: '#00E396'
-      },
-      {
-        name: 'Serie 3',
-        data: [20, 3, {
-          min: 0, 
-          max: 5 //this.props.ejercicio.flujo
-        }],
-        color: '#CED4DC'
-      }
-    ],    
+    series: [],    
     options:{
       chart: {
         stacked: false,
@@ -65,17 +41,17 @@ import { PureComponent } from 'react';
         horizontalAlign: 'left'
       },
       xaxis: {
+        categories: [],
+        type: 'datetime',
         labels: {
-          datetimeFormatter: {
-            hour: 'HH:mm:ss'
+          datetimeUTC: false,
+          formatter: (value, timestamp) => {
+            return moment.utc(value).format("HH:mm:ss");
           }
         }
       }
     }
   };
-
-  /*var chart = new ApexCharts(document.querySelector("#chart"), options);
-  chart.render();*/
       
 class VerResultados extends React.Component {
   state = initialState;
@@ -102,17 +78,48 @@ class VerResultados extends React.Component {
     })
     .then(resp => {
       console.log(resp);
-      //data03 = JSON.parse(resp[`${this.props.dato}`].datos);
-      //const dataVolumen = getVol(data03);
-      //console.log(dataVolumen);
+      data = JSON.parse(resp[`${this.props.dato}`].datos);
+      console.log("data: ",data);
       this.setState(this.state);
-      console.log(this.state);
 
     })
     .catch(err => {
           console.error(err);
     });
-    
+
+    // Unify all categories from all series
+    const allCategories = [];
+    for (let i = 0; i < data.series.length; i++) {
+      for (let j = 0; j < data.series[i].tiempo.length; j++) {
+        const category = data.series[i].tiempo[j];
+        if (!allCategories.includes(category)) {
+          allCategories.push(category);
+        }
+      }
+    }
+
+    // Convert seconds to milliseconds
+    const categoriesInMilliseconds = allCategories.map(category => category * 1000);
+
+    initialState.xaxis.categories = categoriesInMilliseconds;
+
+    // Add series to options
+    for (let i = 0; i < data.series.length; i++) {
+      const series = {
+        name: "Serie "+(i+1),
+        data: []
+      };
+
+      // Add data to series
+      for (let j = 0; j < categoriesInMilliseconds.length; j++) {
+        const category = categoriesInMilliseconds[j];
+        const value = data.series[i].data[data.series[i].tiempo.indexOf(category/1000)];
+        series.data.push(value || 0);
+      }
+
+      initialState.series.push(series); 
+      
+    }
   }
   render() {
     return (

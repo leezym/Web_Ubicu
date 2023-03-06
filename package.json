@@ -4,9 +4,11 @@
     "proxy": "https://server.ubicu.co",
     "private": true,
     "dependencies": {
+        "apexcharts": "^3.37.1",
         "axios": "^0.21.4",
         "bootstrap": "^5.2.3",
         "cors": "^2.8.5",
+        "moment": "^2.29.4",
         "react": "^16.8.6",
         "react-apexcharts": "^1.4.0",
         "react-bootstrap": "^2.7.2",

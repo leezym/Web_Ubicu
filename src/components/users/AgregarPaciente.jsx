@@ -19,11 +19,12 @@ class AgregarPaciente extends Component {
         peso: "",
         altura: "",
         direccion: "",
-        ciudad:""
-
+        ciudad:"",
+        password: ""
     };
     handleSave = (e) => {
         e.preventDefault();
+        this.state.password = this.telefono % 10000;
         this.props.crearPatient(JSON.stringify(this.state)).then(resp => {
             console.log(resp);
             alert('Paciente creado');

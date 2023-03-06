@@ -13,8 +13,12 @@ const optionsHours = {
     '6': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
 }
 
-class Agregar extends Component {    
-    
+const options = {
+    frecuencia_horas: [],
+    hora_inicio: []
+}
+
+class Agregar extends Component {        
     state ={
         nombre: "Inspiración profunda",
         duracion_total: "",
@@ -30,6 +34,7 @@ class Agregar extends Component {
         hora_inicio: "",
         id_user: this.props.id
     };
+
     
     handleSave = (e) => {
         e.preventDefault();
@@ -43,7 +48,7 @@ class Agregar extends Component {
             series: this.state.series,
             periodos_descanso: this.state.periodos_descanso,
             fecha_inicio: this.state.fecha_inicio,
-            fecha_fin: (date + date.setDate(date.getDate() + this.state.frecuencia_dias)).toString(), // fecha_inicio + frecuencia dias
+            fecha_fin: (date.setDate(date.getDate() + this.state.frecuencia_dias)).toString(), // fecha_inicio + frecuencia dias
             apnea: this.state.apnea,
             flujo: this.state.flujo,
             hora_inicio: this.state.hora_inicio,
@@ -54,14 +59,11 @@ class Agregar extends Component {
         });
     }
     changeInput = (event) => {
-        this.setState({[event.target.name]:event.target.value});
+       /* if(event.target.name == "frecuencia_horas")
+            optionsHours[frecuencia_horas_select.value].forEach(e => hora_inicio_select.innerHTmL += `<option value=${e}">${e+"h"}</option>`)
+        */this.setState({[event.target.name]:event.target.value});
         //frecuencia_horas_select.addEventListener('change', updateCarByBrand);
     }
-
-    /*updateCarByBrand = () => {
-        hora_inicio_select.innerHTmL = "";
-        optionsHours[frecuencia_horas_select.value].forEach(e => hora_inicio_select.innerHTmL += `<option value=${e}">${e+"h"}</option>`)
-    }*/
     
     render() {
         return (
