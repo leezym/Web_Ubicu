@@ -4,6 +4,8 @@ import { Form,Button,Segment,Label,Grid, Dropdown } from 'semantic-ui-react';
 import {crearEjercicio} from "../../actions/ejerciciosAction";
 import {Link,withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const optionsHours = {
     '1': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
@@ -13,10 +15,7 @@ const optionsHours = {
     '6': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
 }
 
-const options = {
-    frecuencia_horas: [],
-    hora_inicio: []
-}
+let options = ""
 
 class Agregar extends Component {        
     state ={
@@ -35,10 +34,15 @@ class Agregar extends Component {
         id_user: this.props.id
     };
 
+    componentDidMount(){
+        console.log("props agregar: ",this.props)
+        console.log("state agregar: ",this.state);
+    }
+
     
     handleSave = (e) => {
         e.preventDefault();
-        const date = new Date(this.state.fecha_fin);
+        const date = new Date(this.state.fecha_inicio);
         this.props.crearEjercicio({
             nombre: this.state.nombre,
             duracion_total: this.state.duracion_total,
@@ -47,7 +51,7 @@ class Agregar extends Component {
             repeticiones: this.state.repeticiones,
             series: this.state.series,
             periodos_descanso: this.state.periodos_descanso,
-            fecha_inicio: this.state.fecha_inicio,
+            fecha_inicio: this.state.fecha_inicio.toString(),
             fecha_fin: (date.setDate(date.getDate() + this.state.frecuencia_dias)).toString(), // fecha_inicio + frecuencia dias
             apnea: this.state.apnea,
             flujo: this.state.flujo,
@@ -59,10 +63,14 @@ class Agregar extends Component {
         });
     }
     changeInput = (event) => {
-       /* if(event.target.name == "frecuencia_horas")
-            optionsHours[frecuencia_horas_select.value].forEach(e => hora_inicio_select.innerHTmL += `<option value=${e}">${e+"h"}</option>`)
-        */this.setState({[event.target.name]:event.target.value});
-        //frecuencia_horas_select.addEventListener('change', updateCarByBrand);
+        if(event.target.name == "frecuencia_horas"){
+            options = optionsHours[event.target.value].map(hour => (
+                <option value={hour}>
+                  {hour > 12 ? (hour - 12)+":00 pm" : hour < 12 ? hour+":00 am": hour+":00 pm"}
+                </option>
+              ));
+        }        
+        this.setState({[event.target.name]:event.target.value});
     }
     
     render() {
@@ -98,7 +106,7 @@ class Agregar extends Component {
                     </Form.Field>
                     <Form.Field>
                     <label>Frecuencia (cada cuantas horas al día)</label>
-                        <select id="frecuencia_horas_select" name="frecuencia_horas" onChange={this.changeInput}>
+                        <select name="frecuencia_horas" onChange={this.changeInput}>
                         <option value="-">Select option</option>
                         <option value="1">Cada 1h</option>
                         <option value="2">Cada 2h</option>
@@ -109,15 +117,14 @@ class Agregar extends Component {
                     </Form.Field>
                     <Form.Field>
                     <label>Repeticiones</label>
-                    <input 
-                        name="repeticiones"
+                    <input name="repeticiones"
+                        type = 'number'                    
                         placeholder='Repeticiones'
                         onChange={this.changeInput} />
                     </Form.Field>
                     <Form.Field>
                     <label>Series</label>
-                    <input 
-                        name="series"
+                    <input name="series"
                         placeholder='Series'
                         type='number'
                         onChange={this.changeInput} />
@@ -132,9 +139,10 @@ class Agregar extends Component {
                     </Form.Field>
                     <Form.Field>
                     <label>Fecha de inicio</label>
-                    <input  name="fecha_inicio"
-                        placeholder='DD/MM/AAAA'
-                        onChange={this.changeInput} />
+                    <input name="fecha_inicio"
+                        type="date"
+                        onChange={this.changeInput}
+                        placeholder='DD/MM/AAAA' />
                     </Form.Field>
                     <Form.Field>
                     <label>Apnea (seg)</label>
@@ -161,28 +169,11 @@ class Agregar extends Component {
                     <Form.Field>
                     <label>Hora de inicio de la terapia</label>
                     <select id="hora_inicio_select" name="hora_inicio" onChange={this.changeInput}>
-                        <option value="-">Select option</option>
-                        <option value="1">1 am</option>
-                        <option value="2">2 am</option>
-                        <option value="3">3 am</option>
-                        <option value="4">4 am</option>
-                        <option value="5">5 am</option>
-                        <option value="6">6 am</option>
-                        <option value="7">7 am</option>
-                        <option value="8">8 am</option>
-                        <option value="9">9 am</option>
-                        <option value="10">10 am</option>
-                        <option value="11">11 am</option>
-                        <option value="12">12 pm</option>
-                        <option value="13">1 pm</option>
-                        <option value="14">2 pm</option>
-                        <option value="15">3 pm</option>
-                        <option value="16">4 pm</option>
-                        <option value="17">5 pm</option>
+                        {options}
                     </select>
                     </Form.Field>
                     <Button onClick={this.handleSave} primary type='submit'>Agregar</Button>
-                    <Link to={`/VerUser/${this.props.id}`}><Button type='submit'>Regresar</Button></Link>
+                    <Link to={`/VerEjercicios/${this.state.id_user}`}><Button type='submit'>Regresar</Button></Link>
                 </Form>
             </Segment>
             </Grid.Column>

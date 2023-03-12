@@ -24,7 +24,7 @@ class AgregarPaciente extends Component {
     };
     handleSave = (e) => {
         e.preventDefault();
-        this.state.password = this.telefono % 10000;
+        this.state.password = this.state.telefono % 10000;
         this.props.crearPatient(JSON.stringify(this.state)).then(resp => {
             console.log(resp);
             alert('Paciente creado');

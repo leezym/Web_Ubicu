@@ -2,18 +2,38 @@ import React, { Component } from 'react';
 import {Grid,Label,Segment,List,Icon, Card, Image, Button} from "semantic-ui-react";
 import {Link} from "react-router-dom";
 import MenuNav from '../pages/MenuNav';
+import {getPatientbyId} from "../../actions/patientsAction";
 import {connect} from "react-redux";
 
 
 class Ver extends Component {
     state ={};
     componentDidMount(){
-    const users = this.props.users.filter(p=>p.cedula == this.props.cc );    
-    this.setState(users[0]);
-    console.log(this.props.users);
-    console.log(this.props.cc);
-    console.log(users);
+        
+        fetch('https://server.ubicu.co/getPatientbyId', {
+        //fetch('http://localhost:5000/getPatientbyId', {
+        method: 'POST',
+        body: JSON.stringify({id_patient:this.props.id}),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(res => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          const error = new Error(res.error);
+          throw error;
+        }
+      })
+      .then(resp => {        
+        console.log("resp: ",resp);
+        this.setState(resp);
 
+      })
+      .catch(err => {
+            console.error(err);
+    });
     }
     render() {
         return (
@@ -92,7 +112,6 @@ class Ver extends Component {
                     <List.Content>
                         <List.Description>
                             <Link to={`/VerEjercicios/${this.state._id}`}><Button primary  size='small' > Ejercicios</Button></Link>
-                            <Link to={`/AgregarEjercicio/${this.state._id}`}><Button floated='left' icon labelPosition='left' primary  size='small'><Icon name='clipboard' />Agregar</Button></Link>
                             <Link to="/Users"><Button >Regresar</Button></Link>
                         </List.Description>
                     </List.Content>
@@ -110,4 +129,4 @@ const mapStateToProp =(state)=>{
         users: state.users.users
     };
 }
-export default connect(mapStateToProp,null)(Ver);  
+export default connect(mapStateToProp,{getPatientbyId})(Ver);  

@@ -7,6 +7,7 @@ import {connect} from "react-redux";
 class User extends Component {
 
     componentDidMount(){
+        this.props.mostrarPatients();
         this.props.deletePatient();
     }
 
@@ -28,16 +29,16 @@ class User extends Component {
             <Table.Cell>{user.cedula}</Table.Cell>
             <Table.Cell>{user.nombre}</Table.Cell>
             <Table.Cell>
-                <Link to={`/VerUser/${user.cedula}`}>
+                <Link to={`/VerUser/${user._id}`}>
                 <Button primary floated='right'>
                     Ver
                 <Icon name='right chevron' />
                 </Button>
                 </Link>
-                <Button value={user.cedula} onClick={this.handleDelete} secondary floated='right'>
+                {/*<Button value={user.cedula} onClick={this.handleDelete} secondary floated='right'>
                     Eliminar
                 <Icon name='right chevron' />
-                </Button>
+                </Button>*/}
             </Table.Cell>
         </Table.Row>
         </Table.Body>

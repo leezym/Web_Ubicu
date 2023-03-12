@@ -19,8 +19,8 @@ class LoginForm extends Component{
   }
   onSubmit = (event) => {
     event.preventDefault();
-    fetch('http://localhost:5000/authenticateUser', {
-    //fetch('https://server.ubicu.co/authenticateUser', {
+    //fetch('http://localhost:5000/authenticateUser', {
+    fetch('https://server.ubicu.co/authenticateUser', {
       method: 'POST',
       body: JSON.stringify(this.state),
       headers: {

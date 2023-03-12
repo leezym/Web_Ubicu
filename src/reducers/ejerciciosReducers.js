@@ -12,7 +12,6 @@ export default function(state=estadoinicial,action){
             return {...state,ejercicios:[...state.ejercicios,action.payload]};
             break;
         case ELIMINAR_EJERCICIO:
-            console.log("Entro eliminar")
             return {...state,ejercicios:state.ejercicios.filter(p => p.cedula !== action.payload)};
             break;
         case ACTUALIZAR_EJERCICIO:

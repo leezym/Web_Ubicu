@@ -14,8 +14,8 @@ export default function withAuth(ComponentToProtect) {
       };
     }
     componentDidMount() {
-      fetch('http://localhost:5000/checkToken', {
-      //fetch('https://server.ubicu.co/checkToken', {
+      //fetch('http://localhost:5000/checkToken', {
+      fetch('https://server.ubicu.co/checkToken', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

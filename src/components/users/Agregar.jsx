@@ -18,8 +18,9 @@ class Agregar extends Component {
     };
     handleSubmit = (e) => {
         e.preventDefault();
-        fetch('http://localhost:5000/createUser', {
-        //fetch('https://server.ubicu.co/createUser', {
+        
+        //fetch('http://localhost:5000/createUser', {
+        fetch('https://server.ubicu.co/createUser', {
             method: 'POST',
             body: JSON.stringify(this.state),
             headers: {

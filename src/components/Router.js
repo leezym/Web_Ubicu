@@ -9,15 +9,6 @@ import Users from "./users/Users";
 import Agregar from "./users/Agregar";
 import AgregarPaciente from "./users/AgregarPaciente";
 import Ver from "./users/Ver";
-import VerCultivo from './cultivos/Ver';
-
-import VerRecomendacion from "./recomendaciones/Ver";
-import Cultivos from "./cultivos/Cultivos";
-import Recomendaciones from "./recomendaciones/Recomendaciones";
-import AgregarRecomendacion from "./recomendaciones/Agregar";
-import Novedades from "./novedades/Novedades";
-import VerNovedad from "./novedades/Ver";
-import GestionRecomendaciones from "./recomendaciones/GestionRecomendaciones";
 import Ejercicios from './ejercicios/Ejercicios';
 import AgregarEjercicio from "./ejercicios/Agregar";
 import VerResultados from "./ejercicios/VerResultados";
@@ -53,13 +44,11 @@ class Router extends Component {
                 component ={AgregarPaciente}/>
             
             <Route
-                exact path="/VerUser/:cc"
+                exact path="/VerUser/:id"
                 render={ props => {
                     const { match } = props;
-                    let cc = !isNaN(parseInt(match.params.cc))
-                    ? parseInt(match.params.cc)
-                    : 0;
-                    return <Ver cc={cc} />;
+                    let id = match.params.id;
+                    return <Ver id={id} />;
                 }} />
             
             <Route
@@ -68,52 +57,8 @@ class Router extends Component {
                     const { match } = props;
                     let id = match.params.id;
                     return <AgregarEjercicio id={id} />;
-                }} />
-            
-            <Route
-                exact path="/VerCultivos/:id_user"
-                render={ props => {
-                    const { match } = props;
-                    let id_user = !isNull(match.params.id_user)
-                    ? match.params.id_user
-                    : 0;
-                    return <Cultivos id_user={id_user} />;
-                  }} />
-            
-            <Route
-                exact path="/VerCultivo/:id_cultivo"
-                render={ props => {
-                    const { match } = props;
-                    let id_cultivo = !isNull(match.params.id_cultivo)
-                    ? match.params.id_cultivo
-                    : 0;
-                    return <VerCultivo id_cultivo={id_cultivo} />;
-                  }} />
-            
-            <Route
-                exact path="/VerRecomendaciones"
-                component ={Recomendaciones}/>
-            
-            <Route
-                exact path="/VerRecomendacion"
-                component ={VerRecomendacion}/>
-            
-            <Route
-                exact path="/AgregarRecomendacion"
-                component ={AgregarRecomendacion}/>
-            
-            <Route
-                exact path="/VerNovedades"
-                component ={Novedades}/>
-            
-            <Route
-                exact path="/VerNovedad"
-                component ={VerNovedad}/>
-            
-            <Route
-                exact path="/GestionRecomendaciones"
-                component ={GestionRecomendaciones}/>
-            
+                }} />            
+                                                                                                        
             <Route
                 exact path="/VerEjercicios/:id_user"
                 render={ props => {

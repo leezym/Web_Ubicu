@@ -2,8 +2,8 @@ import { CREAR_USER, ELIMINAR_USER, ACTUALIZAR_USER, MOSTRAR_USERS, GET_USER } f
 import axios from "axios";
 
 // json local json server
-const urlLocal = "http://localhost:5000/";
-//const urlLocal = "https://server.ubicu.co/";
+//const urlLocal = "http://localhost:5000/";
+const urlLocal = "https://server.ubicu.co/";
 
 const urlApi = urlLocal;
 
