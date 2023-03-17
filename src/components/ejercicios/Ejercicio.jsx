@@ -35,12 +35,7 @@ class Ejercicio extends Component {
     }
 
     handleSave(ejercicio){
-        const date = new Date(moment(ejercicio.fecha_inicio, 'MM/DD/YYYY').format('DD/MM/YYYY')); 
-        ejercicio.fecha_fin = new Date(date.setDate(date.getDate() + ejercicio.frecuencia_dias - 1)).toLocaleDateString('es-ES', { 
-            day: '2-digit', 
-            month: '2-digit', 
-            year: 'numeric' 
-          }).toString()
+        ejercicio.fecha_fin = moment(ejercicio.fecha_inicio, 'YYYY-MM-DD').add(ejercicio.frecuencia_dias-1, 'days').format('DD/MM/YYYY').toString()
 
         this.props.updateEjercicio(ejercicio)/*.then(resp => {
             this.forceUpdate();

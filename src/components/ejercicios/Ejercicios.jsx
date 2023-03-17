@@ -122,6 +122,16 @@ class Ejercicios extends Component {
                     </TableRow>
                     </TableBody>
                   </Table>
+                  {this.state.ejercicios.length == 0 ? 
+                    <Link to={`/AgregarEjercicio/${this.state.user._id}`}><Button primary type='submit'>Agregar</Button></Link> : 
+                    new Date().toLocaleDateString('es-ES', { 
+                        day: '2-digit', 
+                        month: '2-digit', 
+                        year: 'numeric' 
+                      }) > this.state.ejercicios[this.state.ejercicios.length - 1].fecha_fin ?
+                      <Link to={`/AgregarEjercicio/${this.state.user._id}`}><Button primary type='submit'>Agregar</Button></Link>
+                      : ""
+                    }            
                   <Link to={`/VerUser/${this.state.user._id}`}><Button type='submit'>Regresar</Button></Link>                  
               </Segment>  
 

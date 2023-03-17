@@ -4,8 +4,8 @@ import { Form,Button,Segment,Label,Grid, Dropdown } from 'semantic-ui-react';
 import {crearEjercicio} from "../../actions/ejerciciosAction";
 import {Link,withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import moment from "moment";
+
 
 const optionsHours = {
     '1': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
@@ -42,7 +42,6 @@ class Agregar extends Component {
     
     handleSave = (e) => {
         e.preventDefault();
-        const date = new Date(this.state.fecha_inicio);
         this.props.crearEjercicio({
             nombre: this.state.nombre,
             duracion_total: this.state.duracion_total,
@@ -51,8 +50,8 @@ class Agregar extends Component {
             repeticiones: this.state.repeticiones,
             series: this.state.series,
             periodos_descanso: this.state.periodos_descanso,
-            fecha_inicio: this.state.fecha_inicio.toString(),
-            fecha_fin: (date.setDate(date.getDate() + this.state.frecuencia_dias)).toString(), // fecha_inicio + frecuencia dias
+            fecha_inicio: moment(this.state.fecha_inicio, 'YYYY-MM-DD').format('DD/MM/YYYY').toString(),
+            fecha_fin: moment(this.state.fecha_inicio, 'YYYY-MM-DD').add(this.state.frecuencia_dias-1, 'days').format('DD/MM/YYYY').toString(), // fecha_inicio + frecuencia dias
             apnea: this.state.apnea,
             flujo: this.state.flujo,
             hora_inicio: this.state.hora_inicio,
