@@ -2,43 +2,62 @@ import React, { Component } from 'react';
 import MenuNav from '../pages/MenuNav';
 import { Form,Button,Segment,Label,Grid } from 'semantic-ui-react';
 import {crearPatient} from "../../actions/patientsAction";
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
 
 
 class AgregarPaciente extends Component {
-
     state ={
         nombre: "",
         cedula: "",
         telefono: "",
         email: "",
-        tipo:"paciente",
         edad: "",
         sexo: "",
         peso: "",
         altura: "",
         direccion: "",
         ciudad:"",
-        password: ""
+        password: "",
+        id_user: this.props.id_user
     };
+    
     handleSave = (e) => {
         e.preventDefault();
-        this.state.password = this.state.telefono % 10000;
-        this.props.crearPatient(JSON.stringify(this.state)).then(resp => {
-            console.log(resp);
+        const { crearPatient, history, id_user } = this.props;
+        const { nombre, cedula, telefono, email, edad, sexo, peso, altura, direccion, ciudad } = this.state;
+        if (!nombre || !cedula || !telefono || !email || !edad || !sexo || !peso || !altura || !direccion || !ciudad ) {
+            alert('Por favor proporcione la información requerida');
+            return;
+        }
+        
+        crearPatient({
+            nombre,
+            cedula,
+            telefono,
+            email,
+            edad,
+            sexo,
+            peso,
+            altura,
+            direccion,
+            ciudad,
+            password: telefono % 10000,
+            id_user: id_user
+        }).then(resp => {
             alert('Paciente creado');
-            this.props.history.push("/Users");
+            history.push(`/Users/${id_user}`);
         })
         .catch(err => {
             console.log(err);
             alert('Error al crear paciente');
-    });   
-    }
+        });
+    };
     
     changeInput = (event) => {
         this.setState({[event.target.name]:event.target.value});
     }
+
     render() {
         return (
             <div>
@@ -76,7 +95,6 @@ class AgregarPaciente extends Component {
                             <option value="-">Select option</option>
                             <option value="F">Femenino</option>
                             <option value="M">Masculino</option>
-                            <option value="O">Otro</option>
                         </select>
                         </Form.Field>
                         <Form.Field>
@@ -123,7 +141,7 @@ class AgregarPaciente extends Component {
                                 onChange={this.changeInput} />
                         </Form.Field>
                         <Button onClick={this.handleSave} primary type='submit'>Agregar</Button>
-                        <Link to="/Users"><Button type='submit'>Regresar</Button></Link>
+                        <Link to={`/Users/${this.props.id_user}`}><Button type='submit'>Regresar</Button></Link>
                     </Form>
                 </Segment>
                 </Grid.Column>
@@ -133,4 +151,4 @@ class AgregarPaciente extends Component {
     }
 }
 
-export default connect(null,{crearPatient})(AgregarPaciente);
+export default connect(null,{crearPatient})(withRouter(AgregarPaciente));

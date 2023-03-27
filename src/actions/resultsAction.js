@@ -17,11 +17,11 @@ const optionHeaders = {
 };
 
 
-export const allResultsByUser = (id_ejercicio) => async dispatch => {
-    const respuesta = await axios.post(urlApi + "allResultsByUser", id_ejercicio);
-    console.log(respuesta.data);
+export const allResultsByEjercicio = (data) => async dispatch => {
+    const respuesta = await axios.post(urlApi + "allResultsByEjercicio", data);
     dispatch({
         type: MOSTRAR_RESULTS,
         payload: respuesta.data
     });
+    return respuesta.data;
 };

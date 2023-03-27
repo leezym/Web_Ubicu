@@ -1,38 +1,83 @@
 import React, { Component } from 'react';
 import {Form,Grid,Label,Segment,List, Button} from "semantic-ui-react";
 import {Link,withRouter} from "react-router-dom";
-import MenuNav from '../pages/MenuNav';
 import {connect} from "react-redux";
-import{allResultsByUser} from "../../actions/resultsAction";
+import{allResultsByEjercicio} from "../../actions/resultsAction";
 import Chart from 'react-apexcharts'
 import moment from "moment";
 
+function fillGraph(data) {
+  console.log("data", data)
+  const seriesGraph = [];
+  // Add series to options
+  for (let i = 0; i < data.length; i++) {
+    const series = {
+      name: "Serie "+(i+1),
+      data: []
+    };
 
-let data = []
-let hourOptions = "";
-let dateOptions = ""
-const optionsHours = {
-  '1': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-  '2': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-  '3': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-  '4': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-  '6': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+    // Add data to series
+    for (let j = 0; j < data[i].flujo.length; j++) {
+      let tiempo = data[i].tiempo[j].toFixed(2) * 1000;
+      moment.utc(tiempo).format("HH:mm:ss")
+      const flujo = data[i].flujo[j].toFixed(1);
+      series.data.push([tiempo, flujo]);
+
+      j === data[i].flujo.length - 1 ?
+        tiempo = (data[i].tiempo[j] + 1) * 1000
+      :
+        tiempo = ((data[i].tiempo[j]) + (data[i].tiempo[j+1] - data[i].tiempo[j])/2) * 1000
+
+      moment.utc(tiempo).format("HH:mm:ss")
+      series.data.push([tiempo, 0]);
+    }
+
+    seriesGraph.push(series);
+  }
+  return seriesGraph;
 }
 
-  const initialState = {
-    id_user: "",
-    id_ejercicio: "",
+function getDatesBetween(startDate, endDate) {
+  const startDateArr = startDate.split("/");
+  const endDateArr = endDate.split("/");
+  const startDateFormatted = `${startDateArr[1]}/${startDateArr[0]}/${startDateArr[2]}`;
+  const endDateFormatted = `${endDateArr[1]}/${endDateArr[0]}/${endDateArr[2]}`;
+  
+  const dates = [];
+  let currentDate = new Date(startDateFormatted);
+  
+  while (currentDate <= new Date(endDateFormatted)) {
+    dates.push(new Date(currentDate));
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+  return dates;
+}
+
+function getHoursOptions(startHour, hourInterval) {
+  const hours = [];  
+  let currentHour = startHour;
+  let i = 0
+  while (i < (12/hourInterval)){
+    hours.push(currentHour);
+    currentHour+=hourInterval
+    i++;
+  }
+  return hours;
+}
+      
+class VerResultados extends React.Component {
+  state = {
+    id_patient: this.props.id_patient,
+    id_ejercicio: this.props.id_ejercicio,
     hora: "",
     fecha: "",
+    dateOptions: "",
+    hourOptions: "",
+    msg: "",
     series: [],    
     options:{
       chart: {
-        stacked: false,
-        events: {
-          selection: function (chart, e) {
-            console.log(new Date(e.xaxis.min))
-          }
-        },
+        stacked: false
       },
       tooltip:{
         followCursor: true
@@ -68,64 +113,9 @@ const optionsHours = {
       }
     }
   };
-
-  function fillGraph(state) {
-    // Add series to options
-    for (let i = 0; i < data.length; i++) {
-      const series = {
-        name: "Serie "+(i+1),
-        data: []
-      };
-
-      // Add data to series
-      for (let j = 0; j < data[i].flujo.length; j++) {
-        const tiempo = data[i].tiempo[j] * 1000;
-        moment.utc(tiempo).format("HH:mm:ss")
-        const flujo = data[i].flujo[j];
-        series.data.push([tiempo, flujo]);
-      }
-
-      state.series.push(series);
-    }
-    console.log("fillGraph, ", state)
-  }
-
-  function getDatesBetween(startDate, endDate) {
-    const startDateArr = startDate.split("/");
-    const endDateArr = endDate.split("/");
-    const startDateFormatted = `${startDateArr[1]}/${startDateArr[0]}/${startDateArr[2]}`;
-    const endDateFormatted = `${endDateArr[1]}/${endDateArr[0]}/${endDateArr[2]}`;
-    
-    const dates = [];
-    let currentDate = new Date(startDateFormatted);
-    
-    while (currentDate <= new Date(endDateFormatted)) {
-      dates.push(new Date(currentDate));
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-    return dates;
-  }
-
-  function getHoursOptions(startHour, hourInterval) {
-    const hours = [];  
-    let currentHour = startHour;
-    let i = 0
-    while (i < (12/hourInterval)){
-      hours.push(currentHour);
-      currentHour+=hourInterval
-      i++;
-    }
-    return hours;
-  }
-      
-class VerResultados extends React.Component {
-  state = initialState;  
   
   componentDidMount(){
-    this.state.id_ejercicio = this.props.id_ejercicio
-    this.state.series = []
-    data = ""
-    
+
     fetch('https://server.ubicu.co/getEjerciciobyId', {
     //fetch('http://localhost:5000/getEjerciciobyId', {
         method: 'POST',
@@ -146,7 +136,7 @@ class VerResultados extends React.Component {
         console.log("resp: ",resp);
         const ejercicio = resp;
         
-        dateOptions = getDatesBetween(ejercicio.fecha_inicio, ejercicio.fecha_fin).map(date => (
+        const dateOptions = getDatesBetween(ejercicio.fecha_inicio, ejercicio.fecha_fin).map(date => (
           <option value={date.toLocaleDateString('es-ES', { 
             day: '2-digit', 
             month: '2-digit', 
@@ -159,54 +149,43 @@ class VerResultados extends React.Component {
             }).toString()}
           </option>
         ));
-        hourOptions = getHoursOptions(ejercicio.hora_inicio, ejercicio.frecuencia_horas).map(hour => (
+        const hourOptions = getHoursOptions(ejercicio.hora_inicio, ejercicio.frecuencia_horas).map(hour => (
           <option value={hour}>
             {hour > 12 ? (hour - 12)+":00 pm" : hour < 12 ? hour+":00 am": hour+":00 pm"}
           </option>
         ));
         
-        this.state.id_user = ejercicio.id_user;
-        this.setState(this.state);
+        this.setState({
+          dateOptions:dateOptions,
+          hourOptions:hourOptions
+        });
       })
       .catch(err => {
         console.error(err);
-    });    
+    });
   }
 
   handleClick = () => {
-    //fetch('http://localhost:5000/allResultsByEjercicio', {
-    fetch('https://server.ubicu.co/allResultsByEjercicio', {
-      method: 'POST',
-      body: JSON.stringify({id_ejercicio:this.state.id_ejercicio, fecha:this.state.fecha, hora:this.state.hora}),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(res => {
-      if (res.status === 200) {
-        return res.json();
-      } else {
-        const error = new Error(res.error);
-        throw error;
-      }
-    })
-    .then(resp => {
-      console.log("resp", resp)
-      if(resp.datos != ""){
-        data = JSON.parse(resp.datos);
-        fillGraph(this.state)
-      }
-      else
-      {
-        data = resp.msg;
-      }
-      this.forceUpdate();
-
-    })
-    .catch(err => {
-        console.error(err);
-    });
+    const { id_ejercicio, allResultsByEjercicio } = this.props;
+    const { fecha, hora } = this.state;
     
+    allResultsByEjercicio({ id_ejercicio, fecha, hora }).then(resp => {
+      console.log(resp.datos);
+      if(resp.datos === "")
+        this.setState({
+          series:[],
+          msg:resp.msg
+        })
+      else
+        this.setState({
+          series:fillGraph(JSON.parse(resp.datos)),
+          msg:""
+        });
+      
+      this.forceUpdate();
+    }).catch(error => {
+      console.log(error);
+    }); 
   }
   
   changeInput = (event) => {
@@ -214,6 +193,8 @@ class VerResultados extends React.Component {
   }
 
   render() {
+    const { id_patient, series, options, dateOptions, hourOptions, msg } = this.state;
+
     return (
       <div>
         <Grid >
@@ -243,16 +224,11 @@ class VerResultados extends React.Component {
             </Form>
           </Grid.Row>
           <Grid.Row>
-            {
-              this.state.series.length != 0 ? 
-                <Chart type="area" height={350} series={this.state.series} options={this.state.options}>
-                </Chart> 
-                : 
-                data
-            }
+            {msg}
+            <Chart type="area" height={350} series={series} options={options}></Chart>
           </Grid.Row>
           <Grid.Row>
-            <Link to={`/VerEjercicios/${this.state.id_user}`}><Button type='submit'>Regresar</Button></Link>
+            <Link to={`/VerEjercicios/${id_patient}`}><Button type='submit'>Regresar</Button></Link>
           </Grid.Row>
         </Grid.Column>
         </Grid>
@@ -266,5 +242,5 @@ const mapStateToProp =(state)=>{
         results: state.results.results
     };
 }
-export default connect(mapStateToProp,{allResultsByUser})(withRouter(VerResultados));
+export default connect(mapStateToProp,{ allResultsByEjercicio })(withRouter(VerResultados));
 

@@ -6,7 +6,6 @@ import {Link,withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
 import moment from "moment";
 
-
 const optionsHours = {
     '1': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     '2': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
@@ -31,43 +30,42 @@ class Agregar extends Component {
         apnea: "",
         flujo: "",
         hora_inicio: "",
-        id_user: this.props.id
+        id_patient: this.props.id_patient
     };
-
-    componentDidMount(){
-        console.log("props agregar: ",this.props)
-        console.log("state agregar: ",this.state);
-    }
-
     
     handleSave = (e) => {
         e.preventDefault();
+        const { nombre, duracion_total, frecuencia_dias, frecuencia_horas, repeticiones, series, periodos_descanso, fecha_inicio, apnea, flujo, hora_inicio, id_patient } = this.state;
+        if (!duracion_total || !frecuencia_dias || !frecuencia_horas || !repeticiones || !series || !periodos_descanso || !fecha_inicio || !apnea || !flujo || !hora_inicio) {
+            alert('Por favor proporcione la información requerida');
+            return;
+        }
+
         this.props.crearEjercicio({
-            nombre: this.state.nombre,
-            duracion_total: this.state.duracion_total,
-            frecuencia_dias: this.state.frecuencia_dias,
-            frecuencia_horas:  this.state.frecuencia_horas,
-            repeticiones: this.state.repeticiones,
-            series: this.state.series,
-            periodos_descanso: this.state.periodos_descanso,
-            fecha_inicio: moment(this.state.fecha_inicio, 'YYYY-MM-DD').format('DD/MM/YYYY').toString(),
-            fecha_fin: moment(this.state.fecha_inicio, 'YYYY-MM-DD').add(this.state.frecuencia_dias-1, 'days').format('DD/MM/YYYY').toString(), // fecha_inicio + frecuencia dias
-            apnea: this.state.apnea,
-            flujo: this.state.flujo,
-            hora_inicio: this.state.hora_inicio,
-            id_user: this.state.id_user
+            nombre,
+            duracion_total,
+            frecuencia_dias,
+            frecuencia_horas,
+            repeticiones,
+            series,
+            periodos_descanso,
+            fecha_inicio: moment(fecha_inicio, 'YYYY-MM-DD').format('DD/MM/YYYY').toString(),
+            fecha_fin: moment(fecha_inicio, 'YYYY-MM-DD').add(frecuencia_dias - 1, 'days').format('DD/MM/YYYY').toString(), // fecha_inicio + frecuencia dias - 1
+            apnea,
+            flujo,
+            hora_inicio,
+            id_patient
         }).then(resp => {
-            console.log(resp);
-            this.props.history.push(`/VerEjercicios/${this.state.id_user}`);
+            this.props.history.push(`/VerEjercicios/${id_patient}`);
         });
     }
     changeInput = (event) => {
-        if(event.target.name == "frecuencia_horas"){
+        if(event.target.name === "frecuencia_horas"){
             options = optionsHours[event.target.value].map(hour => (
                 <option value={hour}>
-                  {hour > 12 ? (hour - 12)+":00 pm" : hour < 12 ? hour+":00 am": hour+":00 pm"}
+                    {hour > 12 ? (hour - 12)+":00 pm" : hour < 12 ? hour+":00 am": hour+":00 pm"}
                 </option>
-              ));
+            ));
         }        
         this.setState({[event.target.name]:event.target.value});
     }
@@ -172,7 +170,7 @@ class Agregar extends Component {
                     </select>
                     </Form.Field>
                     <Button onClick={this.handleSave} primary type='submit'>Agregar</Button>
-                    <Link to={`/VerEjercicios/${this.state.id_user}`}><Button type='submit'>Regresar</Button></Link>
+                    <Link to={`/VerEjercicios/${this.state.id_patient}`}><Button type='submit'>Regresar</Button></Link>
                 </Form>
             </Segment>
             </Grid.Column>

@@ -14,9 +14,8 @@ const optionHeaders = {
     }
 };
 
-export const mostrarPatients = () => async dispatch => {
-    const respuesta = await axios.get(urlApi + "allPatients", optionHeaders);
-    console.log(respuesta);
+export const mostrarPatients = (id_user) => async dispatch => {
+    const respuesta = await axios.post(urlApi + "getPatientbyUser", id_user);
     dispatch({
         type: MOSTRAR_USERS,
         payload: respuesta.data
@@ -55,11 +54,11 @@ export const updatePatient = (product) => async dispatch => {
     });
 };
 
-export const getPatientbyId = (id_user) => async dispatch => {
-    const respuesta = await axios.post(urlApi + "getPatientbyId", id_user);
-    console.log(respuesta);
+export const getPatientbyId = (id_patient) => async dispatch => {
+    const respuesta = await axios.post(urlApi + "getPatientbyId", id_patient);
     dispatch({
         type: GET_USER,
         payload: respuesta.data
     });
+    return respuesta.data;
 };

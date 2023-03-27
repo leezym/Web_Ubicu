@@ -1,4 +1,4 @@
-import { CREAR_EJERCICIO, ELIMINAR_EJERCICIO, ACTUALIZAR_EJERCICIO, MOSTRAR_EJERCICIOS } from "./types.js";
+import { CREAR_EJERCICIO, ELIMINAR_EJERCICIO, ACTUALIZAR_EJERCICIO, MOSTRAR_EJERCICIOS, GET_EJERCICIO } from "./types.js";
 import axios from "axios";
 
 // json local json server
@@ -14,8 +14,8 @@ const optionHeaders = {
     }
 };
 
-export const allEjerciciosByUser = (id_ejercicio) => async dispatch => {
-    const respuesta = await axios.post(urlApi + "allEjerciciosByUser", id_ejercicio);
+export const allEjerciciosByPatient = (id_user) => async dispatch => {
+    const respuesta = await axios.post(urlApi + "allEjerciciosByPatient", id_user);
     console.log(respuesta);
     dispatch({
         type: MOSTRAR_EJERCICIOS,
@@ -43,14 +43,20 @@ export const deleteEjercicio = (cedula) => async dispatch => {
 };
 
 export const updateEjercicio = (ejercicio) => async dispatch => {
-    console.log(ejercicio);
-    let datos;
-    const respuesta = await axios.put(urlApi + "updateEjercicio", ejercicio, optionHeaders).then(
-        datos = await axios.post(urlApi + "allEjerciciosByUser", ejercicio.id_user)
-    );
-    console.log("datosupt:", datos);
+    console.log("in", ejercicio);
+    const respuesta = await axios.put(urlApi + "updateEjercicio", ejercicio, optionHeaders);
+    console.log("out", respuesta.data);
     dispatch({
         type: ACTUALIZAR_EJERCICIO,
-        payload: datos.data
+        payload: respuesta.data
     });
+};
+
+export const getEjerciciobyId = (id_ejercicio) => async dispatch => {
+    const respuesta = await axios.post(urlApi + "getEjerciciobyId", id_ejercicio);
+    dispatch({
+        type: GET_EJERCICIO,
+        payload: respuesta.data
+    });
+    return respuesta.data;
 };

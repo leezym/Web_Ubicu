@@ -1,41 +1,20 @@
 import React, { Component } from 'react';
-import {Grid,Label,Segment,List,Icon, Card, Image, Button} from "semantic-ui-react";
-import {Link} from "react-router-dom";
+import { Grid, Label, Segment, List, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import MenuNav from '../pages/MenuNav';
-import {getPatientbyId} from "../../actions/patientsAction";
-import {connect} from "react-redux";
+import { connect } from 'react-redux';
 
 
 class Ver extends Component {
-    state ={};
-    componentDidMount(){
-        
-        fetch('https://server.ubicu.co/getPatientbyId', {
-        //fetch('http://localhost:5000/getPatientbyId', {
-        method: 'POST',
-        body: JSON.stringify({id_patient:this.props.id}),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(res => {
-        if (res.status === 200) {
-          return res.json();
-        } else {
-          const error = new Error(res.error);
-          throw error;
-        }
-      })
-      .then(resp => {        
-        console.log("resp: ",resp);
-        this.setState(resp);
+    state = {};
 
-      })
-      .catch(err => {
-            console.error(err);
-    });
+    componentDidMount() {
+        const user = this.props.users.find((user) => user._id === this.props.id_patient);
+        this.setState({ ...user });
     }
+
     render() {
+        const { nombre, cedula, edad, sexo, peso, altura, telefono, email, direccion, ciudad, _id, id_user } = this.state;
         return (
         <div>
         <MenuNav/>
@@ -50,69 +29,69 @@ class Ver extends Component {
                     <List.Item>
                         <List.Content>
                             <List.Header>Nombre</List.Header>
-                            <List.Description>{this.state.nombre}</List.Description>
+                            <List.Description>{nombre}</List.Description>
                         </List.Content>
                     </List.Item>
                     <List.Item>    
                         <List.Content>
                             <List.Header>Cédula</List.Header>
-                            <List.Description>{this.state.cedula}</List.Description>
+                            <List.Description>{cedula}</List.Description>
                         </List.Content>
                     </List.Item>
                     <List.Item>
                         <List.Content>
                             <List.Header>Edad</List.Header>
-                            <List.Description>{this.state.edad}</List.Description>
+                            <List.Description>{edad}</List.Description>
                         </List.Content>
                     </List.Item>    
                     <List.Item>
                         <List.Content>
                             <List.Header>Sexo</List.Header>
-                            <List.Description>{this.state.sexo}</List.Description>
+                            <List.Description>{sexo}</List.Description>
                         </List.Content>
                     </List.Item>
                     <List.Item>
                         <List.Content>
                             <List.Header>Peso (kg)</List.Header>
-                            <List.Description>{this.state.peso}</List.Description>
+                            <List.Description>{peso}</List.Description>
                         </List.Content>
                     </List.Item>
                     <List.Item>
                         <List.Content>
                             <List.Header>Altura (cm)</List.Header>
-                            <List.Description>{this.state.altura}</List.Description>
+                            <List.Description>{altura}</List.Description>
                         </List.Content>
                     </List.Item>
                     <List.Item>    
                         <List.Content>
                             <List.Header>Teléfono</List.Header>
-                            <List.Description>{this.state.telefono}</List.Description>
+                            <List.Description>{telefono}</List.Description>
                         </List.Content>
                     </List.Item>
                     <List.Item>
                         <List.Content>
                             <List.Header>Email</List.Header>
-                            <List.Description>{this.state.email}</List.Description>
+                            <List.Description>{email}</List.Description>
                         </List.Content>
                     </List.Item>
                     <List.Item>    
                         <List.Content>
                             <List.Header>Dirección</List.Header>
-                            <List.Description>{this.state.direccion}</List.Description>
+                            <List.Description>{direccion}</List.Description>
                         </List.Content>
                     </List.Item>                    
                     <List.Item>    
                         <List.Content>
                             <List.Header>Ciudad</List.Header>
-                            <List.Description>{this.state.ciudad}</List.Description>
+                            <List.Description>{ciudad}</List.Description>
                         </List.Content>
                     </List.Item>
                     
                     <List.Item style={{ marginTop: '1em' }}>    
                     <List.Content>
                         <List.Description>
-                            <Link to={`/VerEjercicios/${this.state._id}`}><Button primary  size='small' > Ejercicios</Button></Link>
-                            <Link to="/Users"><Button >Regresar</Button></Link>
+                            <Link to={`/VerEjercicios/${_id}`}><Button primary  size='small' > Ejercicios</Button></Link>
+                            <Link to={`/Users/${id_user}`}><Button >Regresar</Button></Link>
                         </List.Description>
                     </List.Content>
                     </List.Item>
@@ -129,4 +108,4 @@ const mapStateToProp =(state)=>{
         users: state.users.users
     };
 }
-export default connect(mapStateToProp,{getPatientbyId})(Ver);  
+export default connect(mapStateToProp, null)(Ver);

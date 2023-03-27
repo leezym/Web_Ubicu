@@ -5,51 +5,45 @@ import {crearUser} from "../../actions/usersAction";
 import {Link} from "react-router-dom";
 import { connect } from 'react-redux';
 
-
 class Agregar extends Component {
 
-    state ={
-        nombre: "",
-        cedula: "",
-        telefono: "",
-        email: "",
-        password:"",
-        tipo:"fisioterapeuta"
+    state = {
+        nombre: '',
+        cedula: '',
+        telefono: '',
+        email: '',
+        password:''
     };
-    handleSubmit = (e) => {
+    
+    handleSave = (e) => {
         e.preventDefault();
-        
-        //fetch('http://localhost:5000/createUser', {
-        fetch('https://server.ubicu.co/createUser', {
-            method: 'POST',
-            body: JSON.stringify(this.state),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(res => {
-            if (res.status === 200) {
-                return res.json();
-            } else {
-                const error = new Error(res.error);
-                throw error;
-            }
-        })
-        .then(resp => {
-            console.log(resp);
-            alert('Usuario creado');
-            this.props.history.push("/");
+        const { crearUser, history } = this.props;
+        const { nombre, cedula, telefono, email, password } = this.state;
+        if (!nombre || !cedula || !telefono || !email || !password) {
+            alert('Por favor proporcione la información requerida');
+            return;
+        }
+
+        crearUser({
+            nombre,
+            cedula,
+            telefono,
+            email,
+            password
+        }).then(resp => {
+            alert('Fisioterapeuta creado');
+            history.push('/');
         })
         .catch(err => {
             console.log(err);
             alert('Error al crear usuario');
         });
-        
-    }
+    };
     
     changeInput = (event) => {
         this.setState({[event.target.name]:event.target.value});
     }
+    
     render() {
         return (
             <div>
@@ -98,7 +92,7 @@ class Agregar extends Component {
                             type='password'
                             onChange={this.changeInput} />
                         </Form.Field>
-                        <Button onClick={this.handleSubmit} primary type='submit'>Agregar</Button>
+                        <Button onClick={this.handleSave} primary type='submit'>Agregar</Button>
                         <Link to="/"><Button type='submit'>Regresar</Button></Link>
                     </Form>
                 </Segment>
@@ -109,4 +103,4 @@ class Agregar extends Component {
     }
 }
 
-export default connect(null,{crearUser})(Agregar);
+export default connect(null, { crearUser })(Agregar);

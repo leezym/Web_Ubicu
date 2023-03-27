@@ -57,11 +57,10 @@ export const updateUser = (product) => async dispatch => {
 
 export const authenticateUser = (data) => async dispatch => {
     console.log(data);
-    console.log("data");
     const respuesta = await axios.post(urlApi + "authenticateUser", data);
-    //        sessionStorage.setItem(‘jwtToken’, response.payload.data.token);
+    //sessionStorage.setItem('jwtToken', respuesta.payload.data.token);
+    //localStorage.setItem('token', respuesta.payload.data.token);
     console.log(respuesta);
-
     dispatch({
         type: AUTHENTICATE_USER,
         payload: respuesta.data

@@ -3,9 +3,9 @@ import {Item,Button,Icon,Dropdown, Image, Form, Input,Card} from 'semantic-ui-re
 import {Link,withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
 import moment from "moment";
+import { updateEjercicio } from '../../actions/ejerciciosAction';
 
 
-let options = ""
 const optionsHours = {
     '1': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     '2': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
@@ -14,63 +14,55 @@ const optionsHours = {
     '6': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
 }
 
-const readOnly = "";
-const ejercicio = "";
-const initialState = {
-    readOnly,
-    ejercicio
-}
-
 class Ejercicio extends Component {
-    
-    state = initialState;
+    state = {
+        id: this.props.ejercicio._id,
+        readOnly: true,
+        ejercicio: this.props.ejercicio,
+        options: optionsHours[this.props.ejercicio.frecuencia_horas].map(hour => (
+            <option value={hour}>
+            {hour > 12 ? (hour - 12)+":00 pm" : hour < 12 ? hour+":00 am": hour+":00 pm"}
+            </option>
+        ))
+    };
 
-    componentDidMount(){              
-
-        //this.props.deleteUser();
-    }
-
-    handleEdit(value) {
+    handleEdit (value) {
         this.setState({ readOnly: value });
     }
 
-    handleSave(ejercicio){
-        ejercicio.fecha_fin = moment(ejercicio.fecha_inicio, 'YYYY-MM-DD').add(ejercicio.frecuencia_dias-1, 'days').format('DD/MM/YYYY').toString()
+    handleSave = (e) => {
+        this.handleEdit(true);
 
-        this.props.updateEjercicio(ejercicio)/*.then(resp => {
-            this.forceUpdate();
-        })*/
+        e.preventDefault();
+        const { ejercicio } = this.state;
+        console.log(ejercicio.fecha_inicio)
+        ejercicio.fecha_fin = moment(ejercicio.fecha_inicio, 'YYYY-MM-DD').add(ejercicio.frecuencia_dias - 1, 'days').format('DD/MM/YYYY').toString();
+        console.log("fechaifn", this.state.ejercicio.fecha_fin);
+        this.props.updateEjercicio(this.state);
     }
 
     changeInput = (event) => {
-        if(event.target.name == "frecuencia_horas"){
-            options = optionsHours[event.target.value].map(hour => (
-                <option value={hour}>
-                  {hour > 12 ? (hour - 12)+":00 pm" : hour < 12 ? hour+":00 am": hour+":00 pm"}
-                </option>
-              ));
-        }    
-        //this.setState({[event.target.name]:event.target.value});
-    }
-
-    render() {
-        this.state.readOnly = true;
-        this.state.ejercicio = this.props.ejercicio
-
-        if(Object.keys(this.props.ejercicio).length !=  0)
-            options = optionsHours[this.state.ejercicio.frecuencia_horas].map(hour => (
+        if(event.target.name === "frecuencia_horas"){
+            const options = optionsHours[event.target.value].map(hour => (
                 <option value={hour}>
                 {hour > 12 ? (hour - 12)+":00 pm" : hour < 12 ? hour+":00 am": hour+":00 pm"}
                 </option>
-            ))
-        
-        
+            ));
+            this.setState({ options });
+        }    
+        this.setState({[event.target.name]:event.target.value});
+        console.log(this.state)
+    }
+
+    render() {
+        const { readOnly, ejercicio, options } = this.state;
+                
         return (
             <Card fluid color="blue" >
                 <Card.Content >
                     <Card.Header></Card.Header>
                     <Card.Description width="60%">
-                    <Form>
+                    <Form onSubmit={this.handleSave}>
                     <Form.Group >
                         <Form.Field>
                         <label>Nombre</label>
@@ -78,7 +70,7 @@ class Ejercicio extends Component {
                             placeholder='Nombre'
                             type='text'
                             disabled={true}
-                            value={this.state.readOnly ? this.state.ejercicio.nombre : null}/>
+                            value={readOnly ? ejercicio.nombre : null}/>
                         </Form.Field>
                         <Form.Field>
                         <label>Duración total de la terapia (días)</label>
@@ -86,12 +78,12 @@ class Ejercicio extends Component {
                             placeholder='Duración total'
                             type='number'
                             onChange={this.changeInput}
-                            disabled={this.state.readOnly}
-                            value={this.state.readOnly ? this.state.ejercicio.duracion_total : null}/>
+                            disabled={readOnly}
+                            value={readOnly ? ejercicio.duracion_total : null}/>
                         </Form.Field>
                         <Form.Field>
                         <label>Frecuencia (cuantos días a la semana)</label>
-                        <select name="frecuencia_dias" value={this.state.readOnly ? this.state.ejercicio.frecuencia_dias : null} disabled={this.state.readOnly} onChange={this.changeInput}>
+                        <select name="frecuencia_dias" value={readOnly ? ejercicio.frecuencia_dias : null} disabled={readOnly} onChange={this.changeInput}>
                             <option value="-">Select option</option>
                             <option value="1">1 día</option>
                             <option value="2">2 días</option>
@@ -104,7 +96,7 @@ class Ejercicio extends Component {
                         </Form.Field>
                         <Form.Field>
                         <label>Frecuencia (cada cuantas horas al día)</label>
-                            <select name="frecuencia_horas" value={this.state.readOnly ? this.state.ejercicio.frecuencia_horas : null} disabled={this.state.readOnly} onChange={this.changeInput}>
+                            <select name="frecuencia_horas" value={readOnly ? ejercicio.frecuencia_horas : null} disabled={readOnly} onChange={this.changeInput}>
                             <option value="-">Select option</option>
                             <option value="1">Cada 1h</option>
                             <option value="2">Cada 2h</option>
@@ -121,8 +113,8 @@ class Ejercicio extends Component {
                             type = 'number'                        
                             placeholder='Repeticiones'
                             onChange={this.changeInput} 
-                            disabled={this.state.readOnly}
-                            value={this.state.readOnly ? this.state.ejercicio.repeticiones : null}/>
+                            disabled={readOnly}
+                            value={readOnly ? ejercicio.repeticiones : null}/>
                         </Form.Field>
                         <Form.Field>
                         <label>Series</label>
@@ -131,8 +123,8 @@ class Ejercicio extends Component {
                             placeholder='Series'
                             type='number'
                             onChange={this.changeInput} 
-                            disabled={this.state.readOnly}
-                            value={this.state.readOnly ? this.state.ejercicio.series : null}/>
+                            disabled={readOnly}
+                            value={readOnly ? ejercicio.series : null}/>
                         </Form.Field>
                         <Form.Field>
                         <label>Periodo de descanso (seg)</label>
@@ -141,8 +133,8 @@ class Ejercicio extends Component {
                             placeholder='Periodo de descanso'
                             type='number'
                             onChange={this.changeInput} 
-                            disabled={this.state.readOnly}
-                            value={this.state.readOnly ? this.state.ejercicio.periodos_descanso: null}/>
+                            disabled={readOnly}
+                            value={readOnly ? ejercicio.periodos_descanso: null}/>
                         </Form.Field>
                         <Form.Field>
                         <label>Fecha de inicio</label>
@@ -150,8 +142,8 @@ class Ejercicio extends Component {
                             type="date"
                             onChange={this.changeInput}
                             placeholder='DD/MM/AAAA'
-                            disabled={this.state.readOnly}
-                            value={this.state.readOnly ? moment(this.state.ejercicio.fecha_inicio, 'DD/MM/YYYY').format('YYYY-MM-DD') : null}/>
+                            disabled={readOnly}
+                            value={readOnly ? moment(ejercicio.fecha_inicio, 'DD/MM/YYYY').format('YYYY-MM-DD') : null}/>
                         </Form.Field>
                         </Form.Group>
                         <Form.Group>
@@ -160,11 +152,11 @@ class Ejercicio extends Component {
                         <input  name="fecha_fin"
                             type='text'
                             disabled={true}
-                            value={this.state.ejercicio.fecha_fin}/>
+                            value={ejercicio.fecha_fin}/>
                         </Form.Field>
                         <Form.Field>
                         <label>Apnea (seg)</label>
-                        <select name="apnea" value={this.state.readOnly ? this.state.ejercicio.apnea : null} disabled={this.state.readOnly} onChange={this.changeInput}>
+                        <select name="apnea" value={readOnly ? ejercicio.apnea : null} disabled={readOnly} onChange={this.changeInput}>
                             <option value="-">Select option</option>
                             <option value="1">1 seg</option>
                             <option value="2">2 seg</option>
@@ -173,7 +165,7 @@ class Ejercicio extends Component {
                         </Form.Field>                    
                         <Form.Field>
                         <label>Flujo (mL)</label>
-                        <select name="flujo" value={this.state.readOnly ? this.state.ejercicio.flujo : null} disabled={this.state.readOnly} onChange={this.changeInput}>
+                        <select name="flujo" value={readOnly ? ejercicio.flujo : null} disabled={readOnly} onChange={this.changeInput}>
                             <option value="-">Select option</option>
                             <option value="600">600 mL</option>
                             <option value="900">900 mL</option>
@@ -186,7 +178,7 @@ class Ejercicio extends Component {
                         </Form.Field>
                         <Form.Field>
                         <label>Hora de inicio de la terapia</label>
-                        <select name="hora_inicio" value={this.state.readOnly ? this.state.ejercicio.hora_inicio : null} disabled={this.state.readOnly} onChange={this.changeInput}>
+                        <select name="hora_inicio" value={readOnly ? ejercicio.hora_inicio : null} disabled={readOnly} onChange={this.changeInput}>
                             {options}
                         </select>
                         </Form.Field>
@@ -194,17 +186,20 @@ class Ejercicio extends Component {
                     </Form>
                     </Card.Description>
                     <Card.Content extra>
-                    <Link to={`/VerResultados/${this.state.ejercicio.id_user}/${this.state.ejercicio._id}`}>
+                    <Link to={`/VerResultados/${ejercicio.id_patient}/${ejercicio._id}`}>
                     <Button secundary floated='right'>
                         Ver Gráfica
                     <Icon name='right chevron' />
                     </Button>
                     </Link>
-                    {/* pdte revisar el metodo guardar
-                        this.state.readOnly ? 
+                    {/* readOnly ? 
                         <Button onClick={()=>this.handleEdit(false)} floated='left' icon labelPosition='left' primary  size='small'><Icon name='clipboard' />Editar</Button>
                         :
-                        <Button onClick={()=>{this.handleEdit(true); this.handleSave(ejercicio);}} floated='left' icon labelPosition='left' primary  size='small'><Icon name='clipboard' />Guardar</Button>*/
+                        <>
+                            <Button onClick={this.handleSave} type="submit" floated='left' icon labelPosition='left' primary size='small'><Icon name='clipboard' />Guardar</Button>
+                            <Button onClick={()=>this.handleEdit(true)} type='submit'>Cancelar</Button>
+                        </>
+                        */
                     }
                     </Card.Content>
                 </Card.Content>
@@ -213,5 +208,5 @@ class Ejercicio extends Component {
     }
 }
 
-export default connect(null,null)(withRouter(Ejercicio));
+export default connect(null,{ updateEjercicio })(withRouter(Ejercicio));
 
