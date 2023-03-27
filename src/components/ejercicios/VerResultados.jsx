@@ -80,7 +80,21 @@ class VerResultados extends React.Component {
         stacked: false
       },
       tooltip:{
-        followCursor: true
+        followCursor: true,
+        x: {
+          formatter: function(value) {
+            // crea un objeto Date con el valor del eje X
+            let date = new Date(value);
+    
+            // obtiene las horas, minutos y segundos del objeto Date
+            let hours = date.getHours().toString().padStart(2, '0');
+            let minutes = date.getMinutes().toString().padStart(2, '0');
+            let seconds = date.getSeconds().toString().padStart(2, '0');
+    
+            // retorna la cadena con el formato "HH:mm:ss"
+            return `${hours}:${minutes}:${seconds}`;
+          }
+        }
       },
       dataLabels: {
         enabled: false
