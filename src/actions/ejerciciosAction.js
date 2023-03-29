@@ -1,5 +1,6 @@
 import { CREAR_EJERCICIO, ELIMINAR_EJERCICIO, ACTUALIZAR_EJERCICIO, MOSTRAR_EJERCICIOS, GET_EJERCICIO } from "./types.js";
 import axios from "axios";
+import { optionHeaders } from './headers.js';
 
 // json local json server
 //const urlLocal = "http://localhost:5000/";
@@ -7,16 +8,9 @@ const urlLocal = "https://server.ubicu.co/";
 
 const urlApi = urlLocal;
 
-const optionHeaders = {
-    headers: {
-        'Content-Type': 'application/json',
-        'x-access-token': localStorage.getItem('token')
-    }
-};
 
 export const allEjerciciosByPatient = (id_user) => async dispatch => {
     const respuesta = await axios.post(urlApi + "allEjerciciosByPatient", id_user);
-    console.log(respuesta);
     dispatch({
         type: MOSTRAR_EJERCICIOS,
         payload: respuesta.data
@@ -25,7 +19,6 @@ export const allEjerciciosByPatient = (id_user) => async dispatch => {
 
 export const crearEjercicio = (ejercicio) => async dispatch => {
     const respuesta = await axios.post(urlApi + "createEjercicio", ejercicio, optionHeaders);
-    console.log(respuesta);
     dispatch({
         type: CREAR_EJERCICIO,
         payload: respuesta.data
@@ -33,7 +26,6 @@ export const crearEjercicio = (ejercicio) => async dispatch => {
 };
 
 export const deleteEjercicio = (cedula) => async dispatch => {
-    console.log(cedula);
     const respuesta = await axios.post(urlApi + "deleteEjercicio", cedula, optionHeaders);
     console.log(respuesta.data);
     dispatch({
@@ -43,7 +35,6 @@ export const deleteEjercicio = (cedula) => async dispatch => {
 };
 
 export const updateEjercicio = (ejercicio) => async dispatch => {
-    console.log("in", ejercicio);
     const respuesta = await axios.put(urlApi + "updateEjercicio", ejercicio, optionHeaders);
     console.log("out", respuesta.data);
     dispatch({

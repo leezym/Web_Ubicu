@@ -4,6 +4,8 @@ import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
 import { authenticateUser } from '../../actions/usersAction';
 import 'semantic-ui-css/semantic.min.css';
+import { optionHeaders } from '../../actions/headers.js';
+
 
 class LoginForm extends Component {
   state = {
@@ -20,8 +22,9 @@ class LoginForm extends Component {
     return cedula.length > 0 && password.length > 0;
   };
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
+
     //fetch('http://localhost:5000/authenticateUser', {
     fetch('https://server.ubicu.co/authenticateUser', {
       method: 'POST',
@@ -40,8 +43,8 @@ class LoginForm extends Component {
     })
     .then(resp => {
       localStorage.setItem('token', resp.token);
-      if(localStorage.getItem('token'))
-        this.props.history.push(`/Users/${resp.user._id}`);
+      optionHeaders.headers['x-access-token'] = localStorage.getItem('token', resp.token)
+      this.props.history.push(`/Users/${resp.user._id}`);
     })
     .catch(err => {
       console.log(err);

@@ -7,7 +7,6 @@ import Chart from 'react-apexcharts'
 import moment from "moment";
 
 function fillGraph(data) {
-  console.log("data", data)
   const seriesGraph = [];
   // Add series to options
   for (let i = 0; i < data.length; i++) {
@@ -146,8 +145,7 @@ class VerResultados extends React.Component {
           throw error;
         }
       })
-      .then(resp => {        
-        console.log("resp: ",resp);
+      .then(resp => {
         const ejercicio = resp;
         
         const dateOptions = getDatesBetween(ejercicio.fecha_inicio, ejercicio.fecha_fin).map(date => (
@@ -184,7 +182,6 @@ class VerResultados extends React.Component {
     const { fecha, hora } = this.state;
     
     allResultsByEjercicio({ id_ejercicio, fecha, hora }).then(resp => {
-      console.log(resp.datos);
       if(resp.datos === "")
         this.setState({
           series:[],
@@ -222,14 +219,14 @@ class VerResultados extends React.Component {
                           <Form.Field>
                 <label>Fecha de la fisioterapia</label>
                 <select name="fecha" onChange={this.changeInput}>
-                <option value={0}></option>
+                  <option value={0}></option>
                   {dateOptions}
                 </select>
                 </Form.Field>
                 <Form.Field>
                 <label>Hora de la fisioterapia</label>
                 <select name="hora" onChange={this.changeInput}>
-                <option value={0}></option>
+                  <option value={0}></option>
                   {hourOptions}
                 </select>
                 </Form.Field>

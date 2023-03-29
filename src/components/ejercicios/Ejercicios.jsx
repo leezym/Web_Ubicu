@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 class Ejercicios extends Component {
   state = {
     user: {},
-    capacidad_vital: 0,
+    capacidad_vital: 0
   };
 
 
@@ -88,6 +88,16 @@ class Ejercicios extends Component {
                   </TableRow>
                 </TableBody>
               </Table>
+              {ejercicios.length == 0 ? 
+                <Link to={`/AgregarEjercicio/${user._id}`}><Button primary type='submit'>Agregar</Button></Link> : 
+                new Date().toLocaleDateString('es-ES', { 
+                    day: '2-digit', 
+                    month: '2-digit', 
+                    year: 'numeric' 
+                  }) > ejercicios[ejercicios.length - 1].fecha_fin ?
+                  <Link to={`/AgregarEjercicio/${user._id}`}><Button primary type='submit'>Agregar</Button></Link>
+                  : ""
+              }
               <Link to={`/VerUser/${user._id}`}><Button >Regresar</Button></Link>
             </Segment>
             <Segment raised>

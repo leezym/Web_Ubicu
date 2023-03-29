@@ -23,7 +23,6 @@ export default function withAuth(ComponentToProtect) {
         }
       })
       .then(res => {
-          console.log(res);
           if (res.status === 200) {
             this.setState({ loading: false });
           } else {

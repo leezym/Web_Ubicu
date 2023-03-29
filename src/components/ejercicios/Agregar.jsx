@@ -37,6 +37,7 @@ class Agregar extends Component {
         e.preventDefault();
         const { nombre, duracion_total, frecuencia_dias, frecuencia_horas, repeticiones, series, periodos_descanso, fecha_inicio, apnea, flujo, hora_inicio, id_patient } = this.state;
         if (!duracion_total || !frecuencia_dias || !frecuencia_horas || !repeticiones || !series || !periodos_descanso || !fecha_inicio || !apnea || !flujo || !hora_inicio) {
+            console.log(duracion_total, frecuencia_dias, frecuencia_horas, repeticiones, series, periodos_descanso, fecha_inicio, apnea, flujo, hora_inicio);
             alert('Por favor proporcione la información requerida');
             return;
         }
@@ -166,6 +167,7 @@ class Agregar extends Component {
                     <Form.Field>
                     <label>Hora de inicio de la terapia</label>
                     <select id="hora_inicio_select" name="hora_inicio" onChange={this.changeInput}>
+                        <option value={0}></option>
                         {options}
                     </select>
                     </Form.Field>

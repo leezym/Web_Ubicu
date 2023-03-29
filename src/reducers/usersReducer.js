@@ -21,7 +21,6 @@ export default function(state = estadoinicial, action) {
             return {...state, users: action.payload };
             break;
         case CHECKTOKEN_USER:
-            console.log(action.payload);
             return {...state, users: action.payload };
             break;
         case GET_USER:

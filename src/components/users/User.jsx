@@ -29,15 +29,14 @@ class User extends Component {
                 <Icon name="right chevron" />
                 </Button>
             </Link>
-            <Button
+            {/*<Button
                 value={user.cedula}
                 onClick={this.handleDelete}
                 secondary
-                floated="right"
-            >
+                floated="right">
                 Eliminar
                 <Icon name="right chevron" />
-            </Button>
+            </Button>*/}
             </Table.Cell>
         </Table.Row>
         );
