@@ -219,14 +219,14 @@ class VerResultados extends React.Component {
                           <Form.Field>
                 <label>Fecha de la fisioterapia</label>
                 <select name="fecha" onChange={this.changeInput}>
-                  <option value={0}></option>
+                  <option value={0}>Seleccione una opción</option>
                   {dateOptions}
                 </select>
                 </Form.Field>
                 <Form.Field>
                 <label>Hora de la fisioterapia</label>
                 <select name="hora" onChange={this.changeInput}>
-                  <option value={0}></option>
+                  <option value={0}>Seleccione una opción</option>
                   {hourOptions}
                 </select>
                 </Form.Field>

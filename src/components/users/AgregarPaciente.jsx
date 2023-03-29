@@ -92,7 +92,7 @@ class AgregarPaciente extends Component {
                         <Form.Field>
                         <label>Sexo</label>
                         <select name="sexo" onChange={this.changeInput}>
-                            <option value="-">Select option</option>
+                            <option value="-">Seleccione una opción</option>
                             <option value="F">Femenino</option>
                             <option value="M">Masculino</option>
                         </select>

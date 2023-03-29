@@ -92,7 +92,7 @@ class Agregar extends Component {
                     <Form.Field>
                     <label>Frecuencia (cuantos días a la semana)</label>
                     <select name="frecuencia_dias" onChange={this.changeInput}>
-                        <option value="-">Select option</option>
+                        <option value="-">Seleccione una opción</option>
                         <option value="1">1 día</option>
                         <option value="2">2 días</option>
                         <option value="3">3 días</option>
@@ -105,7 +105,7 @@ class Agregar extends Component {
                     <Form.Field>
                     <label>Frecuencia (cada cuantas horas al día)</label>
                         <select name="frecuencia_horas" onChange={this.changeInput}>
-                        <option value="-">Select option</option>
+                        <option value="-">Seleccione una opción</option>
                         <option value="1">Cada 1h</option>
                         <option value="2">Cada 2h</option>
                         <option value="3">Cada 3h</option>
@@ -145,7 +145,7 @@ class Agregar extends Component {
                     <Form.Field>
                     <label>Apnea (seg)</label>
                     <select name="apnea" onChange={this.changeInput}>
-                        <option value="-">Select option</option>
+                        <option value="-">Seleccione una opción</option>
                         <option value="1">1 seg</option>
                         <option value="2">2 seg</option>
                         <option value="3">3 seg</option>
@@ -154,7 +154,7 @@ class Agregar extends Component {
                     <Form.Field>
                     <label>Flujo (mL)</label>
                     <select name="flujo" onChange={this.changeInput}>
-                        <option value="-">Select option</option>
+                        <option value="-">Seleccione una opción</option>
                         <option value="600">600 mL</option>
                         <option value="900">900 mL</option>
                         <option value="1200">1200 mL</option>
@@ -167,7 +167,7 @@ class Agregar extends Component {
                     <Form.Field>
                     <label>Hora de inicio de la terapia</label>
                     <select id="hora_inicio_select" name="hora_inicio" onChange={this.changeInput}>
-                        <option value={0}></option>
+                        <option value={0}>Seleccione una opción</option>
                         {options}
                     </select>
                     </Form.Field>
