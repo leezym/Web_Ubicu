@@ -6,12 +6,12 @@ import {Link,withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
 import moment from "moment";
 
-const optionsHours = {
-    '1': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    '2': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-    '3': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-    '4': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-    '6': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+const optionsHours = { //13h de ejercicios 
+    '1': [6, 7, 8, 9, 10, 11], // 13 sesiones
+    '2': [6, 7, 8, 9, 10, 11], // 7 sesiones
+    '3': [6, 7, 8, 9, 10, 11], // 5 sesiones
+    '4': [6, 7, 8, 9, 10, 11], // 4 sesiones
+    '6': [6, 7, 8, 9, 10, 11] // 3 sesiones
 }
 
 let options = ""
@@ -61,13 +61,13 @@ class Agregar extends Component {
         });
     }
     changeInput = (event) => {
-        if(event.target.name === "frecuencia_horas"){
+        /*if(event.target.name === "frecuencia_horas"){
             options = optionsHours[event.target.value].map(hour => (
                 <option value={hour}>
                     {hour > 12 ? (hour - 12)+":00 pm" : hour < 12 ? hour+":00 am": hour+":00 pm"}
                 </option>
             ));
-        }        
+        }*/       
         this.setState({[event.target.name]:event.target.value});
     }
     
@@ -106,7 +106,7 @@ class Agregar extends Component {
                     <label>Frecuencia (cada cuantas horas al día)</label>
                         <select name="frecuencia_horas" onChange={this.changeInput}>
                         <option value="-">Seleccione una opción</option>
-                        <option value="1">Cada 1h</option>
+                        {/*<option value="1">Cada 1h</option>*/}
                         <option value="2">Cada 2h</option>
                         <option value="3">Cada 3h</option>
                         <option value="4">Cada 4h</option>
@@ -168,7 +168,13 @@ class Agregar extends Component {
                     <label>Hora de inicio de la terapia</label>
                     <select id="hora_inicio_select" name="hora_inicio" onChange={this.changeInput}>
                         <option value={0}>Seleccione una opción</option>
-                        {options}
+                        {/*options*/}
+                        <option value={6}>6:00 am</option>
+                        <option value={7}>7:00 am</option>
+                        <option value={8}>8:00 am</option>
+                        <option value={9}>9:00 am</option>
+                        <option value={10}>10:00 am</option>
+                        <option value={11}>11:00 am</option>
                     </select>
                     </Form.Field>
                     <Button onClick={this.handleSave} primary type='submit'>Agregar</Button>

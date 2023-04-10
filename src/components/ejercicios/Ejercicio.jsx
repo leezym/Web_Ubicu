@@ -6,12 +6,12 @@ import moment from "moment";
 import { updateEjercicio } from '../../actions/ejerciciosAction';
 
 
-const optionsHours = {
-    '1': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    '2': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-    '3': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-    '4': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-    '6': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+const optionsHours = { //13h de ejercicios 
+    '1': [6, 7, 8, 9, 10, 11], // 13 sesiones
+    '2': [6, 7, 8, 9, 10, 11], // 7 sesiones
+    '3': [6, 7, 8, 9, 10, 11], // 5 sesiones
+    '4': [6, 7, 8, 9, 10, 11], // 4 sesiones
+    '6': [6, 7, 8, 9, 10, 11] // 3 sesiones
 }
 
 class Ejercicio extends Component {
@@ -19,11 +19,11 @@ class Ejercicio extends Component {
         id: this.props.ejercicio._id,
         readOnly: true,
         ejercicio: this.props.ejercicio,
-        options: optionsHours[this.props.ejercicio.frecuencia_horas].map(hour => (
+        /*options: optionsHours[this.props.ejercicio.frecuencia_horas].map(hour => (
             <option value={hour}>
             {hour > 12 ? (hour - 12)+":00 pm" : hour < 12 ? hour+":00 am": hour+":00 pm"}
             </option>
-        ))
+        ))*/
     };
 
     handleEdit (value) {
@@ -42,20 +42,19 @@ class Ejercicio extends Component {
     }
 
     changeInput = (event) => {
-        if(event.target.name === "frecuencia_horas"){
+        /*if(event.target.name === "frecuencia_horas"){
             const options = optionsHours[event.target.value].map(hour => (
                 <option value={hour}>
                 {hour > 12 ? (hour - 12)+":00 pm" : hour < 12 ? hour+":00 am": hour+":00 pm"}
                 </option>
             ));
             this.setState({ options });
-        }    
+        }    */
         this.setState({[event.target.name]:event.target.value});
-        console.log(this.state)
     }
 
     render() {
-        const { readOnly, ejercicio, options } = this.state;
+        const { readOnly, ejercicio } = this.state;
                 
         return (
             <Card fluid color="blue" >
@@ -179,7 +178,14 @@ class Ejercicio extends Component {
                         <Form.Field>
                         <label>Hora de inicio de la terapia</label>
                         <select name="hora_inicio" value={readOnly ? ejercicio.hora_inicio : null} disabled={readOnly} onChange={this.changeInput}>
-                            {options}
+                            <option value={0}>Seleccione una opción</option>
+                            {/*options*/}
+                            <option value={6}>6:00 am</option>
+                            <option value={7}>7:00 am</option>
+                            <option value={8}>8:00 am</option>
+                            <option value={9}>9:00 am</option>
+                            <option value={10}>10:00 am</option>
+                            <option value={11}>11:00 am</option>
                         </select>
                         </Form.Field>
                         </Form.Group>
