@@ -106,8 +106,8 @@ class Agregar extends Component {
                     <label>Frecuencia (cada cuantas horas al día)</label>
                         <select name="frecuencia_horas" onChange={this.changeInput}>
                         <option value="-">Seleccione una opción</option>
-                        {/*<option value="1">Cada 1h</option>*/}
-                        <option value="2">Cada 2h</option>
+                        {/*<option value="1">Cada 1h</option>
+                        <option value="2">Cada 2h</option>*/}
                         <option value="3">Cada 3h</option>
                         <option value="4">Cada 4h</option>
                         <option value="6">Cada 6h</option>
@@ -169,12 +169,12 @@ class Agregar extends Component {
                     <select id="hora_inicio_select" name="hora_inicio" onChange={this.changeInput}>
                         <option value={0}>Seleccione una opción</option>
                         {/*options*/}
-                        <option value={6}>6:00 am</option>
-                        <option value={7}>7:00 am</option>
-                        <option value={8}>8:00 am</option>
-                        <option value={9}>9:00 am</option>
-                        <option value={10}>10:00 am</option>
-                        <option value={11}>11:00 am</option>
+                        <option value="6">6:00 am</option>
+                        <option value="7">7:00 am</option>
+                        <option value="8">8:00 am</option>
+                        <option value="9">9:00 am</option>
+                        <option value="10">10:00 am</option>
+                        <option value="11">11:00 am</option>
                     </select>
                     </Form.Field>
                     <Button onClick={this.handleSave} primary type='submit'>Agregar</Button>
