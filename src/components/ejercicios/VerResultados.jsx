@@ -17,6 +17,13 @@ function fillGraph(data) {
 
     // Add data to series
     for (let j = 0; j < data[i].flujo.length; j++) {
+      const tiempo = data[i].tiempo[j].toFixed(1) * 1000;
+      moment.utc(tiempo).format("HH:mm:ss")
+      const flujo = data[i].flujo[j].toFixed(1);
+      series.data.push([tiempo, flujo]);
+    }
+
+    /*for (let j = 0; j < data[i].flujo.length; j++) {
       let tiempo = data[i].tiempo[j].toFixed(2) * 1000;
       moment.utc(tiempo).format("HH:mm:ss")
       const flujo = data[i].flujo[j].toFixed(1);
@@ -29,7 +36,7 @@ function fillGraph(data) {
 
       moment.utc(tiempo).format("HH:mm:ss")
       series.data.push([tiempo, 0]);
-    }
+    }*/
 
     seriesGraph.push(series);
   }
@@ -56,7 +63,7 @@ function getHoursOptions(startHour, hourInterval) {
   const hours = [];  
   let currentHour = startHour;
   let i = 0
-  while (i < (12/hourInterval)){
+  while (i < ((12/hourInterval)+1)){
     hours.push(currentHour);
     currentHour+=hourInterval
     i++;
