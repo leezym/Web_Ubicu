@@ -5,6 +5,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { allEjerciciosByPatient } from '../../actions/ejerciciosAction';
 import Ejercicio from './Ejercicio';
 import { connect } from 'react-redux';
+import moment from "moment";
 
 class Ejercicios extends Component {
   state = {
@@ -88,15 +89,9 @@ class Ejercicios extends Component {
                   </TableRow>
                 </TableBody>
               </Table>
-              {ejercicios.length == 0 ? 
-                <Link to={`/AgregarEjercicio/${user._id}`}><Button primary type='submit'>Agregar</Button></Link> : 
-                new Date().toLocaleDateString('es-ES', { 
-                    day: '2-digit', 
-                    month: '2-digit', 
-                    year: 'numeric' 
-                  }) > ejercicios[ejercicios.length - 1].fecha_fin ?
-                  <Link to={`/AgregarEjercicio/${user._id}`}><Button primary type='submit'>Agregar</Button></Link>
-                  : ""
+              {
+              ejercicios.length === 0 || moment(moment().format('DD/MM/YYYY'), 'DD/MM/YYYY').isAfter(moment(ejercicios[ejercicios.length - 1].fecha_fin, 'DD/MM/YYY')) ?
+                <Link to={`/AgregarEjercicio/${user._id}`}><Button primary type='submit'>Agregar</Button></Link> : ""
               }
               <Link to={`/VerUser/${user._id}`}><Button >Regresar</Button></Link>
             </Segment>

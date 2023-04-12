@@ -97,8 +97,8 @@ class Ejercicio extends Component {
                         <label>Frecuencia (cada cuantas horas al día)</label>
                             <select name="frecuencia_horas" value={readOnly ? ejercicio.frecuencia_horas : null} disabled={readOnly} onChange={this.changeInput}>
                             <option value="-">Seleccione una opción</option>
-                            <option value="1">Cada 1h</option>
-                            <option value="2">Cada 2h</option>
+                            {/*<option value="1">Cada 1h</option>
+                            <option value="2">Cada 2h</option>*/}
                             <option value="3">Cada 3h</option>
                             <option value="4">Cada 4h</option>
                             <option value="6">Cada 6h</option>
@@ -180,12 +180,12 @@ class Ejercicio extends Component {
                         <select name="hora_inicio" value={readOnly ? ejercicio.hora_inicio : null} disabled={readOnly} onChange={this.changeInput}>
                             <option value={0}>Seleccione una opción</option>
                             {/*options*/}
-                            <option value={6}>6:00 am</option>
-                            <option value={7}>7:00 am</option>
-                            <option value={8}>8:00 am</option>
-                            <option value={9}>9:00 am</option>
-                            <option value={10}>10:00 am</option>
-                            <option value={11}>11:00 am</option>
+                            <option value="6">6:00 am</option>
+                            <option value="7">7:00 am</option>
+                            <option value="8">8:00 am</option>
+                            <option value="9">9:00 am</option>
+                            <option value="10">10:00 am</option>
+                            <option value="11">11:00 am</option>
                         </select>
                         </Form.Field>
                         </Form.Group>
