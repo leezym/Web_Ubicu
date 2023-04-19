@@ -75,6 +75,7 @@ class VerResultados extends React.Component {
   state = {
     id_patient: this.props.id_patient,
     id_ejercicio: this.props.id_ejercicio,
+    flujo: "",
     hora: "",
     fecha: "",
     dateOptions: "",
@@ -98,7 +99,8 @@ class VerResultados extends React.Component {
             let seconds = date.getSeconds().toString().padStart(2, '0');
     
             // retorna la cadena con el formato "HH:mm:ss"
-            return `${hours}:${minutes}:${seconds}`;
+            //return `${hours}:${minutes}:${seconds}`;
+            return date;
           }
         }
       },
@@ -130,12 +132,25 @@ class VerResultados extends React.Component {
           text: "Flujo"
         },
         type: 'numeric'
+      },
+      annotations: {
+        yaxis: [{
+          y: 0,
+          borderColor: '#999',
+          label: {
+            show: true,
+            text: 'Meta',
+            style: {
+              color: "#fff",
+              background: 'red'
+            }
+          }
+        }]
       }
     }
   };
   
   componentDidMount(){
-
     fetch('https://server.ubicu.co/getEjerciciobyId', {
     //fetch('http://localhost:5000/getEjerciciobyId', {
         method: 'POST',
@@ -175,6 +190,7 @@ class VerResultados extends React.Component {
         ));
         
         this.setState({
+          flujo:ejercicio.flujo,
           dateOptions:dateOptions,
           hourOptions:hourOptions
         });
@@ -186,7 +202,14 @@ class VerResultados extends React.Component {
 
   handleClick = () => {
     const { id_ejercicio, allResultsByEjercicio } = this.props;
-    const { fecha, hora } = this.state;
+    const { flujo, fecha, hora } = this.state;
+    this.setState(prevState => {
+      let options = {...prevState.options};
+      options.annotations.yaxis[0].y = flujo;
+      return {
+        options: options
+      };
+    });
     
     allResultsByEjercicio({ id_ejercicio, fecha, hora }).then(resp => {
       if(resp.datos === "")
@@ -194,7 +217,7 @@ class VerResultados extends React.Component {
           series:[],
           msg:resp.msg
         })
-      else
+        else
         this.setState({
           series:fillGraph(JSON.parse(resp.datos)),
           msg:""
