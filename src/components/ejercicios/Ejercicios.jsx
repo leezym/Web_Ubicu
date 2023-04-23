@@ -13,7 +13,6 @@ class Ejercicios extends Component {
     capacidad_vital: 0
   };
 
-
   componentDidMount() {
     const { id_patient, allEjerciciosByPatient } = this.props;
 

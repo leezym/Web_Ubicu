@@ -9,8 +9,14 @@ class Ver extends Component {
     state = {};
 
     componentDidMount() {
-        const user = this.props.users.find((user) => user._id === this.props.id_patient);
-        this.setState({ ...user });
+        if(this.props.users.length !== 0)
+        {
+            const user = this.props.users.find((user) => user._id === this.props.id_patient);
+            this.setState({ ...user });
+            localStorage.setItem('paciente', JSON.stringify(user));
+        }
+        else if (localStorage.getItem('paciente'))
+            this.setState(JSON.parse(localStorage.getItem('paciente')));
     }
 
     render() {

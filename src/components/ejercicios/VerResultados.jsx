@@ -18,7 +18,6 @@ function fillGraph(data) {
     // Add data to series
     for (let j = 0; j < data[i].flujo.length; j++) {
       const tiempo = data[i].tiempo[j].toFixed(1) * 1000;
-      moment.utc(tiempo).format("HH:mm:ss")
       const flujo = data[i].flujo[j].toFixed(1);
       series.data.push([tiempo, flujo]);
     }
@@ -90,17 +89,7 @@ class VerResultados extends React.Component {
         followCursor: true,
         x: {
           formatter: function(value) {
-            // crea un objeto Date con el valor del eje X
-            let date = new Date(value);
-    
-            // obtiene las horas, minutos y segundos del objeto Date
-            let hours = date.getHours().toString().padStart(2, '0');
-            let minutes = date.getMinutes().toString().padStart(2, '0');
-            let seconds = date.getSeconds().toString().padStart(2, '0');
-    
-            // retorna la cadena con el formato "HH:mm:ss"
-            //return `${hours}:${minutes}:${seconds}`;
-            return date;
+            return moment.utc(value).format("HH:mm:ss");
           }
         }
       },

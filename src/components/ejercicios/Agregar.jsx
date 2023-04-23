@@ -60,14 +60,7 @@ class Agregar extends Component {
             this.props.history.push(`/VerEjercicios/${id_patient}`);
         });
     }
-    changeInput = (event) => {
-        /*if(event.target.name === "frecuencia_horas"){
-            options = optionsHours[event.target.value].map(hour => (
-                <option value={hour}>
-                    {hour > 12 ? (hour - 12)+":00 pm" : hour < 12 ? hour+":00 am": hour+":00 pm"}
-                </option>
-            ));
-        }*/       
+    changeInput = (event) => {    
         this.setState({[event.target.name]:event.target.value});
     }
     

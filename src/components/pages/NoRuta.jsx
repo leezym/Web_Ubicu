@@ -7,7 +7,7 @@ class NoRuta extends Component {
     render() {
         return (
             <div>
-              <Container><Segment>No existe la Ruta</Segment></Container>
+                <Container><Segment>No existe la Ruta</Segment></Container>
             </div>
         );
     }
