@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { authenticateUser } from '../../actions/usersAction';
 import 'semantic-ui-css/semantic.min.css';
 import { optionHeaders } from '../../actions/headers.js';
-
+import Apk from '../../ubicu_25_04_2023.apk';
 
 class LoginForm extends Component {
   state = {
@@ -55,44 +55,52 @@ class LoginForm extends Component {
   render() {
     const { cedula, password } = this.state;
     return (
-      <Grid textAlign="center" style={{ height: '100vh' }} verticalAlign="middle">
-        <Grid.Column style={{ maxWidth: 450 }}>
-          <Header as="h1" color="blue" textAlign="center" size="huge">
-            Fisioterapia Respiratoria
-          </Header>
-          <Form size="large" onSubmit={this.handleSubmit}>
-            <Segment stacked>
-              <Form.Input
-                fluid
-                icon="user"
-                iconPosition="left"
-                placeholder="Cedula"
-                name="cedula"
-                type="text"
-                pattern="[0-9]*"
-                value={cedula}
-                onChange={this.handleChange}
-              />
-              <Form.Input
-                fluid
-                icon="lock"
-                iconPosition="left"
-                placeholder="Password"
-                type="password"
-                name="password"
-                value={password}
-                onChange={this.handleChange}
-              />
-              <Button color="blue" fluid size="large" disabled={!this.validateForm()}>
-                Entrar
-              </Button>
-            </Segment>
-          </Form>
-          <Message>
-            ¿Nuevo Usuario? <Link to="/AgregarFisioterapeuta">Registrarse</Link>
-          </Message>
-        </Grid.Column>
-      </Grid>
+      <div>
+        <Grid textAlign="center" style={{ height: '100vh' }} verticalAlign="middle">
+          <Grid.Column style={{ maxWidth: 450 }}>
+            <Header as="h1" color="blue" textAlign="center" size="huge">
+              Fisioterapia Respiratoria
+            </Header>
+            <Form size="large" onSubmit={this.handleSubmit}>
+              <Segment stacked>
+                <Form.Input
+                  fluid
+                  icon="user"
+                  iconPosition="left"
+                  placeholder="Cedula"
+                  name="cedula"
+                  type="text"
+                  pattern="[0-9]*"
+                  value={cedula}
+                  onChange={this.handleChange}
+                />
+                <Form.Input
+                  fluid
+                  icon="lock"
+                  iconPosition="left"
+                  placeholder="Password"
+                  type="password"
+                  name="password"
+                  value={password}
+                  onChange={this.handleChange}
+                />
+                <Button color="blue" fluid size="large" disabled={!this.validateForm()}>
+                  Entrar
+                </Button>
+              </Segment>
+            </Form>
+            <Message>
+              ¿Nuevo Usuario? <Link to="/AgregarFisioterapeuta">Registrarse</Link>
+            </Message>
+          </Grid.Column>
+        </Grid>
+        <Grid textAlign="center" style={{ height: '20vh' }} verticalAlign="middle">
+            <a href={Apk} download>          
+              {' '}
+              <button>Descargar App</button>
+            </a>
+        </Grid>
+      </div>
     );
   }
 }
