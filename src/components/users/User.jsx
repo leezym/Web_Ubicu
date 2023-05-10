@@ -16,21 +16,21 @@ class User extends Component {
     };
 
     render() {
-        const { user } = this.props;
+        const { patient } = this.props;
 
         return (
         <Table.Row>
-            <Table.Cell>{user.cedula}</Table.Cell>
-            <Table.Cell>{user.nombre}</Table.Cell>
+            <Table.Cell>{patient.cedula}</Table.Cell>
+            <Table.Cell>{patient.nombre}</Table.Cell>
             <Table.Cell>
-            <Link to={`/VerUser/${user._id}`}>
+            <Link to={`/VerUser/${patient._id}`}>
                 <Button primary floated="right">
                 Ver
                 <Icon name="right chevron" />
                 </Button>
             </Link>
             {/*<Button
-                value={user.cedula}
+                value={patient.cedula}
                 onClick={this.handleDelete}
                 secondary
                 floated="right">

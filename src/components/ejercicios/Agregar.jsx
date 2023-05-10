@@ -17,7 +17,7 @@ const optionsHours = { //13h de ejercicios
 let options = ""
 
 class Agregar extends Component {        
-    state ={
+    state = {
         nombre: "Inspiración profunda",
         duracion_total: "",
         frecuencia_dias: "",

@@ -3,7 +3,7 @@ import {Item,Button,Icon,Dropdown, Image, Form, Input,Card} from 'semantic-ui-re
 import {Link,withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
 import moment from "moment";
-import { updateEjercicio } from '../../actions/ejerciciosAction';
+import { updateEjercicio, allEjerciciosByPatient } from '../../actions/ejerciciosAction';
 
 
 const optionsHours = { //13h de ejercicios 
@@ -16,15 +16,15 @@ const optionsHours = { //13h de ejercicios
 
 class Ejercicio extends Component {
     state = {
-        id: this.props.ejercicio._id,
-        readOnly: true,
-        ejercicio: this.props.ejercicio,
-        /*options: optionsHours[this.props.ejercicio.frecuencia_horas].map(hour => (
-            <option value={hour}>
-            {hour > 12 ? (hour - 12)+":00 pm" : hour < 12 ? hour+":00 am": hour+":00 pm"}
-            </option>
-        ))*/
-    };
+        readOnly: true
+    };    
+
+    componentDidMount() {
+        /*this.setState({
+            readOnly: true,
+            ejercicio: this.props.ejercicio,
+        });*/
+    }
 
     handleEdit (value) {
         this.setState({ readOnly: value });
@@ -34,27 +34,18 @@ class Ejercicio extends Component {
         this.handleEdit(true);
 
         e.preventDefault();
-        const { ejercicio } = this.state;
-        console.log(ejercicio.fecha_inicio)
+        const { ejercicio } = this.props;
         ejercicio.fecha_fin = moment(ejercicio.fecha_inicio, 'YYYY-MM-DD').add(ejercicio.frecuencia_dias - 1, 'days').format('DD/MM/YYYY').toString();
-        console.log("fechaifn", this.state.ejercicio.fecha_fin);
-        this.props.updateEjercicio(this.state);
+        //this.props.updateEjercicio(this.state);
     }
 
     changeInput = (event) => {
-        /*if(event.target.name === "frecuencia_horas"){
-            const options = optionsHours[event.target.value].map(hour => (
-                <option value={hour}>
-                {hour > 12 ? (hour - 12)+":00 pm" : hour < 12 ? hour+":00 am": hour+":00 pm"}
-                </option>
-            ));
-            this.setState({ options });
-        }    */
         this.setState({[event.target.name]:event.target.value});
     }
 
     render() {
-        const { readOnly, ejercicio } = this.state;
+        const { ejercicio } = this.props;
+        const { readOnly } = this.state;
                 
         return (
             <Card fluid color="blue" >
@@ -214,5 +205,5 @@ class Ejercicio extends Component {
     }
 }
 
-export default connect(null,{ updateEjercicio })(withRouter(Ejercicio));
+export default connect(null,{ updateEjercicio, allEjerciciosByPatient })(withRouter(Ejercicio));
 

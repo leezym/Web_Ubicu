@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 
 class AgregarPaciente extends Component {
-    state ={
+    state = {
         nombre: "",
         cedula: "",
         telefono: "",

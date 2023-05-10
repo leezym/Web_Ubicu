@@ -33,7 +33,7 @@ class Users extends Component {
                 </Table.Header>
                 <Table.Body>
                   {users.map((user, index) => (
-                    <User key={index} user={user} id={this.props.id_user}/>
+                    <User key={index} patient={user} id={this.props.id_user}/>
                   ))}
                 </Table.Body>
                 <Table.Footer fullWidth>

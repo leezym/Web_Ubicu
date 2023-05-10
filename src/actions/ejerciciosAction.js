@@ -15,6 +15,7 @@ export const allEjerciciosByPatient = (id_user) => async dispatch => {
         type: MOSTRAR_EJERCICIOS,
         payload: respuesta.data
     });
+    return respuesta.data;
 };
 
 export const crearEjercicio = (ejercicio) => async dispatch => {
@@ -49,5 +50,4 @@ export const getEjerciciobyId = (id_ejercicio) => async dispatch => {
         type: GET_EJERCICIO,
         payload: respuesta.data
     });
-    return respuesta.data;
 };

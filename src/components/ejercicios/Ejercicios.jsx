@@ -15,9 +15,17 @@ class Ejercicios extends Component {
 
   componentDidMount() {
     const { id_patient, allEjerciciosByPatient } = this.props;
-
+    
     allEjerciciosByPatient({ id_patient });
-
+    /*allEjerciciosByPatient({ id_patient }).then(resp => {
+      console.log(resp)
+      this.setState({
+        ejercicios: resp,
+      })
+    }).catch(error => {
+      console.log(error);
+    });*/
+    
     fetch('https://server.ubicu.co/getPatientbyId', {
     //fetch('http://localhost:5000/getPatientbyId', {
         method: 'POST',
@@ -42,6 +50,7 @@ class Ejercicios extends Component {
       .catch(err => {
             console.error(err);
     });
+
   };
 
   getCapacidadVital = (user) => {
@@ -89,8 +98,8 @@ class Ejercicios extends Component {
                 </TableBody>
               </Table>
               {
-              ejercicios.length === 0 || moment(moment().format('DD/MM/YYYY'), 'DD/MM/YYYY').isAfter(moment(ejercicios[ejercicios.length - 1].fecha_fin, 'DD/MM/YYY')) ?
-                <Link to={`/AgregarEjercicio/${user._id}`}><Button primary type='submit'>Agregar</Button></Link> : ""
+                ejercicios.length === 0 || moment(moment().format('DD/MM/YYYY'), 'DD/MM/YYYY').isAfter(moment(ejercicios[ejercicios.length - 1].fecha_fin, 'DD/MM/YYY')) ?
+                  <Link to={`/AgregarEjercicio/${user._id}`}><Button primary type='submit'>Agregar</Button></Link> : ""
               }
               <Link to={`/VerUser/${user._id}`}><Button >Regresar</Button></Link>
             </Segment>
@@ -99,9 +108,11 @@ class Ejercicios extends Component {
                 Prescripción
               </Label>
               <Card.Group>
-                {ejercicios.map((ejercicio, index) => {
-                  return <Ejercicio key={index} ejercicio={ejercicio} />;
-                })}
+                {
+                  ejercicios.map((ejercicio, index) => {
+                    return <Ejercicio key={index} ejercicio={ejercicio} />;
+                  })
+                }
               </Card.Group>
             </Segment>
           </Grid.Column>
