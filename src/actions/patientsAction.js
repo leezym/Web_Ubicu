@@ -53,3 +53,12 @@ export const getPatientbyId = (id_patient) => async dispatch => {
     });
     return respuesta.data;
 };
+
+export const getPatientbyCc = (cedula) => async dispatch => {
+    const respuesta = await axios.post(urlApi + "getPatientbyCc", cedula);
+    dispatch({
+        type: GET_USER,
+        payload: respuesta.data
+    });
+    return respuesta.data;
+};

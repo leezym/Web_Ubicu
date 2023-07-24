@@ -47,6 +47,85 @@ class AgregarPaciente extends Component {
         }).then(resp => {
             alert('Paciente creado');
             history.push(`/Users/${id_user}`);
+            
+            fetch('https://server.ubicu.co/getPatientbyCc', {
+            //fetch('http://localhost:5000/getPatientbyCc', {
+                method: 'POST',
+                body: JSON.stringify({cedula}),
+                headers: {
+                'Content-Type': 'application/json'
+                }
+            })
+            .then(res => {
+                if (res.status === 200) {
+                return res.json();
+                } else {
+                const error = new Error(res.error);
+                throw error;
+                }
+            })
+            .then(resp => {
+                fetch('https://server.ubicu.co/createRewards', {
+                //fetch('http://localhost:5000/createRewards', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        all_badges_array: "0,0,0,0,0,0,0;0,0,0,0,0,0,0;0,0,0,0,0,0,0;0,0,0,0,0,0,0;", //7 isnignias por 4 items
+                        session_reward: 0,
+                        day_reward: 0,
+                        total_reward: 0,
+                        total_series: 0,
+                        total_sessions: 0,
+                        total_days: 0,
+                        total_weeks: 0,
+                        id_patient: resp._id
+                    }),
+                    headers: {
+                    'Content-Type': 'application/json'
+                    }
+                })
+                .then(res => {
+                    if (res.status === 200) {
+                    return res.json();
+                    } else {
+                    const error = new Error(res.error);
+                    throw error;
+                    }
+                })
+                .catch(err => {
+                        console.error(err);
+                });
+
+                fetch('https://server.ubicu.co/createCustomizations', {
+                //fetch('http://localhost:5000/createCustomizations', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        id_customization: 0,
+                        id_item_fondos_array: "0,-1,-1,-1,-1", //5 temas, el primero es gratis
+                        id_item_figuras_array: "0,-1,-1,-1,-1", //5 temas, el primero es gratis
+                        all_fondos_items_array: "1,1,1;0,0,0;0,0,0;0,0,0;0,0,0;", //3 items por cada 5 temas, el primero es gratis
+                        all_figuras_items_array: "1,1,1;0,0,0;0,0,0;0,0,0;0,0,0;", //3 items por cada 5 temas, el primero es gratis
+                        id_patient: resp._id
+                    }),
+                    headers: {
+                    'Content-Type': 'application/json'
+                    }
+                })
+                .then(res => {
+                    if (res.status === 200) {
+                    return res.json();
+                    } else {
+                    const error = new Error(res.error);
+                    throw error;
+                    }
+                })
+                .catch(err => {
+                        console.error(err);
+                });
+            })
+            .catch(err => {
+                    console.error(err);
+            });
+
         })
         .catch(err => {
             console.log(err);
