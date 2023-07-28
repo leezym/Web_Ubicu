@@ -37,10 +37,9 @@ export const deleteEjercicio = (cedula) => async dispatch => {
 
 export const updateEjercicio = (ejercicio) => async dispatch => {
     const respuesta = await axios.put(urlApi + "updateEjercicio", ejercicio, optionHeaders);
-    console.log("out", respuesta.data);
     dispatch({
         type: ACTUALIZAR_EJERCICIO,
-        payload: respuesta.data
+        payload: ejercicio
     });
 };
 

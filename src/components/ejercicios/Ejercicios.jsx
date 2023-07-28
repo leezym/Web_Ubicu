@@ -10,22 +10,13 @@ import moment from "moment";
 class Ejercicios extends Component {
   state = {
     user: {},
-    capacidad_vital: 0
+    capacidad_vital: 0, 
+    ejercicios: {}
   };
 
   componentDidMount() {
-    const { id_patient, allEjerciciosByPatient } = this.props;
-    
-    allEjerciciosByPatient({ id_patient });
-    /*allEjerciciosByPatient({ id_patient }).then(resp => {
-      console.log(resp)
-      this.setState({
-        ejercicios: resp,
-      })
-    }).catch(error => {
-      console.log(error);
-    });*/
-    
+    const { id_patient } = this.props;
+
     fetch('https://server.ubicu.co/getPatientbyId', {
     //fetch('http://localhost:5000/getPatientbyId', {
         method: 'POST',
@@ -50,6 +41,30 @@ class Ejercicios extends Component {
       .catch(err => {
             console.error(err);
     });
+    
+    fetch('https://server.ubicu.co/allEjerciciosByPatient', {
+    //fetch('http://localhost:5000/allEjerciciosByPatient', {
+        method: 'POST',
+        body: JSON.stringify({id_patient}),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(res => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          const error = new Error(res.error);
+          throw error;
+        }
+      })
+      .then(resp => {        
+        const ejercicios = resp;
+        this.setState({ ejercicios });
+      })
+      .catch(err => {
+            console.error(err);
+    });
 
   };
 
@@ -64,8 +79,7 @@ class Ejercicios extends Component {
   };  
 
   render() {
-    const { ejercicios } = this.props;
-    const { user, capacidad_vital } = this.state;
+    const { user, capacidad_vital, ejercicios } = this.state;
 
     return (
       <div>
@@ -98,7 +112,7 @@ class Ejercicios extends Component {
                 </TableBody>
               </Table>
               {
-                ejercicios.length === 0 || moment(moment().format('DD/MM/YYYY'), 'DD/MM/YYYY').isAfter(moment(ejercicios[ejercicios.length - 1].fecha_fin, 'DD/MM/YYY')) ?
+                ejercicios.length === 0 || (ejercicios.length > 0 && moment().isAfter(moment(ejercicios[ejercicios.length - 1].fecha_fin, 'DD/MM/YYYY'))) ?
                   <Link to={`/AgregarEjercicio/${user._id}`}><Button primary type='submit'>Agregar</Button></Link> : ""
               }
               <Link to={`/VerUser/${user._id}`}><Button >Regresar</Button></Link>
@@ -109,9 +123,12 @@ class Ejercicios extends Component {
               </Label>
               <Card.Group>
                 {
-                  ejercicios.map((ejercicio, index) => {
-                    return <Ejercicio key={index} ejercicio={ejercicio} />;
-                  })
+                  ejercicios.length > 0 ?
+                    ejercicios.map((ejercicio, index) => {
+                      return <Ejercicio key={index} ejercicio={ejercicio} />;
+                    })
+                  :
+                    ""
                 }
               </Card.Group>
             </Segment>

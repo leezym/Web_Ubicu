@@ -16,14 +16,18 @@ const optionsHours = { //13h de ejercicios
 
 class Ejercicio extends Component {
     state = {
-        readOnly: true
-    };    
+        readOnly: true,
+        ejercicio: this.props.ejercicio
+    };
 
     componentDidMount() {
-        /*this.setState({
-            readOnly: true,
-            ejercicio: this.props.ejercicio,
-        });*/
+        const { ejercicio } = this.state;
+        this.setState({
+            ejercicio: {
+                ...this.state.ejercicio,
+                fecha_inicio: moment(ejercicio.fecha_inicio, 'DD/MM/YYYY').format('YYYY-MM-DD').toString()
+            }
+        });
     }
 
     handleEdit (value) {
@@ -32,21 +36,28 @@ class Ejercicio extends Component {
 
     handleSave = (e) => {
         this.handleEdit(true);
-
         e.preventDefault();
-        const { ejercicio } = this.props;
+        const { ejercicio } = this.state;
         ejercicio.fecha_fin = moment(ejercicio.fecha_inicio, 'YYYY-MM-DD').add(ejercicio.frecuencia_dias - 1, 'days').format('DD/MM/YYYY').toString();
-        //this.props.updateEjercicio(this.state);
+                
+        const nuevo = { ...ejercicio };
+        nuevo.fecha_inicio = moment(ejercicio.fecha_inicio, 'YYYY-MM-DD').format('DD/MM/YYYY').toString();
+
+        this.props.updateEjercicio(nuevo);
     }
 
     changeInput = (event) => {
-        this.setState({[event.target.name]:event.target.value});
-    }
+        this.setState({
+            ejercicio: {
+            ...this.state.ejercicio,
+            [event.target.name]: event.target.value
+          }
+        });
+      }
 
     render() {
-        const { ejercicio } = this.props;
-        const { readOnly } = this.state;
-                
+        const { readOnly, ejercicio } = this.state;
+                        
         return (
             <Card fluid color="blue" >
                 <Card.Content >
@@ -133,7 +144,7 @@ class Ejercicio extends Component {
                             onChange={this.changeInput}
                             placeholder='DD/MM/AAAA'
                             disabled={readOnly}
-                            value={readOnly ? moment(ejercicio.fecha_inicio, 'DD/MM/YYYY').format('YYYY-MM-DD') : null}/>
+                            value={readOnly ? ejercicio.fecha_inicio : null}/>
                         </Form.Field>
                         </Form.Group>
                         <Form.Group>
@@ -189,14 +200,13 @@ class Ejercicio extends Component {
                     <Icon name='right chevron' />
                     </Button>
                     </Link>
-                    {/* readOnly ? 
+                    { readOnly ?
                         <Button onClick={()=>this.handleEdit(false)} floated='left' icon labelPosition='left' primary  size='small'><Icon name='clipboard' />Editar</Button>
                         :
                         <>
                             <Button onClick={this.handleSave} type="submit" floated='left' icon labelPosition='left' primary size='small'><Icon name='clipboard' />Guardar</Button>
                             <Button onClick={()=>this.handleEdit(true)} type='submit'>Cancelar</Button>
                         </>
-                        */
                     }
                     </Card.Content>
                 </Card.Content>
