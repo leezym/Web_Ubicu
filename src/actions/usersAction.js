@@ -1,4 +1,4 @@
-import { CREAR_USER, ELIMINAR_USER, ACTUALIZAR_USER, MOSTRAR_USERS, AUTHENTICATE_USER, CHECKTOKEN_USER, GET_USER } from "./types.js";
+import { CREAR_USER, ACTUALIZAR_USER, AUTHENTICATE_USER, CHECKTOKEN_USER } from "./types.js";
 import axios from "axios";
 import { optionHeaders } from './headers.js';
 
@@ -8,27 +8,11 @@ const urlLocal = "https://server.ubicu.co/";
 
 const urlApi = urlLocal;
 
-export const mostrarUsers = () => async dispatch => {
-    const respuesta = await axios.get(urlApi + "allUsers", optionHeaders);
-    dispatch({
-        type: MOSTRAR_USERS,
-        payload: respuesta.data
-    });
-};
-
 export const crearUser = (user) => async dispatch => {
     const respuesta = await axios.post(urlApi + "createUser", user);
     dispatch({
         type: CREAR_USER,
         payload: respuesta.data
-    });
-};
-
-export const deleteUser = (cedula) => async dispatch => {
-    const respuesta = await axios.post(urlApi + "deleteUser", cedula, optionHeaders);
-    dispatch({
-        type: ELIMINAR_USER,
-        payload: cedula
     });
 };
 
@@ -56,14 +40,6 @@ export const checkToken = () => async dispatch => {
     const respuesta = await axios.get(urlApi + "checkToken");
     dispatch({
         type: CHECKTOKEN_USER,
-        payload: respuesta.data
-    });
-};
-
-export const getUserbyId = (id_user) => async dispatch => {
-    const respuesta = await axios.post(urlApi + "getUserbyId", id_user);
-    dispatch({
-        type: GET_USER,
         payload: respuesta.data
     });
 };

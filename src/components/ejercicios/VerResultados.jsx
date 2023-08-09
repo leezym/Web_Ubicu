@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import {Form,Grid,Label,Segment,List, Button} from "semantic-ui-react";
+import React from 'react';
+import {Form, Grid, Button} from "semantic-ui-react";
 import {Link,withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import{allResultsByEjercicio} from "../../actions/resultsAction";
@@ -145,7 +145,8 @@ class VerResultados extends React.Component {
         method: 'POST',
         body: JSON.stringify({id_ejercicio:this.state.id_ejercicio}),
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'x-access-token': localStorage.getItem('token')
         }
       })
       .then(res => {
@@ -267,10 +268,5 @@ class VerResultados extends React.Component {
   }
 }
 
-const mapStateToProp =(state)=>{
-    return{
-        results: state.results.results
-    };
-}
-export default connect(mapStateToProp,{ allResultsByEjercicio })(withRouter(VerResultados));
+export default connect(null,{ allResultsByEjercicio })(withRouter(VerResultados));
 

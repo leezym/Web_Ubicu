@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Button, Table, Grid, Segment, Label, Card, TableBody, TableCell, TableRow } from 'semantic-ui-react';
 import MenuNav from '../pages/MenuNav';
 import { Link, withRouter } from 'react-router-dom';
-import { allEjerciciosByPatient } from '../../actions/ejerciciosAction';
 import Ejercicio from './Ejercicio';
 import { connect } from 'react-redux';
 import moment from "moment";
@@ -22,7 +21,8 @@ class Ejercicios extends Component {
         method: 'POST',
         body: JSON.stringify({id_patient}),
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'x-access-token': localStorage.getItem('token')
         }
       })
       .then(res => {
@@ -47,7 +47,8 @@ class Ejercicios extends Component {
         method: 'POST',
         body: JSON.stringify({id_patient}),
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'x-access-token': localStorage.getItem('token')
         }
       })
       .then(res => {
@@ -139,10 +140,4 @@ class Ejercicios extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    ejercicios: state.ejercicios.ejercicios
-  };
-};
-
-export default withRouter(connect(mapStateToProps, { allEjerciciosByPatient })(Ejercicios));
+export default withRouter(connect(null)(Ejercicios));

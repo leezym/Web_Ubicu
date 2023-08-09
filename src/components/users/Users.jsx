@@ -1,19 +1,46 @@
 import React, { Component } from 'react';
 import User from "./User"
 import {Table,Button,Icon,Grid,Segment,Label} from 'semantic-ui-react'
-import { mostrarPatients } from "../../actions/patientsAction";
 import MenuNav from '../pages/MenuNav';
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
 class Users extends Component {
+  state = {
+    patients: {}
+  };
 
   componentDidMount() {
-    this.props.mostrarPatients({id_user:this.props.id_user});
+    const { id_user } = this.props;
+    
+    fetch('https://server.ubicu.co/getPatientbyUser', {
+    //fetch('http://localhost:5000/getPatientbyUser', {
+        method: 'POST',
+        body: JSON.stringify({id_user}),
+        headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': localStorage.getItem('token')
+        }
+    })
+    .then(res => {
+        if (res.status === 200) {
+        return res.json();
+        } else {
+        const error = new Error(res.error);
+        throw error;
+        }
+    })
+    .then(resp => {        
+        const patients = resp;
+        this.setState({ patients });
+    })
+    .catch(err => {
+            console.error(err);
+    });
   }
 
   render() {
-    const { users } = this.props;
+    const { patients } = this.state;
     return (
       <div>
         <MenuNav/> 
@@ -32,9 +59,14 @@ class Users extends Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {users.map((user, index) => (
-                    <User key={index} patient={user} id={this.props.id_user}/>
-                  ))}
+                  {
+                    patients.length > 0 ?
+                      patients.map((patient, index) => (
+                        <User key={index} patient={patient}/>
+                      ))
+                    :
+                      ""
+                  }
                 </Table.Body>
                 <Table.Footer fullWidth>
                   <Table.Row>
@@ -58,10 +90,4 @@ class Users extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    users: state.users.users
-  };
-};
-
-export default connect(mapStateToProps, { mostrarPatients })(withRouter(Users));
+export default connect(null)(withRouter(Users));

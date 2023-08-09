@@ -1,22 +1,15 @@
 import React, { Component } from 'react';
-import {Item,Button,Icon,Dropdown, Image, Form, Input,Card} from 'semantic-ui-react'
+import {Button,Icon, Form, Card} from 'semantic-ui-react'
 import {Link,withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
 import moment from "moment";
-import { updateEjercicio, allEjerciciosByPatient } from '../../actions/ejerciciosAction';
+import { updateEjercicio } from '../../actions/ejerciciosAction';
 
-
-const optionsHours = { //13h de ejercicios 
-    '1': [6, 7, 8, 9, 10, 11], // 13 sesiones
-    '2': [6, 7, 8, 9, 10, 11], // 7 sesiones
-    '3': [6, 7, 8, 9, 10, 11], // 5 sesiones
-    '4': [6, 7, 8, 9, 10, 11], // 4 sesiones
-    '6': [6, 7, 8, 9, 10, 11] // 3 sesiones
-}
 
 class Ejercicio extends Component {
     state = {
         readOnly: true,
+        original: {},
         ejercicio: this.props.ejercicio
     };
 
@@ -46,6 +39,22 @@ class Ejercicio extends Component {
         this.props.updateEjercicio(nuevo);
     }
 
+    copyOriginal = () => {
+        this.setState({
+            original: {
+                ...this.state.ejercicio
+            }
+        });
+    }
+
+    pasteOriginal = () => {
+        this.setState({
+            ejercicio: {
+                ...this.state.original
+            }
+        });
+    }
+
     changeInput = (event) => {
         this.setState({
             ejercicio: {
@@ -53,7 +62,7 @@ class Ejercicio extends Component {
             [event.target.name]: event.target.value
           }
         });
-      }
+    }
 
     render() {
         const { readOnly, ejercicio } = this.state;
@@ -201,11 +210,11 @@ class Ejercicio extends Component {
                     </Button>
                     </Link>
                     { readOnly ?
-                        <Button onClick={()=>this.handleEdit(false)} floated='left' icon labelPosition='left' primary  size='small'><Icon name='clipboard' />Editar</Button>
+                        <Button onClick={()=>{this.handleEdit(false); this.copyOriginal()}} floated='left' icon labelPosition='left' primary  size='small'><Icon name='clipboard' />Editar</Button>
                         :
                         <>
                             <Button onClick={this.handleSave} type="submit" floated='left' icon labelPosition='left' primary size='small'><Icon name='clipboard' />Guardar</Button>
-                            <Button onClick={()=>this.handleEdit(true)} type='submit'>Cancelar</Button>
+                            <Button onClick={()=>{this.handleEdit(true); this.pasteOriginal()}} type='submit'>Cancelar</Button>
                         </>
                     }
                     </Card.Content>
@@ -215,5 +224,5 @@ class Ejercicio extends Component {
     }
 }
 
-export default connect(null,{ updateEjercicio, allEjerciciosByPatient })(withRouter(Ejercicio));
+export default connect(null,{ updateEjercicio })(withRouter(Ejercicio));
 

@@ -1,117 +1,217 @@
 import React, { Component } from 'react';
-import { Grid, Label, Segment, List, Button } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Grid, Label, Segment, Button, Icon, Form, Card} from 'semantic-ui-react';
+import { Link, withRouter } from 'react-router-dom';
 import MenuNav from '../pages/MenuNav';
 import { connect } from 'react-redux';
+import { updatePatient } from '../../actions/patientsAction';
 
 
 class Ver extends Component {
-    state = {};
+    state = {
+        readOnly: true,
+        original: {},
+        patient: {}
+    };
 
     componentDidMount() {
-        if(this.props.users.length !== 0)
-        {
-            const user = this.props.users.find((user) => user._id === this.props.id_patient);
-            this.setState({ ...user });
-            localStorage.setItem('paciente', JSON.stringify(user));
-        }
-        else if (localStorage.getItem('paciente'))
-            this.setState(JSON.parse(localStorage.getItem('paciente')));
+        const { id_patient } = this.props;
+        fetch('https://server.ubicu.co/getPatientbyId', {
+        //fetch('http://localhost:5000/getPatientbyId', {
+            method: 'POST',
+            body: JSON.stringify({id_patient}),
+            headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': localStorage.getItem('token')
+            }
+        })
+        .then(res => {
+            if (res.status === 200) {
+            return res.json();
+            } else {
+            const error = new Error(res.error);
+            throw error;
+            }
+        })
+        .then(resp => {        
+            const patient = resp;
+            this.setState({ patient });
+        })
+        .catch(err => {
+                console.error(err);
+        });
+
+    }
+
+    handleEdit (value) {
+        this.setState({ readOnly: value });
+    }
+
+    handleSave = (e) => {
+        this.handleEdit(true);
+        e.preventDefault();
+        const { patient } = this.state;
+        patient.password = (patient.telefono % 10000).toString();
+        console.log(patient);
+        this.props.updatePatient(patient);
+    }
+
+    copyOriginal = () => {
+        this.setState({
+            original: {
+                ...this.state.patient
+            }
+        });
+    }
+
+    pasteOriginal = () => {
+        this.setState({
+            patient: {
+                ...this.state.original
+            }
+        });
+    }
+
+    changeInput = (event) => {
+        this.setState({
+            patient: {
+            ...this.state.patient,
+            [event.target.name]: event.target.value
+          }
+        });
     }
 
     render() {
-        const { nombre, cedula, edad, sexo, peso, altura, telefono, email, direccion, ciudad, _id, id_user } = this.state;
+        const { readOnly, patient } = this.state;
         return (
         <div>
-        <MenuNav/>
-        <Segment>
-        <Grid style={{ marginTop: '9em' }} columns={2} stackable>
-            <Grid.Column>
-                <Label color='blue' ribbon>
-                Paciente
-                </Label>
-                <span>Datos del paciente</span>
-                <List>
-                    <List.Item>
-                        <List.Content>
-                            <List.Header>Nombre</List.Header>
-                            <List.Description>{nombre}</List.Description>
-                        </List.Content>
-                    </List.Item>
-                    <List.Item>    
-                        <List.Content>
-                            <List.Header>Cédula</List.Header>
-                            <List.Description>{cedula}</List.Description>
-                        </List.Content>
-                    </List.Item>
-                    <List.Item>
-                        <List.Content>
-                            <List.Header>Edad</List.Header>
-                            <List.Description>{edad}</List.Description>
-                        </List.Content>
-                    </List.Item>    
-                    <List.Item>
-                        <List.Content>
-                            <List.Header>Sexo</List.Header>
-                            <List.Description>{sexo}</List.Description>
-                        </List.Content>
-                    </List.Item>
-                    <List.Item>
-                        <List.Content>
-                            <List.Header>Peso (kg)</List.Header>
-                            <List.Description>{peso}</List.Description>
-                        </List.Content>
-                    </List.Item>
-                    <List.Item>
-                        <List.Content>
-                            <List.Header>Altura (cm)</List.Header>
-                            <List.Description>{altura}</List.Description>
-                        </List.Content>
-                    </List.Item>
-                    <List.Item>    
-                        <List.Content>
-                            <List.Header>Teléfono</List.Header>
-                            <List.Description>{telefono}</List.Description>
-                        </List.Content>
-                    </List.Item>
-                    <List.Item>
-                        <List.Content>
-                            <List.Header>Email</List.Header>
-                            <List.Description>{email}</List.Description>
-                        </List.Content>
-                    </List.Item>
-                    <List.Item>    
-                        <List.Content>
-                            <List.Header>Dirección</List.Header>
-                            <List.Description>{direccion}</List.Description>
-                        </List.Content>
-                    </List.Item>                    
-                    <List.Item>    
-                        <List.Content>
-                            <List.Header>Ciudad</List.Header>
-                            <List.Description>{ciudad}</List.Description>
-                        </List.Content>
-                    </List.Item>
-                    
-                    <List.Item style={{ marginTop: '1em' }}>    
-                    <List.Content>
-                        <List.Description>
-                            <Link to={`/VerEjercicios/${_id}`}><Button primary  size='small' > Ejercicios</Button></Link>
-                            <Link to={`/Users/${id_user}`}><Button >Regresar</Button></Link>
-                        </List.Description>
-                    </List.Content>
-                    </List.Item>
-                </List>
-            </Grid.Column>
-        </Grid> 
-        </Segment>   
+            <MenuNav/>
+            <Segment>
+            <Grid style={{ marginTop: '9em' }} stackable>
+                <Grid.Column>
+                    <Label color='blue' ribbon>
+                    Paciente
+                    </Label>
+                    <span>Datos del paciente</span>
+                    <Card fluid color="blue" >
+                        <Card.Content >
+                            <Card.Description width="100%">                        
+                                <Form onSubmit={this.handleSave}>
+                                    <Form.Group >
+                                        <Form.Field>
+                                        <label>Nombre</label>
+                                        <input  name="nombre"
+                                            placeholder='Nombre'
+                                            type='text'
+                                            onChange={this.changeInput}
+                                            disabled={readOnly}
+                                            value={readOnly ? patient.nombre : null}/>
+                                        </Form.Field>
+                                        <Form.Field>
+                                        <label>Cédula</label>
+                                        <input  name="cedula"
+                                            placeholder='Cédula'
+                                            type='number'
+                                            onChange={this.changeInput}
+                                            disabled={readOnly}
+                                            value={readOnly ? patient.cedula : null}/>
+                                        </Form.Field>
+                                    </Form.Group >
+                                    <Form.Group >
+                                        <Form.Field>
+                                        <label>Edad</label>
+                                        <input  name="edad"
+                                            placeholder='Edad'
+                                            type='number'
+                                            onChange={this.changeInput}
+                                            disabled={readOnly}
+                                            value={readOnly ? patient.edad : null}/>
+                                        </Form.Field>
+                                        <Form.Field>
+                                        <label>Sexo</label>
+                                        <select name="sexo" value={readOnly ? patient.sexo : null} disabled={readOnly} onChange={this.changeInput}>
+                                            <option value="-">Seleccione una opción</option>
+                                            <option value="F">Femenino</option>
+                                            <option value="M">Masculino</option>
+                                        </select>
+                                        </Form.Field>
+                                        <Form.Field>
+                                        <label>Peso (kg)</label>
+                                        <input  name="peso"
+                                            placeholder='Peso'
+                                            type='number'
+                                            onChange={this.changeInput}
+                                            disabled={readOnly}
+                                            value={readOnly ? patient.peso : null}/>
+                                        </Form.Field>
+                                        <Form.Field>
+                                        <label>Altura (cm)</label>
+                                        <input  name="altura"
+                                            placeholder='Altura'
+                                            type='number'
+                                            onChange={this.changeInput}
+                                            disabled={readOnly}
+                                            value={readOnly ? patient.altura : null}/>
+                                        </Form.Field>
+                                    </Form.Group >
+                                    <Form.Group >
+                                        <Form.Field>
+                                        <label>Teléfono</label>
+                                        <input  name="telefono"
+                                            placeholder='Teléfono'
+                                            type='number'
+                                            onChange={this.changeInput}
+                                            disabled={readOnly}
+                                            value={readOnly ? patient.telefono : null}/>
+                                        </Form.Field>
+                                        <Form.Field>
+                                        <label>Email</label>
+                                        <input  name="email"
+                                            placeholder='Email'
+                                            type='email'
+                                            onChange={this.changeInput}
+                                            disabled={readOnly}
+                                            value={readOnly ? patient.email : null}/>
+                                        </Form.Field>
+                                        <Form.Field>
+                                        <label>Dirección</label>
+                                        <input  name="direccion"
+                                            placeholder='Dirección'
+                                            type='text'
+                                            onChange={this.changeInput}
+                                            disabled={readOnly}
+                                            value={readOnly ? patient.direccion : null}/>
+                                        </Form.Field>
+                                        <Form.Field>
+                                        <label>Ciudad</label>
+                                        <input  name="ciudad"
+                                            placeholder='Ciudad'
+                                            type='text'
+                                            onChange={this.changeInput}
+                                            disabled={readOnly}
+                                            value={readOnly ? patient.ciudad : null}/>
+                                        </Form.Field>
+                                    </Form.Group >
+                                </Form>
+                            </Card.Description>
+                            <Card.Content >
+                                { readOnly ?
+                                    <Button onClick={()=>{this.handleEdit(false); this.copyOriginal()}} floated='left' icon labelPosition='left' primary  size='small'><Icon name='clipboard' />Editar</Button>
+                                    :
+                                    <>
+                                        <Button onClick={this.handleSave} type="submit" floated='left' icon labelPosition='left' primary size='small'><Icon name='clipboard' />Guardar</Button>
+                                        <Button onClick={()=>{this.handleEdit(true); this.pasteOriginal()}} type='submit'>Cancelar</Button>
+                                    </>
+                                }
+                            </Card.Content>
+                        </Card.Content >
+                    </Card>
+                        <Link to={`/VerEjercicios/${patient._id}`}><Button primary  size='small' > Ejercicios</Button></Link>
+                        <Link to={`/Users/${patient.id_user}`}><Button >Regresar</Button></Link>
+                    </Grid.Column>            
+                </Grid> 
+            </Segment>   
         </div>
         );
     }
 }
-const mapStateToProp =(state)=>{
-    return{
-        users: state.users.users
-    };
-}
-export default connect(mapStateToProp, null)(Ver);
+export default withRouter(connect(null, { updatePatient })(Ver));

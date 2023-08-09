@@ -42,7 +42,7 @@ class AgregarPaciente extends Component {
             altura,
             direccion,
             ciudad,
-            password: telefono % 10000,
+            password: (telefono % 10000).toString(),
             id_user: id_user
         }).then(resp => {
             alert('Paciente creado');
@@ -53,7 +53,8 @@ class AgregarPaciente extends Component {
                 method: 'POST',
                 body: JSON.stringify({cedula}),
                 headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'x-access-token': localStorage.getItem('token')
                 }
             })
             .then(res => {
@@ -205,6 +206,7 @@ class AgregarPaciente extends Component {
                         <input 
                             name="email"
                             placeholder='Email'
+                            type='email'
                             onChange={this.changeInput} />
                         </Form.Field>
                         <Form.Field>
