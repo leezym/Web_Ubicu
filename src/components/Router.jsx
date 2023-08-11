@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter, Route, Switch, HashRouter } from "react-router-dom";
+import { Route, Switch, HashRouter } from "react-router-dom";
 import { Container } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import LoginForm from "./users/LoginForm";
@@ -11,6 +11,7 @@ import Ver from "./users/Ver";
 import Ejercicios from './ejercicios/Ejercicios';
 import AgregarEjercicio from "./ejercicios/Agregar";
 import VerResultados from "./ejercicios/VerResultados";
+import VerPerfil from "./users/VerPerfil";
 import { isNull } from "util";
 
 class Router extends Component {
@@ -34,6 +35,14 @@ class Router extends Component {
                     <Route
                         exact path="/AgregarFisioterapeuta"
                         component ={Agregar}/>
+                    
+                    <Route
+                        exact path="/VerPerfil/:id_user"
+                        render={ props => {
+                            const { match } = props;
+                            let id_user = match.params.id_user;
+                            return <VerPerfil id_user={id_user} />;
+                        }} />
                     
                     <Route
                         exact path="/AgregarPaciente/:id_user"

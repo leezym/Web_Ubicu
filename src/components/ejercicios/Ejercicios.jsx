@@ -5,12 +5,17 @@ import { Link, withRouter } from 'react-router-dom';
 import Ejercicio from './Ejercicio';
 import { connect } from 'react-redux';
 import moment from "moment";
+import ReactPaginate from 'react-paginate';
+import '../../styles/pagination_style.css';
 
 class Ejercicios extends Component {
   state = {
     user: {},
     capacidad_vital: 0, 
-    ejercicios: {}
+    ejercicios: {},
+    pageCount: 1,
+    currentPage: 0,
+    exercisesPerPage: 5
   };
 
   componentDidMount() {
@@ -61,7 +66,8 @@ class Ejercicios extends Component {
       })
       .then(resp => {        
         const ejercicios = resp;
-        this.setState({ ejercicios });
+        const pageCount = Math.ceil(ejercicios.length / this.state.exercisesPerPage); // Calcula el número de páginas
+        this.setState({ ejercicios, pageCount });
       })
       .catch(err => {
             console.error(err);
@@ -79,9 +85,18 @@ class Ejercicios extends Component {
     }
   };  
 
-  render() {
-    const { user, capacidad_vital, ejercicios } = this.state;
+  handlePageClick = ({ selected }) => {
+    this.setState({ currentPage: selected });
+  };
 
+  render() {
+    const { user, capacidad_vital, ejercicios, currentPage, exercisesPerPage } = this.state;
+    const offset = currentPage * exercisesPerPage;
+    let currentExercises = 0;
+    
+    if (ejercicios.length > 0)
+      currentExercises = ejercicios.slice(offset, offset + exercisesPerPage);
+    
     return (
       <div>
         <MenuNav />
@@ -123,16 +138,29 @@ class Ejercicios extends Component {
                 Prescripción
               </Label>
               <Card.Group>
-                {
-                  ejercicios.length > 0 ?
-                    ejercicios.map((ejercicio, index) => {
+                {                  
+                  currentExercises.length > 0 ?
+                    currentExercises.map((ejercicio, index) => {
                       return <Ejercicio key={index} ejercicio={ejercicio} />;
                     })
                   :
-                    ""
+                    ( <p>No hay ejercicios disponibles.</p> )
                 }
               </Card.Group>
             </Segment>
+            <ReactPaginate
+              previousLabel={"Anterior"}
+              nextLabel={"Siguiente"}
+              breakLabel={"..."}
+              breakClassName={"break-me"}
+              pageCount={this.state.pageCount}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={this.handlePageClick}
+              containerClassName={"pagination"}
+              subContainerClassName={"pages pagination"}
+              activeClassName={"active"}
+            />
           </Grid.Column>
         </Grid>
       </div>

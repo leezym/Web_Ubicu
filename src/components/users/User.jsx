@@ -5,8 +5,22 @@ import { connect } from 'react-redux';
 
 class User extends Component {
 
+    state = {
+        patient: this.props.patient
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.patient !== this.props.patient) {
+            this.setState({
+                patient: {
+                    ...this.props.patient
+                }
+            });
+        }
+    }
+
     render() {
-        const { patient } = this.props;
+        const { patient } = this.state;
 
         return (
         <Table.Row>

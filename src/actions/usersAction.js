@@ -16,16 +16,21 @@ export const crearUser = (user) => async dispatch => {
     });
 };
 
-export const updateUser = (product) => async dispatch => {
-    let datos;
-    const respuesta = await axios.put(urlApi + product.id, product, optionHeaders).then(
-        datos = await axios.get(urlApi)
-    );
-    console.log(datos);
+export const updateUser = (user) => async dispatch => {
+    const respuesta = await axios.put(urlApi + "updateUser", user, optionHeaders);
     dispatch({
         type: ACTUALIZAR_USER,
-        payload: datos.data
+        payload: user
     });
+};
+
+export const updatePassword = (user) => async dispatch => {
+    const respuesta = await axios.put(urlApi + "updatePassword", user, optionHeaders);
+    dispatch({
+        type: ACTUALIZAR_USER,
+        payload: user
+    });
+    return respuesta.data;
 };
 
 export const authenticateUser = (data) => async dispatch => {

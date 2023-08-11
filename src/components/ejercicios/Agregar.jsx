@@ -37,7 +37,6 @@ class Agregar extends Component {
         e.preventDefault();
         const { nombre, duracion_total, frecuencia_dias, frecuencia_horas, repeticiones, series, periodos_descanso, fecha_inicio, apnea, flujo, hora_inicio, id_patient } = this.state;
         if (!duracion_total || !frecuencia_dias || !frecuencia_horas || !repeticiones || !series || !periodos_descanso || !fecha_inicio || !apnea || !flujo || !hora_inicio) {
-            console.log(duracion_total, frecuencia_dias, frecuencia_horas, repeticiones, series, periodos_descanso, fecha_inicio, apnea, flujo, hora_inicio);
             alert('Por favor proporcione la información requerida');
             return;
         }

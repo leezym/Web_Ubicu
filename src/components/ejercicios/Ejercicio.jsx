@@ -12,7 +12,18 @@ class Ejercicio extends Component {
         original: {},
         ejercicio: this.props.ejercicio
     };
-
+    
+    componentDidUpdate(prevProps) {
+        if (prevProps.ejercicio !== this.props.ejercicio) {
+            this.setState({
+                ejercicio: {
+                    ...this.props.ejercicio,
+                    fecha_inicio: moment(this.props.ejercicio.fecha_inicio, 'DD/MM/YYYY').format('YYYY-MM-DD').toString()
+                }
+            });
+        }
+    }
+    
     componentDidMount() {
         const { ejercicio } = this.state;
         this.setState({

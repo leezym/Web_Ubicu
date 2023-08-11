@@ -2,20 +2,19 @@ import React,{ Component }  from 'react'
 import {Container,Dropdown,Image,Menu} from 'semantic-ui-react'
 import logo from '../../logo.png'; // Tell Webpack this JS file uses this image
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 
 class MenuNav extends Component {
-  componentDidMount() {
-    console.log(this.props)
-  }
-
+  
   handleLogout = () => {
     localStorage.removeItem('token');
     this.props.history.push('/');
   };
 
   render() {
+    const { id_user } = this.props.match.params;
+    
     return (
       <div>
         <Menu fixed='top' inverted>
@@ -26,7 +25,7 @@ class MenuNav extends Component {
             </Menu.Item>
             <Dropdown item simple text='Mi Cuenta'>
               <Dropdown.Menu>
-                <Dropdown.Item>Cambiar Password</Dropdown.Item>
+                <Dropdown.Item><Link to={`/VerPerfil/${id_user}`} style={{ color: 'black' }}>Ver perfil</Link></Dropdown.Item>
                 <Dropdown.Item onClick={this.handleLogout}>Cerrar Sesion</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

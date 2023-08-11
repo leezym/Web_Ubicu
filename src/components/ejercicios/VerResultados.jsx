@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import{allResultsByEjercicio} from "../../actions/resultsAction";
 import Chart from 'react-apexcharts'
 import moment from "moment";
+import MenuNav from '../pages/MenuNav';
 
 function fillGraph(data) {
   const seriesGraph = [];
@@ -228,40 +229,41 @@ class VerResultados extends React.Component {
 
     return (
       <div>
-        <Grid >
-        <Grid.Column>
-          <Grid.Row>
-          <Form style={{ marginTop: '1em' }}>
-          <Form.Field>
-            <label>Para ver la gráfica de la fisioterapia por favor selecciona el día de la semana y la hora del día:</label>              
-            </Form.Field>
-            <Form.Group >
-                          <Form.Field>
-                <label>Fecha de la fisioterapia</label>
-                <select name="fecha" onChange={this.changeInput}>
-                  <option value={0}>Seleccione una opción</option>
-                  {dateOptions}
-                </select>
-                </Form.Field>
-                <Form.Field>
-                <label>Hora de la fisioterapia</label>
-                <select name="hora" onChange={this.changeInput}>
-                  <option value={0}>Seleccione una opción</option>
-                  {hourOptions}
-                </select>
-                </Form.Field>
-                <Button onClick={this.handleClick} primary type='submit'>Buscar</Button>                
-            </Form.Group >
-            </Form>
-          </Grid.Row>
-          <Grid.Row>
-            {msg}
-            <Chart type="area" height={350} series={series} options={options}></Chart>
-          </Grid.Row>
-          <Grid.Row>
-            <Link to={`/VerEjercicios/${id_patient}`}><Button type='submit'>Regresar</Button></Link>
-          </Grid.Row>
-        </Grid.Column>
+        <MenuNav />
+        <Grid style={{ marginTop: '7em' }} columns={1}>
+          <Grid.Column>
+            <Grid.Row>
+            <Form style={{ marginTop: '1em' }}>
+            <Form.Field>
+              <label>Para ver la gráfica de la fisioterapia por favor selecciona el día de la semana y la hora del día:</label>              
+              </Form.Field>
+              <Form.Group >
+                            <Form.Field>
+                  <label>Fecha de la fisioterapia</label>
+                  <select name="fecha" onChange={this.changeInput}>
+                    <option value={0}>Seleccione una opción</option>
+                    {dateOptions}
+                  </select>
+                  </Form.Field>
+                  <Form.Field>
+                  <label>Hora de la fisioterapia</label>
+                  <select name="hora" onChange={this.changeInput}>
+                    <option value={0}>Seleccione una opción</option>
+                    {hourOptions}
+                  </select>
+                  </Form.Field>
+                  <Button onClick={this.handleClick} primary type='submit'>Buscar</Button>                
+              </Form.Group >
+              </Form>
+            </Grid.Row>
+            <Grid.Row>
+              {msg}
+              <Chart type="area" height={350} series={series} options={options}></Chart>
+            </Grid.Row>
+            <Grid.Row>
+              <Link to={`/VerEjercicios/${id_patient}`}><Button type='submit'>Regresar</Button></Link>
+            </Grid.Row>
+          </Grid.Column>
         </Grid>
       </div>
     );

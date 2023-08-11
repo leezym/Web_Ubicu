@@ -4,7 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 import MenuNav from '../pages/MenuNav';
 import { connect } from 'react-redux';
 import { updatePatient } from '../../actions/patientsAction';
-
+import ciudades from '../../colombia.json';
 
 class Ver extends Component {
     state = {
@@ -51,7 +51,6 @@ class Ver extends Component {
         e.preventDefault();
         const { patient } = this.state;
         patient.password = (patient.telefono % 10000).toString();
-        console.log(patient);
         this.props.updatePatient(patient);
     }
 
@@ -183,12 +182,18 @@ class Ver extends Component {
                                         </Form.Field>
                                         <Form.Field>
                                         <label>Ciudad</label>
-                                        <input  name="ciudad"
-                                            placeholder='Ciudad'
-                                            type='text'
-                                            onChange={this.changeInput}
-                                            disabled={readOnly}
-                                            value={readOnly ? patient.ciudad : null}/>
+                                        <select name="ciudad" value={readOnly ? patient.ciudad : null} disabled={readOnly} onChange={this.changeInput}>
+                                            <option value="-">Seleccione una opción</option>
+                                            {
+                                            ciudades.map((lugar, index) => (
+                                                lugar.ciudades.map((ciudad, index) => (
+                                                    <option key={index} value={ciudad+", "+lugar.departamento}>
+                                                        {ciudad+", "+lugar.departamento}
+                                                    </option>
+                                                    
+                                                ))                            
+                                            ))}
+                                        </select>
                                         </Form.Field>
                                     </Form.Group >
                                 </Form>

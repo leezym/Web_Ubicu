@@ -4,7 +4,7 @@ import { Form,Button,Segment,Label,Grid } from 'semantic-ui-react';
 import {crearPatient} from "../../actions/patientsAction";
 import {Link, withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
-
+import ciudades from '../../colombia.json';
 
 class AgregarPaciente extends Component {
     state = {
@@ -217,9 +217,18 @@ class AgregarPaciente extends Component {
                         </Form.Field>
                         <Form.Field>
                         <label>Ciudad</label>
-                        <input  name="ciudad"
-                                placeholder='Ciudad'
-                                onChange={this.changeInput} />
+                        <select name="ciudad" onChange={this.changeInput}>
+                            <option value="-">Seleccione una opción</option>
+                            {
+                            ciudades.map((lugar, index) => (
+                                lugar.ciudades.map((ciudad, index) => (
+                                    <option key={index} value={ciudad+", "+lugar.departamento}>
+                                        {ciudad+", "+lugar.departamento}
+                                    </option>
+                                    
+                                ))                            
+                            ))}
+                        </select>
                         </Form.Field>
                         <Button onClick={this.handleSave} primary type='submit'>Agregar</Button>
                         <Link to={`/Users/${this.props.id_user}`}><Button type='submit'>Regresar</Button></Link>
