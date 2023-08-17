@@ -1,20 +1,23 @@
-//test
-//import React, {useEffect, useState} from 'react';
-//import axios from "axios";
-import React from 'react';
+import React, { Component } from 'react';
 import './App.css';
 import { Provider } from "react-redux";
 import Router from "./components/Router.jsx";
 import store from "./store.js";
 import Footer from "../src/components/pages/Footer"
 
-function App() {
-    return ( 
-        <Provider store = { store } >
-        <Router/>
-        <Footer/>
-        </Provider>
-    );
+class App extends Component {
+    componentDidMount() {
+        document.title = 'UBICU'; // Cambia 'Nuevo Título de Página' al título que desees
+    }
+
+    render() {
+        return ( 
+            <Provider store = { store } >
+            <Router/>
+            <Footer/>
+            </Provider>
+        );
+    }
 }
 
 export default App;

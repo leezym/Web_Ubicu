@@ -43,6 +43,7 @@ class LoginForm extends Component {
     })
     .then(resp => {
       localStorage.setItem('token', resp.token);
+      localStorage.setItem('id_user', resp.user._id);
       optionHeaders.headers['x-access-token'] = localStorage.getItem('token', resp.token)
       this.props.history.push(`/Users/${resp.user._id}`);
     })

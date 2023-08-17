@@ -127,11 +127,16 @@ class Ejercicios extends Component {
                   </TableRow>
                 </TableBody>
               </Table>
-              {
-                ejercicios.length === 0 || (ejercicios.length > 0 && moment().isAfter(moment(ejercicios[ejercicios.length - 1].fecha_fin, 'DD/MM/YYYY'))) ?
-                  <Link to={`/AgregarEjercicio/${user._id}`}><Button primary type='submit'>Agregar</Button></Link> : ""
-              }
-              <Link to={`/VerUser/${user._id}`}><Button >Regresar</Button></Link>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                {ejercicios.length === 0 || (ejercicios.length > 0 && moment().isAfter(moment(ejercicios[ejercicios.length - 1].fecha_fin, 'DD/MM/YYYY'))) ? (
+                  <Link to={`/AgregarEjercicio/${user._id}`}>
+                    <Button primary type='submit'>Agregar</Button>
+                  </Link>
+                ) : null}
+                <Link to={`/VerUser/${user._id}`}>
+                  <Button>Regresar</Button>
+                </Link>
+              </div>
             </Segment>
             <Segment raised>
               <Label color="blue" ribbon>

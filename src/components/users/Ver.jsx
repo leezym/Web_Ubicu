@@ -210,8 +210,14 @@ class Ver extends Component {
                             </Card.Content>
                         </Card.Content >
                     </Card>
-                        <Link to={`/VerEjercicios/${patient._id}`}><Button primary  size='small' > Ejercicios</Button></Link>
-                        <Link to={`/Users/${patient.id_user}`}><Button >Regresar</Button></Link>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <Link to={`/VerEjercicios/${patient._id}`}>
+                                <Button primary size='small'>Ejercicios</Button>
+                            </Link>
+                            <Link to={`/Users/${patient.id_user}`}>
+                                <Button>Regresar</Button>
+                            </Link>
+                        </div>
                     </Grid.Column>            
                 </Grid> 
             </Segment>   
