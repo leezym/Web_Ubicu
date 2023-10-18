@@ -2,28 +2,29 @@
 
 /* Estilos para la paginación */
 .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    list-style: none;
-    padding: 0;
-    margin: 20px 0;
-  }
-  
-  .pagination li {
-    margin: 0 5px;
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    cursor: pointer;
-  }
-  
-  .pagination li.active {
-    background-color: #007bff;
-    color: #fff;
-    border: 1px solid #007bff;
-  }
-  
-  .pagination li:hover {
-    background-color: #f2f2f2;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.pagination li {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  background-color: #f2f2f2; /* Cambié el fondo predeterminado */
+}
+
+.pagination li.active {
+  background-color: #007bff;
+  color: #fff; /* Cambié el color del texto en estado activo a blanco */
+  border: 1px solid #007bff;
+}
+
+.pagination li:hover {
+  background-color: #007bff;
+  color: #fff; /* Cambié el color del texto en estado hover a blanco */
+}
