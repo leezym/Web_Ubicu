@@ -12,7 +12,6 @@ import Ejercicios from './ejercicios/Ejercicios';
 import AgregarEjercicio from "./ejercicios/Agregar";
 import VerResultados from "./ejercicios/VerResultados";
 import VerPerfil from "./users/VerPerfil";
-import VerCalibraciones from "./calibraciones/VerCalibraciones";
 import { isNull } from "util";
 
 class Router extends Component {
@@ -21,10 +20,6 @@ class Router extends Component {
             <Container>
             <HashRouter>
                 <Switch>
-                    <Route
-                        exact path="/Calibraciones"
-                        component ={VerCalibraciones}/>
-
                     <Route
                         exact path="/"
                         component ={LoginForm}/>
