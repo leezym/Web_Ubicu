@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
+import { Button, Form, Grid, Header, Message, Segment, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { authenticateUser } from '../../actions/usersAction';
 import 'semantic-ui-css/semantic.min.css';
 import { optionHeaders } from '../../actions/headers.js';
-import Apk from '../../ubicu_28_09_2023_v2022.1.23_final.apk';
+import logo from '../../logo_grande.svg';
+//import Apk from '../../ubicu_28_09_2023_v2022.1.23_final.apk';
 
 class LoginForm extends Component {
   state = {
@@ -59,7 +60,8 @@ class LoginForm extends Component {
       <div>
         <Grid textAlign="center" style={{ height: '100vh' }} verticalAlign="middle">
           <Grid.Column style={{ maxWidth: 450 }}>
-            <Header as="h1" color="blue" textAlign="center" size="huge">
+            <Image src={logo} centered style={{ width: '350px', height: 'auto' }} />
+            <Header as="h1" textAlign="center" size="large" style={{ color: '#28367b' }}>
               Fisioterapia Respiratoria
             </Header>
             <Form size="large" onSubmit={this.handleSubmit}>
@@ -85,7 +87,7 @@ class LoginForm extends Component {
                   value={password}
                   onChange={this.handleChange}
                 />
-                <Button color="blue" fluid size="large" disabled={!this.validateForm()}>
+                <Button fluid size="large" disabled={!this.validateForm()} style={{ backgroundColor: '#28367b', color: "white" }}>
                   Entrar
                 </Button>
               </Segment>
@@ -95,12 +97,12 @@ class LoginForm extends Component {
             </Message>
           </Grid.Column>
         </Grid>
-        <Grid textAlign="center" style={{ height: '20vh' }} verticalAlign="middle">
+        {/*<Grid textAlign="center" style={{ height: '20vh' }} verticalAlign="middle">
             <a href={Apk} download>          
               {' '}
               <button>Descargar App</button>
             </a>
-        </Grid>
+        </Grid>*/}
       </div>
     );
   }

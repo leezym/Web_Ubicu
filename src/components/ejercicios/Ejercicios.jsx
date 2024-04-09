@@ -86,7 +86,12 @@ class Ejercicios extends Component {
   };  
 
   handlePageClick = ({ selected }) => {
-    this.setState({ currentPage: selected });
+    this.setState({ currentPage: selected }, () => {
+      const { ejercicios, currentPage, exercisesPerPage } = this.state;
+      const offset = currentPage * exercisesPerPage;
+      let currentExercises = ejercicios.slice(offset, offset + exercisesPerPage);
+      this.setState({ currentExercises });
+    });
   };
 
   render() {
@@ -130,19 +135,19 @@ class Ejercicios extends Component {
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 {ejercicios.length === 0 || (ejercicios.length > 0 && moment().isAfter(moment(ejercicios[ejercicios.length - 1].fecha_fin, 'DD/MM/YYYY'))) ? (
                   <Link to={`/AgregarEjercicio/${user._id}`}>
-                    <Button primary type='submit'>Agregar</Button>
+                    <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>
                   </Link>
                 ) : null}
                 <Link to={`/VerUser/${user._id}`}>
-                  <Button>Regresar</Button>
+                  <Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button>
                 </Link>
               </div>
             </Segment>
             <Segment raised>
-              <Label color="blue" ribbon>
+              <Label ribbon style={{color:"#28367b"}}>
                 Prescripción
               </Label>
-              <Card.Group>
+              <Card.Group style={{ marginTop: '1em' }}>
                 {                  
                   currentExercises.length > 0 ?
                     currentExercises.map((ejercicio, index) => {
@@ -165,6 +170,7 @@ class Ejercicios extends Component {
               containerClassName={"pagination"}
               subContainerClassName={"pages pagination"}
               activeClassName={"active"}
+              activeLinkClassName={"active-link"}
             />
           </Grid.Column>
         </Grid>

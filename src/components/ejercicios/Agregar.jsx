@@ -70,7 +70,7 @@ class Agregar extends Component {
             <Grid style={{ marginTop: '7em' }} columns={1}>
             <Grid.Column>
             <Segment raised>
-                <Label color='blue' ribbon>
+                <Label ribbon style={{color:"#28367b"}}>
                 Registrar Nuevo Ejercicio
                 </Label>
                 <Form style={{ marginTop: '1em' }}>
@@ -169,8 +169,8 @@ class Agregar extends Component {
                         <option value="11">11:00 am</option>
                     </select>
                     </Form.Field>
-                    <Button onClick={this.handleSave} primary type='submit'>Agregar</Button>
-                    <Link to={`/VerEjercicios/${this.state.id_patient}`}><Button type='submit'>Regresar</Button></Link>
+                    <Button onClick={this.handleSave} type='submit' style={{ backgroundColor: '#eb5a25', color:"white" }}>Agregar</Button>
+                    <Link to={`/VerEjercicios/${this.state.id_patient}`}><Button type='submit' style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
                 </Form>
             </Segment>
             </Grid.Column>

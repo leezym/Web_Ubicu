@@ -145,8 +145,8 @@ class AgregarPaciente extends Component {
                 <Grid style={{ marginTop: '7em' }} columns={1}>
                 <Grid.Column>
                 <Segment raised>
-                    <Label color='teal' ribbon>
-                    Registro de Usuario
+                    <Label ribbon style={{color:"#28367b"}}>
+                    Registro de Paciente
                     </Label>
                     <Form style={{ marginTop: '1em' }}>
                         <Form.Field>
@@ -230,8 +230,8 @@ class AgregarPaciente extends Component {
                             ))}
                         </select>
                         </Form.Field>
-                        <Button onClick={this.handleSave} primary type='submit'>Agregar</Button>
-                        <Link to={`/Users/${this.props.id_user}`}><Button type='submit'>Regresar</Button></Link>
+                        <Button onClick={this.handleSave} type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>
+                        <Link to={`/Users/${this.props.id_user}`}><Button type='submit' style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
                     </Form>
                 </Segment>
                 </Grid.Column>

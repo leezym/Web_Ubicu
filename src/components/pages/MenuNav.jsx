@@ -18,7 +18,7 @@ class MenuNav extends Component {
     
     return (
       <div>
-        <Menu fixed='top' inverted>
+        <Menu fixed='top' inverted style = {{ backgroundColor: "#28367b"}}>
           <Container>
             <Menu.Item as='a' header>
             <Link to={`/Users/${id_user}`} style={{ display: 'flex', alignItems: 'center', color: 'white' }}>

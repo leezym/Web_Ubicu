@@ -99,10 +99,10 @@ class VerPerfil extends Component {
         return (
         <div>
             <MenuNav/>
-                <Segment>
-                <Grid style={{ marginTop: '9em' }} stackable>
+            <Segment style={{ marginTop: '6em' }}>
+                <Grid stackable>
                     <Grid.Column>
-                        <Label color='blue' ribbon>
+                        <Label ribbon style={{color:"#28367b"}}>
                         Perfil
                         </Label>
                         <Card fluid color="blue" >
@@ -151,11 +151,11 @@ class VerPerfil extends Component {
                                 </Card.Description>
                                 <Card.Content >
                                     { readOnly ?
-                                        <Button onClick={()=>{this.handleEdit(false); this.copyOriginal()}} floated='left' icon labelPosition='left' primary  size='small'><Icon name='clipboard' />Editar</Button>
+                                        <Button onClick={()=>{this.handleEdit(false); this.copyOriginal()}} style={{ backgroundColor: '#eb5a25', color:"white" }}>Editar</Button>
                                         :
                                         <>
-                                            <Button onClick={this.handleSave} type="submit" floated='left' icon labelPosition='left' primary size='small'><Icon name='clipboard' />Guardar</Button>
-                                            <Button onClick={()=>{this.handleEdit(true); this.pasteOriginal()}} type='submit'>Cancelar</Button>
+                                            <Button onClick={this.handleSave} type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Guardar</Button>
+                                            <Button onClick={()=>{this.handleEdit(true); this.pasteOriginal()}} type='submit' style={{ backgroundColor: '#eb5a25', color:"white" }}>Cancelar</Button>
                                         </>
                                     }
                                 </Card.Content>
@@ -192,14 +192,14 @@ class VerPerfil extends Component {
                                     </Form>
                                 </Card.Description>
                                 <Card.Content >
-                                    <Button onClick={this.handleUpdate} floated='left' icon labelPosition='left' primary  size='small'><Icon name='clipboard' />Actualizar</Button>
+                                    <Button onClick={this.handleUpdate} style={{ backgroundColor: '#46bee0', color:"white" }}>Actualizar</Button>
                                 </Card.Content>
                             </Card.Content >
                         </Card> 
-                            <Link to={`/Users/${user._id}`}><Button >Regresar</Button></Link>
+                            <Link to={`/Users/${user._id}`}><Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
                         </Grid.Column>            
                     </Grid> 
-                </Segment> 
+            </Segment> 
         </div>
         );
     }

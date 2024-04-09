@@ -22,6 +22,10 @@
     color: #fff;
     border: 1px solid #007bff;
   }
+
+  .active-link {
+    color: #fff; /* Cambia este valor al color de texto deseado */
+  }
   
   .pagination li:hover {
     background-color: #f2f2f2;

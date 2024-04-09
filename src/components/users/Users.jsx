@@ -47,7 +47,14 @@ class Users extends Component {
   }
 
   handlePageClick = ({ selected }) => {
-    this.setState({ currentPage: selected });
+    this.setState({ currentPage: selected }, () => {
+      const { patients, currentPage, patientsPerPage, filteredPatients } = this.state;
+      const offset = currentPage * patientsPerPage;
+      const currentPatients = filteredPatients.length > 0 ?
+        filteredPatients.slice(offset, offset + patientsPerPage)
+        : patients.slice(offset, offset + patientsPerPage);
+      this.setState({ currentPatients });
+    });
   };
 
   handleNameFilter = (event) => {
@@ -76,10 +83,10 @@ class Users extends Component {
     return (
       <div>
         <MenuNav/> 
-        <Grid style={{ marginTop: '7em' }} columns={1}>
+        <Grid stackable style={{ marginTop: '6em' }}>
           <Grid.Column>
             <Segment raised>
-              <Label color='blue' ribbon>
+              <Label ribbon style={{color:"#28367b"}}>
                 Lista de pacientes
               </Label>
               <input
@@ -114,7 +121,7 @@ class Users extends Component {
                     <Table.HeaderCell />
                     <Table.HeaderCell colSpan='2'>
                       <Link to={`/AgregarPaciente/${this.props.id_user}`}>
-                        <Button floated='right' icon labelPosition='left' primary size='small'>
+                        <Button floated='right' icon labelPosition='left' style={{ backgroundColor: '#eb5a25', color:"white" }}>
                           <Icon name='user' />
                           Agregar
                         </Button>
@@ -136,6 +143,7 @@ class Users extends Component {
               containerClassName={"pagination"}
               subContainerClassName={"pages pagination"}
               activeClassName={"active"}
+              activeLinkClassName={"active-link"}
             />
           </Grid.Column>
         </Grid>

@@ -28,7 +28,7 @@ class User extends Component {
             <Table.Cell>{patient.nombre}</Table.Cell>
             <Table.Cell>
             <Link to={`/VerUser/${patient._id}`}>
-                <Button primary floated="right">
+                <Button style={{ backgroundColor: '#46bee0', color:"white" }} floated="right">
                 Ver
                 <Icon name="right chevron" />
                 </Button>

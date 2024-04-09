@@ -51,8 +51,8 @@ class Agregar extends Component {
                 <Grid style={{ marginTop: '7em' }} columns={1}>
                 <Grid.Column>
                 <Segment raised>
-                    <Label color='teal' ribbon>
-                    Registro de Usuario
+                    <Label ribbon style={{color:"#28367b"}}>
+                    Registro de Fisioterapeuta
                     </Label>
                     <Form style={{ marginTop: '1em' }}>
                         <Form.Field>
@@ -92,8 +92,8 @@ class Agregar extends Component {
                             type='password'
                             onChange={this.changeInput} />
                         </Form.Field>
-                        <Button onClick={this.handleSave} primary type='submit'>Agregar</Button>
-                        <Link to="/"><Button type='submit'>Regresar</Button></Link>
+                        <Button onClick={this.handleSave} type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>
+                        <Link to="/"><Button type='submit' style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
                     </Form>
                 </Segment>
                 </Grid.Column>

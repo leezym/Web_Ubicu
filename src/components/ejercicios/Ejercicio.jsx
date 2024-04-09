@@ -215,17 +215,17 @@ class Ejercicio extends Component {
                     </Card.Description>
                     <Card.Content extra>
                     <Link to={`/VerResultados/${ejercicio.id_patient}/${ejercicio._id}`}>
-                    <Button secundary floated='right'>
+                    <Button style={{ backgroundColor: '#46bee0', color:"white" }} floated='right'>
                         Ver Gráfica
                     <Icon name='right chevron' />
                     </Button>
                     </Link>
                     { readOnly ?
-                        <Button onClick={()=>{this.handleEdit(false); this.copyOriginal()}} floated='left' icon labelPosition='left' primary  size='small'><Icon name='clipboard' />Editar</Button>
+                        <Button onClick={()=>{this.handleEdit(false); this.copyOriginal()}} style={{ backgroundColor: '#eb5a25', color:"white" }}>Editar</Button>
                         :
                         <>
-                            <Button onClick={this.handleSave} type="submit" floated='left' icon labelPosition='left' primary size='small'><Icon name='clipboard' />Guardar</Button>
-                            <Button onClick={()=>{this.handleEdit(true); this.pasteOriginal()}} type='submit'>Cancelar</Button>
+                            <Button onClick={this.handleSave} type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Guardar</Button>
+                            <Button onClick={()=>{this.handleEdit(true); this.pasteOriginal()}} type='submit' style={{ backgroundColor: '#eb5a25', color:"white" }}>Cancelar</Button>
                         </>
                     }
                     </Card.Content>
