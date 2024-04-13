@@ -21,8 +21,8 @@ class Ejercicios extends Component {
   componentDidMount() {
     const { id_patient } = this.props;
 
-    fetch('https://server.ubicu.co/getPatientbyId', {
-    //fetch('http://localhost:5000/getPatientbyId', {
+    fetch('https://server.ubicu.co/getPatientbyCc', {
+    //fetch('http://localhost:5000/getPatientbyCc', {
         method: 'POST',
         body: JSON.stringify({id_patient}),
         headers: {

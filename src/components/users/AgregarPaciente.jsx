@@ -78,7 +78,7 @@ class AgregarPaciente extends Component {
                         total_sessions: 0,
                         total_days: 0,
                         total_weeks: 0,
-                        id_patient: resp._id
+                        id_patient: resp.cedula
                     }),
                     headers: {
                     'Content-Type': 'application/json'
@@ -105,7 +105,7 @@ class AgregarPaciente extends Component {
                         id_item_figuras_array: "0,-1,-1,-1,-1", //5 temas, el primero es gratis
                         all_fondos_items_array: "1,1,1;0,0,0;0,0,0;0,0,0;0,0,0;", //3 items por cada 5 temas, el primero es gratis
                         all_figuras_items_array: "1,1,1;0,0,0;0,0,0;0,0,0;0,0,0;", //3 items por cada 5 temas, el primero es gratis
-                        id_patient: resp._id
+                        id_patient: resp.cedula
                     }),
                     headers: {
                     'Content-Type': 'application/json'
