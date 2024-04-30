@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import User from "./User"
-import {Table,Button,Icon,Grid,Segment,Label} from 'semantic-ui-react'
+import {Table, Button, Grid, Segment, Label, Input} from 'semantic-ui-react'
 import MenuNav from '../pages/MenuNav';
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
@@ -89,10 +89,11 @@ class Users extends Component {
               <Label ribbon style={{color:"#28367b"}}>
                 Lista de pacientes
               </Label>
-              <input
-                type="text"
-                placeholder="Filtrar por nombre..."
-                onChange={this.handleNameFilter}
+              <Input
+                  icon='search'
+                  iconPosition='left'
+                  placeholder='Filtrar por nombre...'
+                  onChange={this.handleNameFilter}
               />
               <Table celled compact definition unstackable>
                 <Table.Header fullWidth>
@@ -121,10 +122,7 @@ class Users extends Component {
                     <Table.HeaderCell />
                     <Table.HeaderCell colSpan='2'>
                       <Link to={`/AgregarPaciente/${this.props.id_user}`}>
-                        <Button floated='right' icon labelPosition='left' style={{ backgroundColor: '#eb5a25', color:"white" }}>
-                          <Icon name='user' />
-                          Agregar
-                        </Button>
+                        <Button floated='right' style={{ backgroundColor: '#eb5a25', color:"white" }}>Agregar</Button>
                       </Link>
                     </Table.HeaderCell>
                   </Table.Row>

@@ -194,6 +194,7 @@ class VerResultados extends React.Component {
   handleClick = () => {
     const { id_ejercicio, allResultsByEjercicio } = this.props;
     const { flujo, fecha, hora } = this.state;
+    
     this.setState(prevState => {
       let options = {...prevState.options};
       options.annotations.yaxis[0].y = flujo;
@@ -215,8 +216,8 @@ class VerResultados extends React.Component {
         });
       
       this.forceUpdate();
-    }).catch(error => {
-      console.log(error);
+    }).catch(err => {
+      alert('Error al consultar resultados. ' + err.response.data.msg);
     }); 
   }
   
@@ -239,20 +240,20 @@ class VerResultados extends React.Component {
                     <Form.Field style={{ marginRight: '3em' }}>
                       <label>Fecha de la fisioterapia</label>
                       <select name="fecha" onChange={this.changeInput}>
-                        <option value={0}>Seleccione una opción</option>
+                        <option value={"-"}>Seleccione una opción</option>
                         {dateOptions}
                       </select>
                     </Form.Field>
                     <Form.Field style={{ marginRight: '3em' }}>
                       <label>Hora de la fisioterapia</label>
                       <select name="hora" onChange={this.changeInput}>
-                        <option value={0}>Seleccione una opción</option>
+                        <option value={"-"}>Seleccione una opción</option>
                         {hourOptions}
                       </select>
                     </Form.Field>                    
                   </Form.Group>
                   <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '2em' }}>
-                    <Button onClick={this.handleClick} type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Buscar</Button>
+                    <Button onClick={this.handleClick} type='button' style={{ backgroundColor: '#46bee0', color:"white" }}>Buscar</Button>
                     <Link to={`/VerEjercicios/${id_patient}`}><Button type='submit' style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
                   </div>
                 </Form>

@@ -12,7 +12,8 @@ class Ejercicios extends Component {
   state = {
     user: {},
     capacidad_vital: 0, 
-    ejercicios: {},
+    ejercicios: [],
+    ejercicioPredeterminado: null,
     pageCount: 1,
     currentPage: 0,
     exercisesPerPage: 5
@@ -40,49 +41,49 @@ class Ejercicios extends Component {
       })
       .then(resp => {        
         const user = resp;
-        const capacidad_vital = this.getCapacidadVital(user).toFixed(2);
+        const capacidad_vital = this.getCapacidadVital(user).toFixed(2) + "L";
         this.setState({ user, capacidad_vital });
-      })
-      .catch(err => {
-            console.error(err);
-    });
-    
-    fetch('https://server.ubicu.co/allEjerciciosByPatient', {
-    //fetch('http://localhost:5000/allEjerciciosByPatient', {
-        method: 'POST',
-        body: JSON.stringify({id_patient}),
-        headers: {
-          'Content-Type': 'application/json',
-          'x-access-token': localStorage.getItem('token')
-        }
-      })
-      .then(res => {
-        if (res.status === 200) {
-          return res.json();
-        } else {
-          const error = new Error(res.error);
-          throw error;
-        }
-      })
-      .then(resp => {        
-        const ejercicios = resp;
-        const pageCount = Math.ceil(ejercicios.length / this.state.exercisesPerPage); // Calcula el número de páginas
-        this.setState({ ejercicios, pageCount });
-      })
-      .catch(err => {
-            console.error(err);
-    });
 
+        fetch('https://server.ubicu.co/allEjerciciosByPatient', {
+        //fetch('http://localhost:5000/allEjerciciosByPatient', {
+            method: 'POST',
+            body: JSON.stringify({id_patient}),
+            headers: {
+              'Content-Type': 'application/json',
+              'x-access-token': localStorage.getItem('token')
+            }
+          })
+          .then(res => {
+            if (res.status === 200) {
+              return res.json();
+            } else {
+              const error = new Error(res.error);
+              throw error;
+            }
+          })
+          .then(resp => {        
+            const ejercicios = resp.filter(ejercicio => ejercicio.nombre !== "Predeterminado")
+            const ejercicioPredeterminado = resp.find(ejercicio => ejercicio.nombre === "Predeterminado");
+            const pageCount = Math.ceil(ejercicios.length / this.state.exercisesPerPage); // Calcula el número de páginas
+           
+            this.setState({ ejercicios, ejercicioPredeterminado, pageCount });
+          })
+          .catch(err => {
+            alert('Error al consultar ejercicios. ' + err.response.data.msg);
+        });
+      })
+      .catch(err => {
+        alert('Error al consultar usuario. ' + err.response.data.msg);
+    });
   };
 
   getCapacidadVital = (user) => {
-    if (user.sexo === 'M') {
-      return 27.63 - 0.112 * user.edad * (user.altura / 100);
-    } else if (user.sexo === 'F') {
-      return 21.78 - 0.101 * user.edad * (user.altura / 100);
-    } else {
-      return 0;
-    }
+    if (user.sexo === 'M')
+      return 27.63 - (((0.112 * user.edad) * user.altura) / 100);
+    else if (user.sexo === 'F')
+      return 21.78 - (((0.101 * user.edad) * user.altura) / 100);
+    
+    return 0;
   };  
 
   handlePageClick = ({ selected }) => {
@@ -95,7 +96,7 @@ class Ejercicios extends Component {
   };
 
   render() {
-    const { user, capacidad_vital, ejercicios, currentPage, exercisesPerPage } = this.state;
+    const { user, capacidad_vital, ejercicios, ejercicioPredeterminado, currentPage, exercisesPerPage } = this.state;
     const offset = currentPage * exercisesPerPage;
     let currentExercises = 0;
     
@@ -108,6 +109,9 @@ class Ejercicios extends Component {
         <Grid style={{ marginTop: '7em' }} columns={1}>
           <Grid.Column>
             <Segment raised>
+              <Label ribbon style={{color:"#28367b"}}>
+                Paciente
+              </Label>
               <Table>
                 <TableBody>
                   <TableRow>
@@ -132,30 +136,55 @@ class Ejercicios extends Component {
                   </TableRow>
                 </TableBody>
               </Table>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                {ejercicios.length === 0 || (ejercicios.length > 0 && moment().isAfter(moment(ejercicios[ejercicios.length - 1].fecha_fin, 'DD/MM/YYYY'))) ? (
-                  <Link to={`/AgregarEjercicio/${user._id}`}>
-                    <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>
-                  </Link>
-                ) : null}
+
+              <Label ribbon style={{color:"#28367b"}}>
+                Ejercicio Predeterminado
+              </Label>
+              {
+                ejercicioPredeterminado ?
+                  <Ejercicio ejercicio={ejercicioPredeterminado} />
+                :
+                  (
+                    <div>
+                      <p style={{ marginBottom:"10px", marginTop:"10px" }}>No hay ejercicios predeterminados disponibles, por favor agregar.</p>
+                      <Link to={{ pathname: `/AgregarEjercicio/${user._id}`, nombre_terapia: "Predeterminado" }}>
+                        <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar ejercicio predeterminado</Button>
+                      </Link>
+                    </div>
+                  )
+              }              
+            </Segment>
+            <Segment raised>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: "20px"}}>
+                {
+                  
+                  ejercicios.length === 0 || (ejercicios.length > 0 && moment().isAfter(moment(ejercicios[ejercicios.length - 1].fecha_fin, 'DD/MM/YYYY'))) ? 
+                    (
+                      <Link to={{ pathname: `/AgregarEjercicio/${user._id}`, nombre_terapia: "Inspiración profunda" }}>
+                        <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>
+                      </Link>
+                    ) 
+                  : 
+                    <></>
+                }
                 <Link to={`/VerUser/${user._id}`}>
                   <Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button>
                 </Link>
               </div>
-            </Segment>
-            <Segment raised>
               <Label ribbon style={{color:"#28367b"}}>
-                Prescripción
+                Prescripciones
               </Label>
               <Card.Group style={{ marginTop: '1em' }}>
-                {                  
-                  currentExercises.length > 0 ?
-                    currentExercises.map((ejercicio, index) => {
-                      return <Ejercicio key={index} ejercicio={ejercicio} />;
-                    })
-                  :
-                    ( <p>No hay ejercicios disponibles.</p> )
-                }
+              {        
+                currentExercises.length > 0 ?
+                  currentExercises
+                  //.filter(ejercicio => ejercicio.nombre !== "Predeterminado") // Filtrar el ejercicio predeterminado
+                  .map((ejercicio, index) => {
+                    return <Ejercicio key={index} ejercicio={ejercicio} />;
+                  })
+                :
+                  <p style={{ marginBottom:"10px", marginTop:"10px" }}>No hay ejercicios disponibles.</p>
+              }
               </Card.Group>
             </Segment>
             <ReactPaginate

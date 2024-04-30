@@ -63,9 +63,10 @@ class Router extends Component {
                     <Route
                         exact path="/AgregarEjercicio/:id_patient"
                         render={ props => {
-                            const { match } = props;
+                            const { match, location } = props;
                             let id_patient = match.params.id_patient;
-                            return <AgregarEjercicio id_patient={id_patient} />;
+                            let nombre_terapia = location.nombre_terapia;
+                            return <AgregarEjercicio id_patient={id_patient} nombre_terapia={nombre_terapia}/>;
                         }} />            
                                                                                                                 
                     <Route

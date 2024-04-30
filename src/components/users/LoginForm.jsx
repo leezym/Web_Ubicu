@@ -23,8 +23,10 @@ class LoginForm extends Component {
     return cedula.length > 0 && password.length > 0;
   };
 
-  handleSubmit = async (event) => {
-    event.preventDefault();
+  handleSubmit = async (e) => {
+    e.preventDefault();
+
+    e.target.disabled = true;
 
     //fetch('http://localhost:5000/authenticateUser', {
     fetch('https://server.ubicu.co/authenticateUser', {
@@ -43,19 +45,23 @@ class LoginForm extends Component {
       }
     })
     .then(resp => {
+      e.target.disabled = false;
+
       localStorage.setItem('token', resp.token);
       localStorage.setItem('id_user', resp.user._id);
+      
       optionHeaders.headers['x-access-token'] = localStorage.getItem('token', resp.token)
       this.props.history.push(`/Users/${resp.user._id}`);
     })
     .catch(err => {
-      console.log(err);
-      alert('Error al iniciar sesión');
+      e.target.disabled = false;
+      alert('Error al iniciar sesión.' + err.response.data.msg);
     });
   }
 
   render() {
     const { cedula, password } = this.state;
+    
     return (
       <div>
         <Grid textAlign="center" style={{ height: '100vh' }} verticalAlign="middle">
