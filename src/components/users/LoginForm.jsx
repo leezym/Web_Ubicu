@@ -23,10 +23,11 @@ class LoginForm extends Component {
     return cedula.length > 0 && password.length > 0;
   };
 
-  handleSubmit = async (e) => {
+  handleSave = async (e) => {
     e.preventDefault();
 
-    e.target.disabled = true;
+    const submitButton = e.target.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
 
     //fetch('http://localhost:5000/authenticateUser', {
     fetch('https://server.ubicu.co/authenticateUser', {
@@ -45,7 +46,7 @@ class LoginForm extends Component {
       }
     })
     .then(resp => {
-      e.target.disabled = false;
+      submitButton.disabled = false;
 
       localStorage.setItem('token', resp.token);
       localStorage.setItem('id_user', resp.user._id);
@@ -54,7 +55,7 @@ class LoginForm extends Component {
       this.props.history.push(`/Users/${resp.user._id}`);
     })
     .catch(err => {
-      e.target.disabled = false;
+      submitButton.disabled = false;
       alert('Error al iniciar sesión.' + err.response.data.msg);
     });
   }
@@ -70,7 +71,7 @@ class LoginForm extends Component {
             <Header as="h1" textAlign="center" size="large" style={{ color: '#28367b' }}>
               Fisioterapia Respiratoria
             </Header>
-            <Form size="large" onSubmit={this.handleSubmit}>
+            <Form size="large" onSubmit={this.handleSave}>
               <Segment stacked>
                 <Form.Input
                   fluid
@@ -93,7 +94,7 @@ class LoginForm extends Component {
                   value={password}
                   onChange={this.handleChange}
                 />
-                <Button fluid size="large" disabled={!this.validateForm()} style={{ backgroundColor: '#28367b', color: "white" }}>
+                <Button type="submit" fluid size="large" disabled={!this.validateForm()} style={{ backgroundColor: '#28367b', color: "white" }}>
                   Entrar
                 </Button>
               </Segment>

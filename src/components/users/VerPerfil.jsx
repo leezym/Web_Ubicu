@@ -66,16 +66,17 @@ class VerPerfil extends Component {
     handleSave = (e) => {
         e.preventDefault();
 
-        e.target.disabled = true;
+        const submitButton = e.target.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
 
         const { user } = this.state;
 
         this.handleEdit(true);
         this.props.updateUser(user).then(resp => {
-            e.target.disabled = false;
+            submitButton.disabled = false;
             alert('Usuario actualizado.');
         }).catch(err => {
-            e.target.disabled = false;
+            submitButton.disabled = false;
 
             alert('Error al actualizar usuario. ' + err.response.data.msg);
         });

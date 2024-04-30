@@ -24,7 +24,8 @@ class Agregar extends Component {
     handleSave = async (e) => {
         e.preventDefault();
 
-        e.target.disabled = true;
+        const submitButton = e.target.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
 
         const { crearUser, history } = this.props;
         const { nombre, cedula, telefono, email, password } = this.state;
@@ -36,12 +37,12 @@ class Agregar extends Component {
             email,
             password
         }).then(resp => {
-            e.target.disabled = false;
+            submitButton.disabled = false;
             alert('Fisioterapeuta creado');
             history.push('/');
         })
         .catch(err => {
-            e.target.disabled = false;
+            submitButton.disabled = false;
             alert('Error al crear el usuario. ' + err.response.data.msg);
         });
     };

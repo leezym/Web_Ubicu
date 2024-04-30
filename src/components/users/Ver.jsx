@@ -49,17 +49,18 @@ class Ver extends Component {
     handleSave = (e) => {
         e.preventDefault();
 
-        e.target.disabled = true;
+        const submitButton = e.target.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
         
         const { patient } = this.state;
 
         this.handleEdit(true);
         patient.password = (patient.telefono % 10000).toString();
         this.props.updatePatient(patient).then(resp => {
-            e.target.disabled = false;
+            submitButton.disabled = false;
             alert('Paciente actualizado.');
         }).catch(err => {
-            e.target.disabled = false;
+            submitButton.disabled = false;
             alert('Error al actualizar paciente. ' + err.response.data.msg);         
         });
     }

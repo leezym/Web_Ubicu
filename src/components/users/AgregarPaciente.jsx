@@ -28,7 +28,8 @@ class AgregarPaciente extends Component {
     handleSave = async (e) => {
         e.preventDefault();
 
-        e.target.disabled = true;
+        const submitButton = e.target.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
 
         const { crearPatient, id_user, } = this.props;
         const { nombre, cedula, telefono, email, edad, sexo, peso, altura, direccion, ciudad } = this.state;
@@ -47,7 +48,7 @@ class AgregarPaciente extends Component {
             password: (telefono % 10000).toString(),
             id_user: id_user
         }).then(resp => {
-            e.target.disabled = false;
+            submitButton.disabled = false;
             alert('Paciente creado'); 
             
             fetch('https://server.ubicu.co/getPatientbyCc', {
@@ -136,7 +137,7 @@ class AgregarPaciente extends Component {
 
         })
         .catch(err => {
-            e.target.disabled = false;
+            submitButton.disabled = false;
             alert('Error al crear paciente. ' + err.response.data.msg);           
         });
     };

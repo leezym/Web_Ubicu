@@ -51,7 +51,8 @@ class Ejercicio extends Component {
     handleSave = (e) => {
         e.preventDefault();
 
-        e.target.disabled = true;
+        const submitButton = e.target.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
 
         const { ejercicio } = this.state;
 
@@ -61,10 +62,10 @@ class Ejercicio extends Component {
         nuevo.fecha_inicio = moment(ejercicio.fecha_inicio, 'YYYY-MM-DD').format('DD/MM/YYYY').toString();
         
         this.props.updateEjercicio(nuevo).then(resp => {
-            e.target.disabled = false;
+            submitButton.disabled = false;
             alert('Ejercicio actualizado.');
         }).catch(err => {
-            e.target.disabled = false;
+            submitButton.disabled = false;
             alert('Error al actualizar ejercicio. ' + err.response.data.msg);         
         });
     }

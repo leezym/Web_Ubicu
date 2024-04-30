@@ -26,8 +26,9 @@ class Agregar extends Component {
     
     handleSave = async (e) => {
         e.preventDefault();
-
-        e.target.disabled = true;
+        
+        const submitButton = e.target.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
 
         const { nombre, duracion_total, frecuencia_dias, frecuencia_horas, repeticiones, series, periodos_descanso, fecha_inicio, apnea, flujo, hora_inicio, id_patient, id_user } = this.state;
         const inicio = nombre === "Predeterminado" ? null : moment(fecha_inicio, 'YYYY-MM-DD').format('DD/MM/YYYY').toString();
@@ -48,7 +49,7 @@ class Agregar extends Component {
             hora_inicio,
             id_patient
         }).then(resp => {
-            e.target.disabled = false;
+            submitButton.disabled = false;
             alert('Ejercicio creado.'); 
 
             if(nombre === "Predeterminado")
@@ -57,7 +58,7 @@ class Agregar extends Component {
                 this.props.history.push(`/VerEjercicios/${id_patient}`);
         })
         .catch(err => {
-            e.target.disabled = false;
+            submitButton.disabled = false;
             alert('Error al crear ejercicio. ' + err.response.data.msg);
         });        
     }
