@@ -77,11 +77,11 @@ class Ejercicios extends Component {
     });
   };
 
-  getCapacidadVital = (user) => {
+  getCapacidadVital = (user) => { // Valores en mL/kg
     if (user.sexo === 'M')
-      return 27.63 - (((0.112 * user.edad) * user.altura) / 100);
+      return (27.63 - (0.112 * user.edad)) * user.altura;
     else if (user.sexo === 'F')
-      return 21.78 - (((0.101 * user.edad) * user.altura) / 100);
+      return (21.78 - (0.101 * user.edad)) * user.altura;
     
     return 0;
   };  
@@ -132,7 +132,7 @@ class Ejercicios extends Component {
                   </TableRow>
                   <TableRow>
                     <TableCell>Capacidad vital:</TableCell>
-                    <TableCell>{capacidad_vital}</TableCell>
+                    <TableCell>{capacidad_vital} mL</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
