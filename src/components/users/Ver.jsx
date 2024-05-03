@@ -5,6 +5,7 @@ import MenuNav from '../pages/MenuNav';
 import { connect } from 'react-redux';
 import { updatePatient } from '../../actions/patientsAction';
 import ciudades from '../../colombia.json';
+import { URL } from '../../actions/url.js';
 
 class Ver extends Component {
     state = {
@@ -15,8 +16,7 @@ class Ver extends Component {
 
     componentDidMount() {
         const { id_patient } = this.props;
-        fetch('https://server.ubicu.co/getPatientbyId', {
-        //fetch('http://localhost:5000/getPatientbyId', {
+        fetch(URL+'getPatientbyId', {
             method: 'POST',
             body: JSON.stringify({id_patient}),
             headers: {

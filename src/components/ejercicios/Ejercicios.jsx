@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import moment from "moment";
 import ReactPaginate from 'react-paginate';
 import '../../styles/pagination_style.css';
+import { URL } from '../../actions/url.js';
 
 class Ejercicios extends Component {
   state = {
@@ -22,8 +23,7 @@ class Ejercicios extends Component {
   componentDidMount() {
     const { id_patient } = this.props;
 
-    fetch('https://server.ubicu.co/getPatientbyId', {
-    //fetch('http://localhost:5000/getPatientbyId', {
+    fetch(URL+'getPatientbyId', {
         method: 'POST',
         body: JSON.stringify({id_patient}),
         headers: {
@@ -44,8 +44,7 @@ class Ejercicios extends Component {
         const capacidad_vital = this.getCapacidadVital(user).toFixed(2) + "L";
         this.setState({ user, capacidad_vital });
 
-        fetch('https://server.ubicu.co/allEjerciciosByPatient', {
-        //fetch('http://localhost:5000/allEjerciciosByPatient', {
+        fetch(URL+'allEjerciciosByPatient', {
             method: 'POST',
             body: JSON.stringify({id_patient}),
             headers: {

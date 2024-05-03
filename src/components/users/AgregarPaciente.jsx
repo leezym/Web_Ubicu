@@ -6,6 +6,7 @@ import {Link, withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
 import ciudades from '../../colombia.json';
 import AgregarEjercicio from "../ejercicios/Agregar";
+import { URL } from '../../actions/url.js';
 
 class AgregarPaciente extends Component {
     state = {
@@ -51,13 +52,12 @@ class AgregarPaciente extends Component {
             submitButton.disabled = false;
             alert('Paciente creado'); 
             
-            fetch('https://server.ubicu.co/getPatientbyCc', {
-            //fetch('http://localhost:5000/getPatientbyCc', {
+            fetch(URL+'getPatientbyCc', {
                 method: 'POST',
                 body: JSON.stringify({cedula}),
                 headers: {
-                'Content-Type': 'application/json',
-                'x-access-token': localStorage.getItem('token')
+                    'Content-Type': 'application/json',
+                    'x-access-token': localStorage.getItem('token')
                 }
             })
             .then(res => {
@@ -74,8 +74,7 @@ class AgregarPaciente extends Component {
                     createUser: true
                 });
 
-                fetch('https://server.ubicu.co/createRewards', {
-                //fetch('http://localhost:5000/createRewards', {
+                fetch(URL+'createRewards', {
                     method: 'POST',
                     body: JSON.stringify({
                         all_badges_array: "0,0,0,0,0,0,0;0,0,0,0,0,0,0;0,0,0,0,0,0,0;0,0,0,0,0,0,0;", //7 isnignias por 4 items
@@ -89,7 +88,8 @@ class AgregarPaciente extends Component {
                         id_patient: resp._id
                     }),
                     headers: {
-                    'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'x-access-token': localStorage.getItem('token')
                     }
                 })
                 .then(res => {
@@ -104,8 +104,7 @@ class AgregarPaciente extends Component {
                     alert('Error al crear recompensas. ' + err.response.data.msg);
                 });
 
-                fetch('https://server.ubicu.co/createCustomizations', {
-                //fetch('http://localhost:5000/createCustomizations', {
+                fetch(URL+'createCustomizations', {
                     method: 'POST',
                     body: JSON.stringify({
                         id_customization: 0,
@@ -116,7 +115,8 @@ class AgregarPaciente extends Component {
                         id_patient: resp._id
                     }),
                     headers: {
-                    'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'x-access-token': localStorage.getItem('token')
                     }
                 })
                 .then(res => {
@@ -134,7 +134,6 @@ class AgregarPaciente extends Component {
             .catch(err => {
                 alert('Error al consultar paciente. ' + err.response.data.msg);
             });
-
         })
         .catch(err => {
             submitButton.disabled = false;

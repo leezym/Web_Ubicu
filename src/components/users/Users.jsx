@@ -5,6 +5,7 @@ import MenuNav from '../pages/MenuNav';
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import ReactPaginate from 'react-paginate';
+import { URL } from '../../actions/url.js';
 import '../../styles/pagination_style.css';
 
 class Users extends Component {
@@ -19,8 +20,7 @@ class Users extends Component {
   componentDidMount() {
     const { id_user } = this.props;
     
-    fetch('https://server.ubicu.co/getPatientbyUser', {
-    //fetch('http://localhost:5000/getPatientbyUser', {
+    fetch(URL+'getPatientbyUser', {
         method: 'POST',
         body: JSON.stringify({id_user}),
         headers: {

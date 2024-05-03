@@ -6,6 +6,7 @@ import{allResultsByEjercicio} from "../../actions/resultsAction";
 import Chart from 'react-apexcharts'
 import moment from "moment";
 import MenuNav from '../pages/MenuNav';
+import { URL } from '../../actions/url.js';
 
 function fillGraph(data) {
   const seriesGraph = [];
@@ -22,21 +23,6 @@ function fillGraph(data) {
       const flujo = data[i].flujo[j].toFixed(1);
       series.data.push([tiempo, flujo]);
     }
-
-    /*for (let j = 0; j < data[i].flujo.length; j++) {
-      let tiempo = data[i].tiempo[j].toFixed(2) * 1000;
-      moment.utc(tiempo).format("HH:mm:ss")
-      const flujo = data[i].flujo[j].toFixed(1);
-      series.data.push([tiempo, flujo]);
-
-      j === data[i].flujo.length - 1 ?
-        tiempo = (data[i].tiempo[j] + 1) * 1000
-      :
-        tiempo = ((data[i].tiempo[j]) + (data[i].tiempo[j+1] - data[i].tiempo[j])/2) * 1000
-
-      moment.utc(tiempo).format("HH:mm:ss")
-      series.data.push([tiempo, 0]);
-    }*/
 
     seriesGraph.push(series);
   }
@@ -141,8 +127,7 @@ class VerResultados extends React.Component {
   };
   
   componentDidMount(){
-    fetch('https://server.ubicu.co/getEjerciciobyId', {
-    //fetch('http://localhost:5000/getEjerciciobyId', {
+    fetch(URL+'getEjerciciobyId', {
         method: 'POST',
         body: JSON.stringify({id_ejercicio:this.state.id_ejercicio}),
         headers: {

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import MenuNav from '../pages/MenuNav';
 import { Link, withRouter } from 'react-router-dom';
 import { updateUser, updatePassword } from '../../actions/usersAction';
+import { URL } from '../../actions/url.js';
 
 class VerPerfil extends Component {
 
@@ -21,8 +22,7 @@ class VerPerfil extends Component {
     componentDidMount() {
         const { id_user } = this.props;        
 
-        fetch('https://server.ubicu.co/getUserbyId', {
-        //fetch('http://localhost:5000/getUserbyId', {
+        fetch(URL+'getUserbyId', {
             method: 'POST',
             body: JSON.stringify({id_user}),
             headers: {

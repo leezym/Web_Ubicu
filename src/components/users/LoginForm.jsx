@@ -6,6 +6,7 @@ import { authenticateUser } from '../../actions/usersAction';
 import 'semantic-ui-css/semantic.min.css';
 import { optionHeaders } from '../../actions/headers.js';
 import logo from '../../logo_grande.svg';
+import { URL } from '../../actions/url.js';
 //import Apk from '../../ubicu_28_09_2023_v2022.1.23_final.apk';
 
 class LoginForm extends Component {
@@ -29,8 +30,7 @@ class LoginForm extends Component {
     const submitButton = e.target.querySelector('button[type="submit"]');
     submitButton.disabled = true;
 
-    //fetch('http://localhost:5000/authenticateUser', {
-    fetch('https://server.ubicu.co/authenticateUser', {
+    fetch(URL+'authenticateUser', {
       method: 'POST',
       body: JSON.stringify(this.state),
       headers: {

@@ -1,8 +1,7 @@
 
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-
-
+import { URL } from '../actions/url.js';
 
 export default function withAuth(ComponentToProtect) {
   return class extends Component {
@@ -14,8 +13,7 @@ export default function withAuth(ComponentToProtect) {
       };
     }
     componentDidMount() {
-      //fetch('http://localhost:5000/checkToken', {
-      fetch('https://server.ubicu.co/checkToken', {
+      fetch(URL+'checkToken', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
