@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import User from "./User"
-import {Table,Button,Icon,Grid,Segment,Label} from 'semantic-ui-react'
+import {Table, Button, Grid, Segment, Label, Input} from 'semantic-ui-react'
 import MenuNav from '../pages/MenuNav';
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import ReactPaginate from 'react-paginate';
+import { URL } from '../../actions/url.js';
 import '../../styles/pagination_style.css';
 
 class Users extends Component {
@@ -19,8 +20,7 @@ class Users extends Component {
   componentDidMount() {
     const { id_user } = this.props;
     
-    fetch('https://server.ubicu.co/getPatientbyUser', {
-    //fetch('http://localhost:5000/getPatientbyUser', {
+    fetch(URL+'getPatientbyUser', {
         method: 'POST',
         body: JSON.stringify({id_user}),
         headers: {
@@ -47,7 +47,14 @@ class Users extends Component {
   }
 
   handlePageClick = ({ selected }) => {
-    this.setState({ currentPage: selected });
+    this.setState({ currentPage: selected }, () => {
+      const { patients, currentPage, patientsPerPage, filteredPatients } = this.state;
+      const offset = currentPage * patientsPerPage;
+      const currentPatients = filteredPatients.length > 0 ?
+        filteredPatients.slice(offset, offset + patientsPerPage)
+        : patients.slice(offset, offset + patientsPerPage);
+      this.setState({ currentPatients });
+    });
   };
 
   handleNameFilter = (event) => {
@@ -76,16 +83,17 @@ class Users extends Component {
     return (
       <div>
         <MenuNav/> 
-        <Grid style={{ marginTop: '7em' }} columns={1}>
+        <Grid stackable style={{ marginTop: '6em' }}>
           <Grid.Column>
             <Segment raised>
-              <Label color='blue' ribbon>
+              <Label ribbon style={{color:"#28367b"}}>
                 Lista de pacientes
               </Label>
-              <input
-                type="text"
-                placeholder="Filtrar por nombre..."
-                onChange={this.handleNameFilter}
+              <Input
+                  icon='search'
+                  iconPosition='left'
+                  placeholder='Filtrar por nombre...'
+                  onChange={this.handleNameFilter}
               />
               <Table celled compact definition unstackable>
                 <Table.Header fullWidth>
@@ -114,10 +122,7 @@ class Users extends Component {
                     <Table.HeaderCell />
                     <Table.HeaderCell colSpan='2'>
                       <Link to={`/AgregarPaciente/${this.props.id_user}`}>
-                        <Button floated='right' icon labelPosition='left' primary size='small'>
-                          <Icon name='user' />
-                          Agregar
-                        </Button>
+                        <Button floated='right' style={{ backgroundColor: '#eb5a25', color:"white" }}>Agregar</Button>
                       </Link>
                     </Table.HeaderCell>
                   </Table.Row>
@@ -136,6 +141,7 @@ class Users extends Component {
               containerClassName={"pagination"}
               subContainerClassName={"pages pagination"}
               activeClassName={"active"}
+              activeLinkClassName={"active-link"}
             />
           </Grid.Column>
         </Grid>

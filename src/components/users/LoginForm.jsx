@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
+import { Button, Form, Grid, Header, Message, Segment, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { authenticateUser } from '../../actions/usersAction';
 import 'semantic-ui-css/semantic.min.css';
 import { optionHeaders } from '../../actions/headers.js';
-import Apk from '../../ubicu_28_09_2023_v2022.1.23_final.apk';
+import logo from '../../logo_grande.svg';
+import { URL } from '../../actions/url.js';
+//import Apk from '../../ubicu_28_09_2023_v2022.1.23_final.apk';
 
 class LoginForm extends Component {
   state = {
@@ -22,11 +24,13 @@ class LoginForm extends Component {
     return cedula.length > 0 && password.length > 0;
   };
 
-  handleSubmit = async (event) => {
-    event.preventDefault();
+  handleSave = async (e) => {
+    e.preventDefault();
 
-    //fetch('http://localhost:5000/authenticateUser', {
-    fetch('https://server.ubicu.co/authenticateUser', {
+    const submitButton = e.target.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+
+    fetch(URL+'authenticateUser', {
       method: 'POST',
       body: JSON.stringify(this.state),
       headers: {
@@ -42,27 +46,32 @@ class LoginForm extends Component {
       }
     })
     .then(resp => {
+      submitButton.disabled = false;
+
       localStorage.setItem('token', resp.token);
       localStorage.setItem('id_user', resp.user._id);
+      
       optionHeaders.headers['x-access-token'] = localStorage.getItem('token', resp.token)
       this.props.history.push(`/Users/${resp.user._id}`);
     })
     .catch(err => {
-      console.log(err);
-      alert('Error al iniciar sesión');
+      submitButton.disabled = false;
+      alert('Error al iniciar sesión.' + err.response.data.msg);
     });
   }
 
   render() {
     const { cedula, password } = this.state;
+    
     return (
       <div>
         <Grid textAlign="center" style={{ height: '100vh' }} verticalAlign="middle">
           <Grid.Column style={{ maxWidth: 450 }}>
-            <Header as="h1" color="blue" textAlign="center" size="huge">
+            <Image src={logo} centered style={{ width: '350px', height: 'auto' }} />
+            <Header as="h1" textAlign="center" size="large" style={{ color: '#28367b' }}>
               Fisioterapia Respiratoria
             </Header>
-            <Form size="large" onSubmit={this.handleSubmit}>
+            <Form size="large" onSubmit={this.handleSave}>
               <Segment stacked>
                 <Form.Input
                   fluid
@@ -85,7 +94,7 @@ class LoginForm extends Component {
                   value={password}
                   onChange={this.handleChange}
                 />
-                <Button color="blue" fluid size="large" disabled={!this.validateForm()}>
+                <Button type="submit" fluid size="large" disabled={!this.validateForm()} style={{ backgroundColor: '#28367b', color: "white" }}>
                   Entrar
                 </Button>
               </Segment>
@@ -95,12 +104,12 @@ class LoginForm extends Component {
             </Message>
           </Grid.Column>
         </Grid>
-        <Grid textAlign="center" style={{ height: '20vh' }} verticalAlign="middle">
+        {/*<Grid textAlign="center" style={{ height: '20vh' }} verticalAlign="middle">
             <a href={Apk} download>          
               {' '}
               <button>Descargar App</button>
             </a>
-        </Grid>
+        </Grid>*/}
       </div>
     );
   }

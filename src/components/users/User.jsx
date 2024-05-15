@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Button, Icon } from 'semantic-ui-react';
+import { Table, Button } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -28,10 +28,7 @@ class User extends Component {
             <Table.Cell>{patient.nombre}</Table.Cell>
             <Table.Cell>
             <Link to={`/VerUser/${patient._id}`}>
-                <Button primary floated="right">
-                Ver
-                <Icon name="right chevron" />
-                </Button>
+                <Button style={{ backgroundColor: '#46bee0', color:"white" }} floated="right">Ver</Button>
             </Link>
             </Table.Cell>
         </Table.Row>

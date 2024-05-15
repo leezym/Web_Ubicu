@@ -1,11 +1,12 @@
 import React from 'react';
-import {Form, Grid, Button} from "semantic-ui-react";
+import {Form, Grid, Button, Card, Segment} from "semantic-ui-react";
 import {Link,withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import{allResultsByEjercicio} from "../../actions/resultsAction";
 import Chart from 'react-apexcharts'
 import moment from "moment";
 import MenuNav from '../pages/MenuNav';
+import { URL } from '../../actions/url.js';
 
 function fillGraph(data) {
   const seriesGraph = [];
@@ -22,21 +23,6 @@ function fillGraph(data) {
       const flujo = data[i].flujo[j].toFixed(1);
       series.data.push([tiempo, flujo]);
     }
-
-    /*for (let j = 0; j < data[i].flujo.length; j++) {
-      let tiempo = data[i].tiempo[j].toFixed(2) * 1000;
-      moment.utc(tiempo).format("HH:mm:ss")
-      const flujo = data[i].flujo[j].toFixed(1);
-      series.data.push([tiempo, flujo]);
-
-      j === data[i].flujo.length - 1 ?
-        tiempo = (data[i].tiempo[j] + 1) * 1000
-      :
-        tiempo = ((data[i].tiempo[j]) + (data[i].tiempo[j+1] - data[i].tiempo[j])/2) * 1000
-
-      moment.utc(tiempo).format("HH:mm:ss")
-      series.data.push([tiempo, 0]);
-    }*/
 
     seriesGraph.push(series);
   }
@@ -141,8 +127,7 @@ class VerResultados extends React.Component {
   };
   
   componentDidMount(){
-    fetch('https://server.ubicu.co/getEjerciciobyId', {
-    //fetch('http://localhost:5000/getEjerciciobyId', {
+    fetch(URL+'getEjerciciobyId', {
         method: 'POST',
         body: JSON.stringify({id_ejercicio:this.state.id_ejercicio}),
         headers: {
@@ -194,6 +179,7 @@ class VerResultados extends React.Component {
   handleClick = () => {
     const { id_ejercicio, allResultsByEjercicio } = this.props;
     const { flujo, fecha, hora } = this.state;
+    
     this.setState(prevState => {
       let options = {...prevState.options};
       options.annotations.yaxis[0].y = flujo;
@@ -215,8 +201,8 @@ class VerResultados extends React.Component {
         });
       
       this.forceUpdate();
-    }).catch(error => {
-      console.log(error);
+    }).catch(err => {
+      alert('Error al consultar resultados. ' + err.response.data.msg);
     }); 
   }
   
@@ -230,39 +216,37 @@ class VerResultados extends React.Component {
     return (
       <div>
         <MenuNav />
-        <Grid style={{ marginTop: '7em' }} columns={1}>
+        <Grid style={{ marginTop: '5em' }} columns={1}>
           <Grid.Column>
-            <Grid.Row>
-              <Form style={{ marginTop: '1em' }}>
-                <Form.Field>
+            <Segment raised>
+                <Form >
                   <label>Para ver la gráfica de la fisioterapia por favor selecciona el día de la semana y la hora del día:</label>
-                </Form.Field>
-                <Form.Group style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <Form.Field>
-                    <label>Fecha de la fisioterapia</label>
-                    <select name="fecha" onChange={this.changeInput}>
-                      <option value={0}>Seleccione una opción</option>
-                      {dateOptions}
-                    </select>
-                  </Form.Field>
-                  <Form.Field>
-                    <label>Hora de la fisioterapia</label>
-                    <select name="hora" onChange={this.changeInput}>
-                      <option value={0}>Seleccione una opción</option>
-                      {hourOptions}
-                    </select>
-                  </Form.Field>
-                  <div>
-                    <Button onClick={this.handleClick} primary type='submit'>Buscar</Button>
-                    <Link to={`/VerEjercicios/${id_patient}`}><Button type='submit'>Regresar</Button></Link>
+                  <Form.Group style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '1em' }}>
+                    <Form.Field style={{ marginRight: '3em' }}>
+                      <label>Fecha de la fisioterapia</label>
+                      <select name="fecha" onChange={this.changeInput}>
+                        <option value={"-"}>Seleccione una opción</option>
+                        {dateOptions}
+                      </select>
+                    </Form.Field>
+                    <Form.Field style={{ marginRight: '3em' }}>
+                      <label>Hora de la fisioterapia</label>
+                      <select name="hora" onChange={this.changeInput}>
+                        <option value={"-"}>Seleccione una opción</option>
+                        {hourOptions}
+                      </select>
+                    </Form.Field>                    
+                  </Form.Group>
+                  <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '2em' }}>
+                    <Button onClick={this.handleClick} type='button' style={{ backgroundColor: '#46bee0', color:"white" }}>Buscar</Button>
+                    <Link to={`/VerEjercicios/${id_patient}`}><Button type='submit' style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
                   </div>
-                </Form.Group>
-              </Form>
-            </Grid.Row>
-            <Grid.Row>
+                </Form>
+            </Segment>
+            <Segment raised>
               {msg}
               <Chart type="area" height={350} series={series} options={options}></Chart>
-            </Grid.Row>
+            </Segment>
           </Grid.Column>
         </Grid>
       </div>

@@ -81,8 +81,7 @@ class VerCalibraciones extends React.Component {
 
   componentDidMount() 
   {
-    fetch('https://server.ubicu.co/allCalibrations', {
-    //fetch('http://localhost:5000/allCalibrations', {
+    fetch(URL+'allCalibrations', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'

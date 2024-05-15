@@ -5,32 +5,36 @@ import {crearPatient} from "../../actions/patientsAction";
 import {Link, withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
 import ciudades from '../../colombia.json';
+import AgregarEjercicio from "../ejercicios/Agregar";
+import { URL } from '../../actions/url.js';
 
 class AgregarPaciente extends Component {
     state = {
+        createUser: false,
         nombre: "",
         cedula: "",
         telefono: "",
         email: "",
         edad: "",
-        sexo: "",
+        sexo: "-",
         peso: "",
         altura: "",
         direccion: "",
-        ciudad:"",
+        ciudad:"-",
         password: "",
-        id_user: this.props.id_user
+        id_user: this.props.id_user,
+        id_patient: ""
     };
     
-    handleSave = (e) => {
+    handleSave = async (e) => {
         e.preventDefault();
-        const { crearPatient, history, id_user } = this.props;
+
+        const submitButton = e.target.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+
+        const { crearPatient, id_user, } = this.props;
         const { nombre, cedula, telefono, email, edad, sexo, peso, altura, direccion, ciudad } = this.state;
-        if (!nombre || !cedula || !telefono || !email || !edad || !sexo || !peso || !altura || !direccion || !ciudad ) {
-            alert('Por favor proporcione la información requerida');
-            return;
-        }
-        
+
         crearPatient({
             nombre,
             cedula,
@@ -45,16 +49,15 @@ class AgregarPaciente extends Component {
             password: (telefono % 10000).toString(),
             id_user: id_user
         }).then(resp => {
-            alert('Paciente creado');
-            history.push(`/Users/${id_user}`);
+            submitButton.disabled = false;
+            alert('Paciente creado'); 
             
-            fetch('https://server.ubicu.co/getPatientbyCc', {
-            //fetch('http://localhost:5000/getPatientbyCc', {
+            fetch(URL+'getPatientbyCc', {
                 method: 'POST',
                 body: JSON.stringify({cedula}),
                 headers: {
-                'Content-Type': 'application/json',
-                'x-access-token': localStorage.getItem('token')
+                    'Content-Type': 'application/json',
+                    'x-access-token': localStorage.getItem('token')
                 }
             })
             .then(res => {
@@ -66,8 +69,12 @@ class AgregarPaciente extends Component {
                 }
             })
             .then(resp => {
-                fetch('https://server.ubicu.co/createRewards', {
-                //fetch('http://localhost:5000/createRewards', {
+                this.setState({
+                    id_patient: resp._id,
+                    createUser: true
+                });
+
+                fetch(URL+'createRewards', {
                     method: 'POST',
                     body: JSON.stringify({
                         all_badges_array: "0,0,0,0,0,0,0;0,0,0,0,0,0,0;0,0,0,0,0,0,0;0,0,0,0,0,0,0;", //7 isnignias por 4 items
@@ -81,7 +88,8 @@ class AgregarPaciente extends Component {
                         id_patient: resp._id
                     }),
                     headers: {
-                    'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'x-access-token': localStorage.getItem('token')
                     }
                 })
                 .then(res => {
@@ -93,11 +101,10 @@ class AgregarPaciente extends Component {
                     }
                 })
                 .catch(err => {
-                        console.error(err);
+                    alert('Error al crear recompensas. ' + err.response.data.msg);
                 });
 
-                fetch('https://server.ubicu.co/createCustomizations', {
-                //fetch('http://localhost:5000/createCustomizations', {
+                fetch(URL+'createCustomizations', {
                     method: 'POST',
                     body: JSON.stringify({
                         id_customization: 0,
@@ -108,7 +115,8 @@ class AgregarPaciente extends Component {
                         id_patient: resp._id
                     }),
                     headers: {
-                    'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'x-access-token': localStorage.getItem('token')
                     }
                 })
                 .then(res => {
@@ -120,17 +128,16 @@ class AgregarPaciente extends Component {
                     }
                 })
                 .catch(err => {
-                        console.error(err);
+                    alert('Error al crear personalización. ' + err.response.data.msg);
                 });
             })
             .catch(err => {
-                    console.error(err);
+                alert('Error al consultar paciente. ' + err.response.data.msg);
             });
-
         })
         .catch(err => {
-            console.log(err);
-            alert('Error al crear paciente');
+            submitButton.disabled = false;
+            alert('Error al crear paciente. ' + err.response.data.msg);           
         });
     };
     
@@ -139,101 +146,155 @@ class AgregarPaciente extends Component {
     }
 
     render() {
+        const { id_patient, id_user } = this.state;
+
         return (
             <div>
                 <MenuNav/>
                 <Grid style={{ marginTop: '7em' }} columns={1}>
                 <Grid.Column>
-                <Segment raised>
-                    <Label color='teal' ribbon>
-                    Registro de Usuario
-                    </Label>
-                    <Form style={{ marginTop: '1em' }}>
-                        <Form.Field>
-                        <label>Nombre</label>
-                        <input  name="nombre" placeholder='Nombre' onChange={this.changeInput} />
-                        </Form.Field>
-                        <Form.Field>
-                        <label>Cedula</label>
-                        <input 
-                            name="cedula"
-                            placeholder='Cédula'
-                            type='number'
-                            onChange={this.changeInput} />
-                        </Form.Field>
-                        <Form.Field>
-                        <label>Edad</label>
-                        <input 
-                            name="edad"
-                            placeholder='Edad'
-                            type='number'
-                            onChange={this.changeInput} />
-                        </Form.Field>
-                        <Form.Field>
-                        <label>Sexo</label>
-                        <select name="sexo" onChange={this.changeInput}>
-                            <option value="-">Seleccione una opción</option>
-                            <option value="F">Femenino</option>
-                            <option value="M">Masculino</option>
-                        </select>
-                        </Form.Field>
-                        <Form.Field>
-                        <label>Peso (kg)</label>
-                        <input 
-                            name="peso"
-                            placeholder='Peso'
-                            type='number'
-                            onChange={this.changeInput} />
-                        </Form.Field>
-                        <Form.Field>
-                        <label>Altura (cm)</label>
-                        <input 
-                            name="altura"
-                            placeholder='Altura'
-                            type='number'
-                            onChange={this.changeInput} />
-                        </Form.Field>
-                        <Form.Field>
-                        <label>Teléfono</label>
-                        <input 
-                            name="telefono"
-                            placeholder='Teléfono'
-                            type='number'
-                            onChange={this.changeInput} />
-                        </Form.Field>
-                        <Form.Field>
-                        <label>Email</label>
-                        <input 
-                            name="email"
-                            placeholder='Email'
-                            type='email'
-                            onChange={this.changeInput} />
-                        </Form.Field>
-                        <Form.Field>
-                        <label>Dirección</label>
-                        <input  name="direccion"
-                                placeholder='Dirección'
-                                onChange={this.changeInput} />
-                        </Form.Field>
-                        <Form.Field>
-                        <label>Ciudad</label>
-                        <select name="ciudad" onChange={this.changeInput}>
-                            <option value="-">Seleccione una opción</option>
-                            {
-                            ciudades.map((lugar, index) => (
-                                lugar.ciudades.map((ciudad, index) => (
-                                    <option key={index} value={ciudad+", "+lugar.departamento}>
-                                        {ciudad+", "+lugar.departamento}
-                                    </option>
-                                    
-                                ))                            
-                            ))}
-                        </select>
-                        </Form.Field>
-                        <Button onClick={this.handleSave} primary type='submit'>Agregar</Button>
-                        <Link to={`/Users/${this.props.id_user}`}><Button type='submit'>Regresar</Button></Link>
-                    </Form>
-                </Segment>
+                    {
+                        !this.state.createUser ? 
+                        <Segment raised>
+                            <Label ribbon style={{color:"#28367b"}}>
+                            Registrar Paciente
+                            </Label>
+                            <Form onSubmit={this.handleSave} style={{ marginTop: '1em' }}>
+                                <Form.Field>
+                                <label>Nombre *</label>
+                                <input  
+                                    name="nombre"
+                                    placeholder='Nombre'
+                                    type='text'
+                                    onChange={this.changeInput}
+                                    onBlur={this.validarNombre}
+                                    required/>
+                                </Form.Field>
+                                <Form.Field>
+                                <label>Cedula *</label>
+                                <input 
+                                    name="cedula"
+                                    placeholder='Cédula'
+                                    type='number'
+                                    min="1"
+                                    max="9999999999"
+                                    step="1"
+                                    onChange={this.changeInput}
+                                    onBlur={this.validarCedula}
+                                    required/>
+                                </Form.Field>
+                                <Form.Field>
+                                <label>Edad *</label>
+                                <input 
+                                    name="edad"
+                                    placeholder='Edad'
+                                    type='number'
+                                    min="1"
+                                    max="100"
+                                    step="1"
+                                    onChange={this.changeInput}
+                                    onBlur={this.validarEdad}
+                                    required/>
+                                </Form.Field>
+                                <Form.Field>
+                                <label>Sexo *</label>
+                                <select
+                                    name="sexo"
+                                    onChange={this.changeInput}
+                                    onBlur={this.validarSexo}
+                                    required>                                        
+                                    <option value="-">Seleccione una opción</option>
+                                    <option value="F">Femenino</option>
+                                    <option value="M">Masculino</option>
+                                </select>
+                                </Form.Field>
+                                <Form.Field>
+                                <label>Peso (kg)</label>
+                                <input 
+                                    name="peso"
+                                    placeholder='Peso'
+                                    type='number'
+                                    min="1"
+                                    max="999"
+                                    step="0.01"
+                                    onChange={this.changeInput}
+                                    onBlur={this.validarPeso}
+                                    required/>
+                                </Form.Field>
+                                <Form.Field>
+                                <label>Altura (cm)</label>
+                                <input 
+                                    name="altura"
+                                    placeholder='Altura'
+                                    type='number'
+                                    min="1"
+                                    max="999"
+                                    step="1"
+                                    onChange={this.changeInput}
+                                    onBlur={this.validarAltura}
+                                    required/>
+                                </Form.Field>
+                                <Form.Field>
+                                <label>Teléfono</label>
+                                <input 
+                                    name="telefono"
+                                    placeholder='Teléfono'
+                                    type='number'
+                                    min="1000000000"
+                                    max="9999999999"
+                                    step="1"
+                                    onChange={this.changeInput}
+                                    onBlur={this.validarTelefono}
+                                    required/>
+                                </Form.Field>
+                                <Form.Field>
+                                <label>Correo</label>
+                                <input 
+                                    name="email"
+                                    placeholder='Correo'
+                                    type='email'
+                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                    onChange={this.changeInput}
+                                    onBlur={this.validarEmail}
+                                    required/>
+                                </Form.Field>
+                                <Form.Field>
+                                <label>Dirección</label>
+                                <input 
+                                    name="direccion"
+                                    placeholder='Dirección'
+                                    type='text'
+                                    onChange={this.changeInput}
+                                    onBlur={this.validarDireccion}
+                                    required/>
+                                </Form.Field>
+                                <Form.Field>
+                                <label>Ciudad</label>
+                                <select
+                                    name="ciudad"
+                                    onChange={this.changeInput}
+                                    onBlur={this.validarCiudad}
+                                    required>
+                                    <option value="-">Seleccione una opción</option>
+                                    {
+                                    ciudades.map((lugar, index) => (
+                                        lugar.ciudades.map((ciudad, index) => (
+                                            <option key={index} value={lugar.departamento+", "+ciudad}>
+                                                {lugar.departamento+", "+ciudad}
+                                            </option>
+                                            
+                                        ))                            
+                                    ))}
+                                </select>
+                                </Form.Field>
+                                <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>
+                                <Link to={`/Users/${this.props.id_user}`}><Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
+                            </Form>
+                        </Segment>
+                        :
+                        <AgregarEjercicio id_patient={id_patient} nombre_terapia={"Predeterminado"} id_user={id_user}/>
+                    }
+                
                 </Grid.Column>
                 </Grid>
             </div>
