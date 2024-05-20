@@ -12,19 +12,28 @@ function fillGraph(data) {
   const seriesGraph = [];
   
   // Add series to options
-  const series = {
-    name: "Serie",
+  const seriesFlujo = {
+    name: "Flujo",
+    data: []
+  };
+
+  const seriesVolumen = { //ISABELLA
+    name: "Volumen",
     data: []
   };
   
   // Add data to series
   for (let j = 0; j < data.flujo.length; j++) {
     const flujo = data.flujo[j].toFixed(1);
+    const volumen = data.volumen[j].toFixed(1); //ISABELLA
     const tiempo = data.tiempo[j].toFixed(1) * 1000;
-    series.data.push([tiempo, flujo]);
+
+    seriesFlujo.data.push([tiempo, flujo]);
+    seriesVolumen.data.push([tiempo, volumen]); //ISABELLA
   }
 
-  seriesGraph.push(series);
+  seriesGraph.push(seriesFlujo);
+  seriesGraph.push(seriesVolumen); //ISABELLA
   
   return seriesGraph;
 }
@@ -73,7 +82,7 @@ class VerCalibraciones extends React.Component {
       },
       yaxis: {
         title: {
-          text: "Flujo"
+          text: "Datos" //ISABELLA
         },
         type: 'numeric'
       }
@@ -136,30 +145,22 @@ class VerCalibraciones extends React.Component {
       <div>
         <Grid style={{ marginTop: '7em' }} columns={1}>
           <Grid.Column>
-            <Grid.Row>
-              <Form style={{ marginTop: '1em' }}>
-              </Form>
-            </Grid.Row>
-            <Grid.Row>
-              {       
-                currentGraphs.length > 0 ?
-                  currentGraphs.map((data, index) => {
-                    const chartData = fillGraph(JSON.parse(data.datos));
-                    console.log("ChartData:", chartData); // Agrega esta línea para depuración
-                    return (
-                      <div>
-                        <p>
-                          <span style={{ fontWeight: 'bold' }}>Fecha:</span> {data.fecha} &nbsp;
-                          <span style={{ fontWeight: 'bold' }}>Hora:</span> {data.hora}:{data.minutos}
-                        </p>
-                        <Chart key={index} type="area" height={350} series={fillGraph(JSON.parse(data.datos))} options={options}></Chart>
-                      </div>
-                    )
-                  })
-                :
-                  ( <p>No hay gráficas para mostrar.</p> )
-              }
-            </Grid.Row>
+            {       
+              currentGraphs.length > 0 ?
+                currentGraphs.map((data, index) => {
+                  return (
+                    <div>
+                      <p>
+                        <span style={{ fontWeight: 'bold' }}>Fecha:</span> {data.fecha} &nbsp;
+                        <span style={{ fontWeight: 'bold' }}>Hora:</span> {data.hora}:{data.minutos}
+                      </p>
+                      <Chart key={index} type="area" height={350} series={fillGraph(JSON.parse(data.datos))} options={options}></Chart>
+                    </div>
+                  )
+                })
+              :
+                ( <p>No hay gráficas para mostrar.</p> )
+            }
           </Grid.Column>
         </Grid>
         <ReactPaginate
