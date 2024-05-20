@@ -6,6 +6,7 @@ import Chart from 'react-apexcharts'
 import moment from "moment";
 import ReactPaginate from 'react-paginate';
 import '../../styles/pagination_style.css';
+import { URL } from '../../actions/url.js';
 
 function fillGraph(data) {
   const seriesGraph = [];
