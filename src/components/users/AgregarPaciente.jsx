@@ -167,7 +167,6 @@ class AgregarPaciente extends Component {
                                     placeholder='Nombre'
                                     type='text'
                                     onChange={this.changeInput}
-                                    onBlur={this.validarNombre}
                                     required/>
                                 </Form.Field>
                                 <Form.Field>
@@ -180,7 +179,6 @@ class AgregarPaciente extends Component {
                                     max="9999999999"
                                     step="1"
                                     onChange={this.changeInput}
-                                    onBlur={this.validarCedula}
                                     required/>
                                 </Form.Field>
                                 <Form.Field>
@@ -193,7 +191,6 @@ class AgregarPaciente extends Component {
                                     max="100"
                                     step="1"
                                     onChange={this.changeInput}
-                                    onBlur={this.validarEdad}
                                     required/>
                                 </Form.Field>
                                 <Form.Field>
@@ -201,7 +198,6 @@ class AgregarPaciente extends Component {
                                 <select
                                     name="sexo"
                                     onChange={this.changeInput}
-                                    onBlur={this.validarSexo}
                                     required>                                        
                                     <option value="-">Seleccione una opción</option>
                                     <option value="F">Femenino</option>
@@ -218,7 +214,6 @@ class AgregarPaciente extends Component {
                                     max="999"
                                     step="0.01"
                                     onChange={this.changeInput}
-                                    onBlur={this.validarPeso}
                                     required/>
                                 </Form.Field>
                                 <Form.Field>
@@ -231,7 +226,6 @@ class AgregarPaciente extends Component {
                                     max="999"
                                     step="1"
                                     onChange={this.changeInput}
-                                    onBlur={this.validarAltura}
                                     required/>
                                 </Form.Field>
                                 <Form.Field>
@@ -244,7 +238,6 @@ class AgregarPaciente extends Component {
                                     max="9999999999"
                                     step="1"
                                     onChange={this.changeInput}
-                                    onBlur={this.validarTelefono}
                                     required/>
                                 </Form.Field>
                                 <Form.Field>
@@ -255,7 +248,6 @@ class AgregarPaciente extends Component {
                                     type='email'
                                     pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                                     onChange={this.changeInput}
-                                    onBlur={this.validarEmail}
                                     required/>
                                 </Form.Field>
                                 <Form.Field>
@@ -265,7 +257,6 @@ class AgregarPaciente extends Component {
                                     placeholder='Dirección'
                                     type='text'
                                     onChange={this.changeInput}
-                                    onBlur={this.validarDireccion}
                                     required/>
                                 </Form.Field>
                                 <Form.Field>
@@ -273,7 +264,6 @@ class AgregarPaciente extends Component {
                                 <select
                                     name="ciudad"
                                     onChange={this.changeInput}
-                                    onBlur={this.validarCiudad}
                                     required>
                                     <option value="-">Seleccione una opción</option>
                                     {

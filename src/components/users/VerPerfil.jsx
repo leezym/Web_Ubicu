@@ -39,11 +39,14 @@ class VerPerfil extends Component {
             }
         })
         .then(resp => {        
-            const user = resp;
-            user.password_actual = ""
-            user.password_nueva = ""
-            user.repeat_password_nueva = ""
-            this.setState({user});
+            const user = {
+                ...resp,
+                password_actual: "",
+                password_nueva: "",
+                repeat_password_nueva: ""
+            };
+
+            this.setState({ user });
         })
         .catch(err => {
             console.error(err);
@@ -84,7 +87,7 @@ class VerPerfil extends Component {
 
     handleUpdate = (e) => {
         e.preventDefault();
-        const { user, erroresPass } = this.state;
+        const { user } = this.state;
     
         this.props.updatePassword(user).then(resp => {
             if(resp.password)
@@ -121,7 +124,12 @@ class VerPerfil extends Component {
         });
     }
     changeInputPass = (event) => {
-        this.setState({ [event.target.name]: event.target.value });
+        this.setState({
+            user: {
+                ...this.state.user,
+                [event.target.name]: event.target.value
+            }
+        });
     }
 
     render() {
@@ -168,7 +176,8 @@ class VerPerfil extends Component {
                                             </Form.Field>
                                             <Form.Field style={{ width: '300px' }}>
                                             <label>Teléfono *</label>
-                                            <input  name="telefono"
+                                            <input
+                                                name="telefono"
                                                 placeholder='Teléfono'
                                                 type='number'
                                                 min="1000000000"
@@ -181,7 +190,8 @@ class VerPerfil extends Component {
                                             </Form.Field>
                                             <Form.Field style={{ width: '300px' }}>
                                             <label>Correo *</label>
-                                            <input  name="email"
+                                            <input
+                                                name="email"
                                                 placeholder='Correo'
                                                 type='email'
                                                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
@@ -217,8 +227,6 @@ class VerPerfil extends Component {
                                                 name="password_actual"
                                                 placeholder='Contraseña actual'
                                                 type={showPassword.current ? 'text' : 'password'}
-                                                minLength="8"
-                                                pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$"
                                                 onChange={this.changeInputPass}
                                                 required
                                                 icon={<Icon name={showPassword.current ? 'eye' : 'eye slash'} link onClick={() => this.togglePasswordVisibility('current')} />}
