@@ -30,7 +30,7 @@ class LoginForm extends Component {
     const submitButton = e.target.querySelector('button[type="submit"]');
     submitButton.disabled = true;
 
-    fetch(URL+'authenticateUser', {
+    fetch(URL + 'authenticateUser', {
       method: 'POST',
       body: JSON.stringify(this.state),
       headers: {
@@ -38,26 +38,27 @@ class LoginForm extends Component {
       }
     })
     .then(res => {
-      if (res.status === 200) {
+      if (res.ok) {
         return res.json();
       } else {
-        const error = new Error(res.error);
-        throw error;
+        return res.json().then(error => {
+          throw new Error(error.msg);
+        });
       }
     })
     .then(resp => {
       submitButton.disabled = false;
-
+    
       localStorage.setItem('token', resp.token);
       localStorage.setItem('id_user', resp.user._id);
-      
-      optionHeaders.headers['x-access-token'] = localStorage.getItem('token', resp.token)
+    
+      optionHeaders.headers['x-access-token'] = localStorage.getItem('token');
       this.props.history.push(`/Users/${resp.user._id}`);
     })
     .catch(err => {
       submitButton.disabled = false;
-      alert('Error al iniciar sesión.' + err.response.data.msg);
-    });
+      alert('Error al iniciar sesión. ' + err.message);
+    });    
   }
 
   render() {

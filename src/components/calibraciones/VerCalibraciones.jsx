@@ -98,11 +98,12 @@ class VerCalibraciones extends React.Component {
         }
       })
       .then(res => {
-        if (res.status === 200) {
+        if (res.ok) {
           return res.json();
         } else {
-          const error = new Error(res.error);
-          throw error;
+          return res.json().then(error => {
+            throw new Error(error.msg);
+          });
         }
       })
       .then(resp => {
@@ -120,7 +121,7 @@ class VerCalibraciones extends React.Component {
         this.setState({ graph, pageCount });
       })
       .catch(err => {
-        console.error(err);
+        alert('Error al consultar resultados de calibraciones. ' + err.message);
     });
   }
 

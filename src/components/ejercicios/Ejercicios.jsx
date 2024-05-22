@@ -32,11 +32,12 @@ class Ejercicios extends Component {
         }
       })
       .then(res => {
-        if (res.status === 200) {
+        if (res.ok) {
           return res.json();
         } else {
-          const error = new Error(res.error);
-          throw error;
+          return res.json().then(error => {
+            throw new Error(error.msg);
+          });
         }
       })
       .then(resp => {        
@@ -53,11 +54,12 @@ class Ejercicios extends Component {
             }
           })
           .then(res => {
-            if (res.status === 200) {
+            if (res.ok) {
               return res.json();
             } else {
-              const error = new Error(res.error);
-              throw error;
+              return res.json().then(error => {
+                throw new Error(error.msg);
+              });
             }
           })
           .then(resp => {        
@@ -68,11 +70,11 @@ class Ejercicios extends Component {
             this.setState({ ejercicios, ejercicioPredeterminado, pageCount });
           })
           .catch(err => {
-            alert('Error al consultar ejercicios. ' + err.response.data.msg);
+            alert('Error al consultar ejercicios. ' + err.message);
         });
       })
       .catch(err => {
-        alert('Error al consultar usuario. ' + err.response.data.msg);
+        alert('Error al consultar paciente. ' + err.message);
     });
   };
 

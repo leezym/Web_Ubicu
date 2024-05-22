@@ -61,11 +61,12 @@ class AgregarPaciente extends Component {
                 }
             })
             .then(res => {
-                if (res.status === 200) {
-                return res.json();
+                if (res.ok) {
+                  return res.json();
                 } else {
-                const error = new Error(res.error);
-                throw error;
+                  return res.json().then(error => {
+                    throw new Error(error.msg);
+                  });
                 }
             })
             .then(resp => {
@@ -93,11 +94,12 @@ class AgregarPaciente extends Component {
                     }
                 })
                 .then(res => {
-                    if (res.status === 200) {
-                    return res.json();
+                    if (res.ok) {
+                      return res.json();
                     } else {
-                    const error = new Error(res.error);
-                    throw error;
+                      return res.json().then(error => {
+                        throw new Error(error.msg);
+                      });
                     }
                 })
                 .catch(err => {
@@ -120,24 +122,25 @@ class AgregarPaciente extends Component {
                     }
                 })
                 .then(res => {
-                    if (res.status === 200) {
-                    return res.json();
+                    if (res.ok) {
+                      return res.json();
                     } else {
-                    const error = new Error(res.error);
-                    throw error;
+                      return res.json().then(error => {
+                        throw new Error(error.msg);
+                      });
                     }
                 })
                 .catch(err => {
-                    alert('Error al crear personalización. ' + err.response.data.msg);
+                    alert('Error al crear personalización. ' + err.message);
                 });
             })
             .catch(err => {
-                alert('Error al consultar paciente. ' + err.response.data.msg);
+                alert('Error al consultar paciente. ' + err.message);
             });
         })
         .catch(err => {
             submitButton.disabled = false;
-            alert('Error al crear paciente. ' + err.response.data.msg);           
+            alert('Error al crear paciente. ' + err.message);           
         });
     };
     

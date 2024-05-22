@@ -29,12 +29,13 @@ class Users extends Component {
         }
     })
     .then(res => {
-        if (res.status === 200) {
+      if (res.ok) {
         return res.json();
-        } else {
-        const error = new Error(res.error);
-        throw error;
-        }
+      } else {
+        return res.json().then(error => {
+          throw new Error(error.msg);
+        });
+      }
     })
     .then(resp => {        
         const patients = resp;
@@ -42,8 +43,8 @@ class Users extends Component {
         this.setState({ patients, pageCount });
     })
     .catch(err => {
-            console.error(err);
-    });
+      alert('Error al consultar paciente. ' + err.message);
+    }); 
   }
 
   handlePageClick = ({ selected }) => {

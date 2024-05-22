@@ -31,11 +31,12 @@ class VerPerfil extends Component {
             }
         })
         .then(res => {
-            if (res.status === 200) {
-            return res.json();
+            if (res.ok) {
+              return res.json();
             } else {
-            const error = new Error(res.error);
-            throw error;
+              return res.json().then(error => {
+                throw new Error(error.msg);
+              });
             }
         })
         .then(resp => {        
@@ -49,8 +50,8 @@ class VerPerfil extends Component {
             this.setState({ user });
         })
         .catch(err => {
-            console.error(err);
-        });
+            alert('Error al consultar fisioterapeuta. ' + err.message);
+          });
     }
 
     togglePasswordVisibility = (fieldName) => {
@@ -92,6 +93,14 @@ class VerPerfil extends Component {
         this.props.updatePassword(user).then(resp => {
             if(resp.password)
                 user.password = resp.password;
+
+            this.setState({
+                user: {
+                    password_actual: '',
+                    password_nueva: '',
+                    repeat_password_nueva: ''
+                }
+            });
             
             alert(resp.msg);
         }).catch(err => {
@@ -228,6 +237,7 @@ class VerPerfil extends Component {
                                                 placeholder='Contraseña actual'
                                                 type={showPassword.current ? 'text' : 'password'}
                                                 onChange={this.changeInputPass}
+                                                value={user.password_actual}
                                                 required
                                                 icon={<Icon name={showPassword.current ? 'eye' : 'eye slash'} link onClick={() => this.togglePasswordVisibility('current')} />}
                                                 iconPosition="right"
@@ -242,6 +252,7 @@ class VerPerfil extends Component {
                                                 minLength="8"
                                                 pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$"
                                                 onChange={this.changeInputPass}
+                                                value={user.password_nueva}
                                                 required
                                                 icon={<Icon name={showPassword.nueva ? 'eye' : 'eye slash'} link onClick={() => this.togglePasswordVisibility('nueva')} />}
                                             />
@@ -255,6 +266,7 @@ class VerPerfil extends Component {
                                                 minLength="8"
                                                 pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$"
                                                 onChange={this.changeInputPass}
+                                                value={user.repeat_password_nueva}
                                                 required
                                                 icon={<Icon name={showPassword.repeat ? 'eye' : 'eye slash'} link onClick={() => this.togglePasswordVisibility('repeat')} />}
                                             />

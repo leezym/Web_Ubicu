@@ -136,11 +136,12 @@ class VerResultados extends React.Component {
         }
       })
       .then(res => {
-        if (res.status === 200) {
+        if (res.ok) {
           return res.json();
         } else {
-          const error = new Error(res.error);
-          throw error;
+          return res.json().then(error => {
+            throw new Error(error.msg);
+          });
         }
       })
       .then(resp => {
@@ -172,7 +173,7 @@ class VerResultados extends React.Component {
         });
       })
       .catch(err => {
-        console.error(err);
+        alert('Error al consultar ejercicio. ' + err.message);
     });
   }
 

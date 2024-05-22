@@ -25,21 +25,21 @@ class Ver extends Component {
             }
         })
         .then(res => {
-            if (res.status === 200) {
-            return res.json();
+            if (res.ok) {
+              return res.json();
             } else {
-            const error = new Error(res.error);
-            throw error;
+              return res.json().then(error => {
+                throw new Error(error.msg);
+              });
             }
-        })
+          })
         .then(resp => {        
             const patient = resp;
             this.setState({ patient });
         })
         .catch(err => {
-                console.error(err);
+            alert('Error al consultar paciente. ' + err.message);
         });
-
     }
 
     handleEdit (value) {
