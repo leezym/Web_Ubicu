@@ -159,56 +159,63 @@ class VerPerfil extends Component {
                                     <Form onSubmit={this.handleSave}>
                                         <Form.Group widths='equal'>
                                             <Form.Field style={{ width: '300px' }}>
-                                            <label>Nombre *</label>
-                                            <input  
-                                                name="nombre"
-                                                placeholder='Nombre'
-                                                type='text'
-                                                onChange={this.changeInputUser}
-                                                disabled={readOnly}
-                                                value={readOnly ? user.nombre : null}
-                                                required/>
+                                            <label>Nombre *
+                                                <input  
+                                                    name="nombre"
+                                                    placeholder='Nombre'
+                                                    type='text'
+                                                    onChange={this.changeInputUser}
+                                                    disabled={readOnly}
+                                                    value={readOnly ? user.nombre : null}
+                                                    autocomplete='text'
+                                                    required/>
+                                            </label>
                                             </Form.Field>
                                             <Form.Field style={{ width: '300px' }}>
-                                            <label>Cédula *</label>
-                                            <input  
-                                                name="cedula"
-                                                placeholder='Cédula'
-                                                type='number'
-                                                min="1"
-                                                max="9999999999"
-                                                step="1"
-                                                onChange={this.changeInputUser}
-                                                disabled={readOnly}
-                                                value={readOnly ? user.cedula : null}
-                                                required/>
+                                            <label>Cédula *
+                                                <input  
+                                                    name="cedula"
+                                                    placeholder='Cédula'
+                                                    type='number'
+                                                    min="1"
+                                                    max="9999999999"
+                                                    step="1"
+                                                    onChange={this.changeInputUser}
+                                                    disabled={readOnly}
+                                                    value={readOnly ? user.cedula : null}
+                                                    autocomplete='number'
+                                                    required/>
+                                            </label>
                                             </Form.Field>
                                             <Form.Field style={{ width: '300px' }}>
-                                            <label>Teléfono *</label>
-                                            <input
-                                                name="telefono"
-                                                placeholder='Teléfono'
-                                                type='number'
-                                                min="1000000000"
-                                                max="9999999999"
-                                                step="1"
-                                                onChange={this.changeInputUser}
-                                                disabled={readOnly}
-                                                value={readOnly ? user.telefono : null}
-                                                required/>
+                                            <label>Teléfono *
+                                                <input
+                                                    name="telefono"
+                                                    placeholder='Teléfono'
+                                                    type='tel'
+                                                    min="1000000000"
+                                                    max="9999999999"
+                                                    step="1"
+                                                    onChange={this.changeInputUser}
+                                                    disabled={readOnly}
+                                                    value={readOnly ? user.telefono : null}
+                                                    autocomplete='tel'
+                                                    required/>
+                                            </label>
                                             </Form.Field>
                                             <Form.Field style={{ width: '300px' }}>
-                                            <label>Correo *</label>
-                                            <input
-                                                name="email"
-                                                placeholder='Correo'
-                                                type='email'
-                                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                                                onChange={this.changeInputUser}
-                                                disabled={readOnly}
-                                                value={readOnly ? user.email : null}
-                                                required/>
-                                                
+                                            <label>Correo *
+                                                <input
+                                                    name="email"
+                                                    placeholder='Correo'
+                                                    type='email'
+                                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                                    onChange={this.changeInputUser}
+                                                    disabled={readOnly}
+                                                    value={readOnly ? user.email : null}
+                                                    autocomplete='email'
+                                                    required/>
+                                            </label>
                                             </Form.Field>                                        
                                         </Form.Group >
                                         { readOnly ?
@@ -231,45 +238,51 @@ class VerPerfil extends Component {
                                     <Form onSubmit={this.handleUpdate} style={{ marginTop: '10px'}}>
                                         <Form.Group widths='equal'>
                                             <Form.Field style={{ width: '400px' }}>
-                                            <label>Contraseña actual *</label>
-                                            <Input 
-                                                name="password_actual"
-                                                placeholder='Contraseña actual'
-                                                type={showPassword.current ? 'text' : 'password'}
-                                                onChange={this.changeInputPass}
-                                                value={user.password_actual}
-                                                required
-                                                icon={<Icon name={showPassword.current ? 'eye' : 'eye slash'} link onClick={() => this.togglePasswordVisibility('current')} />}
-                                                iconPosition="right"
-                                            />                      
+                                            <label>Contraseña actual *
+                                                <Input 
+                                                    name="password_actual"
+                                                    placeholder='Contraseña actual'
+                                                    type={showPassword.current ? 'text' : 'password'}
+                                                    onChange={this.changeInputPass}
+                                                    value={user.password_actual}
+                                                    autocomplete='password'
+                                                    required
+                                                    icon={<Icon name={showPassword.current ? 'eye' : 'eye slash'} link onClick={() => this.togglePasswordVisibility('current')} />}
+                                                    iconPosition="right"
+                                                />
+                                            </label>                      
                                             </Form.Field>
                                             <Form.Field style={{ width: '400px' }}> 
-                                            <label>Nueva contraseña *</label>
-                                            <Input 
-                                                name="password_nueva"
-                                                placeholder='Contraseña nueva'
-                                                type={showPassword.nueva ? 'text' : 'password'}
-                                                minLength="8"
-                                                pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$"
-                                                onChange={this.changeInputPass}
-                                                value={user.password_nueva}
-                                                required
-                                                icon={<Icon name={showPassword.nueva ? 'eye' : 'eye slash'} link onClick={() => this.togglePasswordVisibility('nueva')} />}
-                                            />
+                                            <label>Nueva contraseña *
+                                                <Input 
+                                                    name="password_nueva"
+                                                    placeholder='Contraseña nueva'
+                                                    type={showPassword.nueva ? 'text' : 'password'}
+                                                    minLength="8"
+                                                    pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$"
+                                                    onChange={this.changeInputPass}
+                                                    value={user.password_nueva}
+                                                    autocomplete='password'
+                                                    required
+                                                    icon={<Icon name={showPassword.nueva ? 'eye' : 'eye slash'} link onClick={() => this.togglePasswordVisibility('nueva')} />}
+                                                />
+                                            </label>
                                             </Form.Field>
                                             <Form.Field style={{ marginBottom: '20px', width: '400px' }}>
-                                            <label>Repita nueva contraseña *</label>
-                                            <Input 
-                                                name="repeat_password_nueva"
-                                                placeholder='Repita nueva contraseña'
-                                                type={showPassword.repeat ? 'text' : 'password'}
-                                                minLength="8"
-                                                pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$"
-                                                onChange={this.changeInputPass}
-                                                value={user.repeat_password_nueva}
-                                                required
-                                                icon={<Icon name={showPassword.repeat ? 'eye' : 'eye slash'} link onClick={() => this.togglePasswordVisibility('repeat')} />}
-                                            />
+                                            <label>Repita nueva contraseña *
+                                                <Input 
+                                                    name="repeat_password_nueva"
+                                                    placeholder='Repita nueva contraseña'
+                                                    type={showPassword.repeat ? 'text' : 'password'}
+                                                    minLength="8"
+                                                    pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$"
+                                                    onChange={this.changeInputPass}
+                                                    value={user.repeat_password_nueva}
+                                                    autocomplete='password'
+                                                    required
+                                                    icon={<Icon name={showPassword.repeat ? 'eye' : 'eye slash'} link onClick={() => this.togglePasswordVisibility('repeat')} />}
+                                                />
+                                            </label>
                                             </Form.Field>
                                         </Form.Group>    
                                         <Button type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Actualizar</Button>

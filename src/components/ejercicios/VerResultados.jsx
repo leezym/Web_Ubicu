@@ -221,21 +221,27 @@ class VerResultados extends React.Component {
           <Grid.Column>
             <Segment raised>
                 <Form >
-                  <label>Para ver la gráfica de la fisioterapia por favor selecciona el día de la semana y la hora del día:</label>
+                  <p>Para ver la gráfica de la fisioterapia por favor selecciona el día de la semana y la hora del día:</p>
                   <Form.Group style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '1em' }}>
                     <Form.Field style={{ marginRight: '3em' }}>
-                      <label>Fecha de la fisioterapia</label>
-                      <select name="fecha" onChange={this.changeInput}>
-                        <option value={"-"}>Seleccione una opción</option>
-                        {dateOptions}
-                      </select>
+                      <label>Fecha de la fisioterapia
+                        <select 
+                          name="fecha" 
+                          onChange={this.changeInput}>
+                            <option value={"-"}>Seleccione una opción</option>
+                            {dateOptions}
+                        </select>
+                      </label>
                     </Form.Field>
                     <Form.Field style={{ marginRight: '3em' }}>
-                      <label>Hora de la fisioterapia</label>
-                      <select name="hora" onChange={this.changeInput}>
-                        <option value={"-"}>Seleccione una opción</option>
-                        {hourOptions}
-                      </select>
+                      <label>Hora de la fisioterapia
+                        <select 
+                          name="hora" 
+                          onChange={this.changeInput}>
+                            <option value={"-"}>Seleccione una opción</option>
+                            {hourOptions}
+                        </select>
+                      </label>
                     </Form.Field>                    
                   </Form.Group>
                   <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '2em' }}>

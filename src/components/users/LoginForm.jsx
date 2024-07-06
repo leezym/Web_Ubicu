@@ -75,25 +75,26 @@ class LoginForm extends Component {
             <Form size="large" onSubmit={this.handleSave}>
               <Segment stacked>
                 <Form.Input
+                  name="cedula"
+                  placeholder="Cedula"
+                  type="number"
+                  value={cedula}
+                  onChange={this.handleChange}
+                  autocomplete='number'
                   fluid
                   icon="user"
                   iconPosition="left"
-                  placeholder="Cedula"
-                  name="cedula"
-                  type="text"
-                  pattern="[0-9]*"
-                  value={cedula}
-                  onChange={this.handleChange}
                 />
                 <Form.Input
-                  fluid
-                  icon="lock"
-                  iconPosition="left"
+                  name="password"
                   placeholder="Password"
                   type="password"
-                  name="password"
                   value={password}
                   onChange={this.handleChange}
+                  autocomplete='password'
+                  fluid
+                  iconPosition="left"
+                  icon="lock"
                 />
                 <Button type="submit" fluid size="large" disabled={!this.validateForm()} style={{ backgroundColor: '#28367b', color: "white" }}>
                   Entrar

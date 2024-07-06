@@ -64,60 +64,70 @@ class Agregar extends Component {
                     </Label>
                     <Form style={{ marginTop: '1em' }} onSubmit={this.handleSave}>
                         <Form.Field>
-                        <label>Nombre *</label>
-                        <input 
-                            name="nombre"
-                            placeholder='Nombre'
-                            type='text'
-                            onChange={this.changeInput}
-                            required/>
+                        <label>Nombre *
+                            <input 
+                                name="nombre"
+                                placeholder='Nombre'
+                                type='text'
+                                onChange={this.changeInput}
+                                autocomplete='text'
+                                required/>
+                        </label>
                         </Form.Field>
                         <Form.Field>
-                        <label>Cédula *</label>
-                        <input 
-                            name="cedula"
-                            placeholder='Cédula'
-                            type='number'
-                            min="1"
-                            max="9999999999"
-                            step="1"
-                            onChange={this.changeInput}
-                            required/>
+                        <label>Cédula *
+                            <input 
+                                name="cedula"
+                                placeholder='Cédula'
+                                type='number'
+                                min="1"
+                                max="9999999999"
+                                step="1"
+                                onChange={this.changeInput}
+                                autocomplete='number'
+                                required/>
+                        </label>
                         </Form.Field>
                         <Form.Field>
-                        <label>Teléfono *</label>
-                        <input 
-                            name="telefono"
-                            placeholder='Teléfono'
-                            type='number'
-                            min="1000000000"
-                            max="9999999999"
-                            step="1"
-                            onChange={this.changeInput}
-                            required/>
+                        <label>Teléfono *
+                            <input 
+                                name="telefono"
+                                placeholder='Teléfono'
+                                type='tel'
+                                min="1000000000"
+                                max="9999999999"
+                                step="1"
+                                onChange={this.changeInput}
+                                autocomplete='tel'
+                                required/>
+                        </label>
                         </Form.Field>
                         <Form.Field>
-                        <label>Correo *</label>
-                        <input 
-                            name="email"
-                            placeholder='Correo'
-                            type='email'
-                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                            onChange={this.changeInput}
-                            required/>
+                        <label>Correo *
+                            <input 
+                                name="email"
+                                placeholder='Correo'
+                                type='email'
+                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                onChange={this.changeInput}
+                                autocomplete='email'
+                                required/>
+                        </label>
                         </Form.Field>
                         <Form.Field>
-                        <label>Contraseña *</label>
-                        <Input 
-                            name="password"
-                            placeholder='Contraseña'
-                            type={showPassword ? 'text' : 'password'}
-                            minLength="8"
-                            pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$"
-                            onChange={this.changeInput}
-                            required
-                            icon={<Icon name={showPassword ? 'eye' : 'eye slash'} link onClick={this.togglePasswordVisibility} />}
-                        />
+                        <label>Contraseña *
+                            <Input 
+                                name="password"
+                                placeholder='Contraseña'
+                                type={showPassword ? 'text' : 'password'}
+                                minLength="8"
+                                pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$"
+                                onChange={this.changeInput}
+                                autocomplete='password'
+                                required
+                                icon={<Icon name={showPassword ? 'eye' : 'eye slash'} link onClick={this.togglePasswordVisibility} />}
+                            />
+                        </label>
                         <span style={{ color: 'blue', fontSize: 'small' }}>La contraseña debe contener al menos una mayúscula, un número y un carácter especial</span>                        
                         </Form.Field>
                         <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>

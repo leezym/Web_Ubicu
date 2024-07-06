@@ -164,121 +164,139 @@ class AgregarPaciente extends Component {
                             </Label>
                             <Form onSubmit={this.handleSave} style={{ marginTop: '1em' }}>
                                 <Form.Field>
-                                <label>Nombre *</label>
-                                <input  
-                                    name="nombre"
-                                    placeholder='Nombre'
-                                    type='text'
-                                    onChange={this.changeInput}
-                                    required/>
+                                <label>Nombre *
+                                    <input  
+                                        name="nombre"
+                                        placeholder='Nombre'
+                                        type='text'
+                                        onChange={this.changeInput}
+                                        autocomplete='text'
+                                        required/>
+                                </label>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Cedula *</label>
-                                <input 
-                                    name="cedula"
-                                    placeholder='Cédula'
-                                    type='number'
-                                    min="1"
-                                    max="9999999999"
-                                    step="1"
-                                    onChange={this.changeInput}
-                                    required/>
+                                <label>Cedula *
+                                    <input 
+                                        name="cedula"
+                                        placeholder='Cédula'
+                                        type='number'
+                                        min="1"
+                                        max="9999999999"
+                                        step="1"
+                                        onChange={this.changeInput}
+                                        autocomplete='number'
+                                        required/>
+                                </label>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Edad *</label>
-                                <input 
-                                    name="edad"
-                                    placeholder='Edad'
-                                    type='number'
-                                    min="1"
-                                    max="100"
-                                    step="1"
-                                    onChange={this.changeInput}
-                                    required/>
+                                <label>Edad *
+                                    <input 
+                                        name="edad"
+                                        placeholder='Edad'
+                                        type='number'
+                                        min="1"
+                                        max="100"
+                                        step="1"
+                                        onChange={this.changeInput}
+                                        autocomplete='number'
+                                        required/>
+                                </label>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Sexo *</label>
-                                <select
-                                    name="sexo"
-                                    onChange={this.changeInput}
-                                    required>                                        
-                                    <option value="-">Seleccione una opción</option>
-                                    <option value="F">Femenino</option>
-                                    <option value="M">Masculino</option>
-                                </select>
+                                <label>Sexo *
+                                    <select
+                                        name="sexo"
+                                        onChange={this.changeInput}
+                                        required>                                        
+                                        <option value="-">Seleccione una opción</option>
+                                        <option value="F">Femenino</option>
+                                        <option value="M">Masculino</option>
+                                    </select>
+                                </label>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Peso (kg)</label>
-                                <input 
-                                    name="peso"
-                                    placeholder='Peso'
-                                    type='number'
-                                    min="1"
-                                    max="999"
-                                    step="0.01"
-                                    onChange={this.changeInput}
-                                    required/>
+                                <label>Peso (kg)
+                                    <input 
+                                        name="peso"
+                                        placeholder='Peso'
+                                        type='number'
+                                        min="1"
+                                        max="999"
+                                        step="0.01"
+                                        onChange={this.changeInput}
+                                        autocomplete='number'
+                                        required/>
+                                </label>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Altura (cm)</label>
-                                <input 
-                                    name="altura"
-                                    placeholder='Altura'
-                                    type='number'
-                                    min="1"
-                                    max="999"
-                                    step="1"
-                                    onChange={this.changeInput}
-                                    required/>
+                                <label>Altura (cm)
+                                    <input 
+                                        name="altura"
+                                        placeholder='Altura'
+                                        type='number'
+                                        min="1"
+                                        max="999"
+                                        step="1"
+                                        onChange={this.changeInput}
+                                        autocomplete='number'
+                                        required/>
+                                </label>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Teléfono</label>
-                                <input 
-                                    name="telefono"
-                                    placeholder='Teléfono'
-                                    type='number'
-                                    min="1000000000"
-                                    max="9999999999"
-                                    step="1"
-                                    onChange={this.changeInput}
-                                    required/>
+                                <label>Teléfono
+                                    <input 
+                                        name="telefono"
+                                        placeholder='Teléfono'
+                                        type='tel'
+                                        min="1000000000"
+                                        max="9999999999"
+                                        step="1"
+                                        onChange={this.changeInput}
+                                        autocomplete='tel'
+                                        required/>
+                                </label>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Correo</label>
-                                <input 
-                                    name="email"
-                                    placeholder='Correo'
-                                    type='email'
-                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                                    onChange={this.changeInput}
-                                    required/>
+                                <label>Correo
+                                    <input 
+                                        name="email"
+                                        placeholder='Correo'
+                                        type='email'
+                                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                        onChange={this.changeInput}
+                                        autocomplete='email'
+                                        required/>
+                                </label>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Dirección</label>
-                                <input 
-                                    name="direccion"
-                                    placeholder='Dirección'
-                                    type='text'
-                                    onChange={this.changeInput}
-                                    required/>
+                                <label>Dirección
+                                    <input 
+                                        name="direccion"
+                                        placeholder='Dirección'
+                                        type='text'
+                                        onChange={this.changeInput}
+                                        autocomplete='text'
+                                        required/>
+                                </label>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Ciudad</label>
-                                <select
-                                    name="ciudad"
-                                    onChange={this.changeInput}
-                                    required>
-                                    <option value="-">Seleccione una opción</option>
-                                    {
-                                    ciudades.map((lugar, index) => (
-                                        lugar.ciudades.map((ciudad, index) => (
-                                            <option key={index} value={lugar.departamento+", "+ciudad}>
-                                                {lugar.departamento+", "+ciudad}
-                                            </option>
-                                            
-                                        ))                            
-                                    ))}
-                                </select>
+                                <label>Ciudad
+                                    <select
+                                        name="ciudad"
+                                        onChange={this.changeInput}
+                                        required>
+                                        <option value="-">Seleccione una opción</option>
+                                        {
+                                        ciudades.map((lugar, index) => (
+                                            lugar.ciudades.map((ciudad, index) => (
+                                                <option key={index} value={lugar.departamento+", "+ciudad}>
+                                                    {lugar.departamento+", "+ciudad}
+                                                </option>
+                                                
+                                            ))                            
+                                        ))}
+                                    </select>
+                                </label>
                                 </Form.Field>
                                 <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>
                                 <Link to={`/Users/${this.props.id_user}`}><Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>

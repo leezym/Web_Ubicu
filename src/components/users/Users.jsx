@@ -91,10 +91,11 @@ class Users extends Component {
                 Lista de pacientes
               </Label>
               <Input
-                  icon='search'
-                  iconPosition='left'
-                  placeholder='Filtrar por nombre...'
-                  onChange={this.handleNameFilter}
+                name='search'
+                icon='search'
+                iconPosition='left'
+                placeholder='Filtrar por nombre...'
+                onChange={this.handleNameFilter}
               />
               <Table celled compact definition unstackable>
                 <Table.Header fullWidth>

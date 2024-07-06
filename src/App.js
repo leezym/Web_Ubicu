@@ -7,7 +7,7 @@ import Footer from "../src/components/pages/Footer"
 
 class App extends Component {
     componentDidMount() {
-        document.title = 'UBICU'; // Cambia 'Nuevo Título de Página' al título que desees
+        document.title = 'UBICU: Sistema Incentivo Respiratorio';
     }
 
     render() {

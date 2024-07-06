@@ -30,7 +30,6 @@ class Ejercicio extends Component {
     
     componentDidMount() {
         const { ejercicio } = this.state;
-        console.log(ejercicio)
         const fechaInicio = moment(ejercicio.fecha_inicio, 'DD/MM/YYYY').format('YYYY-MM-DD').toString();
         const fechaFin = moment(ejercicio.fecha_fin, 'DD/MM/YYYY').format('YYYY-MM-DD')
         const isDisabled = moment(fechaFin).isBefore(moment(), 'day') && ejercicio.nombre !== "Predeterminado";
@@ -106,116 +105,130 @@ class Ejercicio extends Component {
                         <Form onSubmit={this.handleSave}>
                             <Form.Group widths='equal'>
                                 <Form.Field>
-                                <label>Nombre *</label>
-                                <input
-                                    name="nombre"
-                                    placeholder='Nombre'
-                                    type='text'
-                                    disabled={true}
-                                    value={ejercicio.nombre}/>
+                                <label>Nombre *
+                                    <input
+                                        name="nombre"
+                                        placeholder='Nombre'
+                                        type='text'
+                                        disabled={true}
+                                        value={ejercicio.nombre}
+                                        autocomplete='text'/>
+                                </label>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Duración total de la terapia (días) *</label>
-                                <input
-                                    name="duracion_total"
-                                    placeholder='Duración total'
-                                    type='number'
-                                    min="1"
-                                    max="999"
-                                    step="1"
-                                    onChange={this.changeInput}
-                                    disabled={readOnly}
-                                    value={readOnly ? ejercicio.duracion_total : null}
-                                    required/>                            
+                                <label>Duración total de la terapia (días) *
+                                    <input
+                                        name="duracion_total"
+                                        placeholder='Duración total'
+                                        type='number'
+                                        min="1"
+                                        max="999"
+                                        step="1"
+                                        onChange={this.changeInput}
+                                        disabled={readOnly}
+                                        value={readOnly ? ejercicio.duracion_total : null}
+                                        autocomplete='number'
+                                        required/>
+                                </label>                   
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Frecuencia (cuantos días a la semana) *</label>
-                                <select
-                                    name="frecuencia_dias"
-                                    value={readOnly ? ejercicio.frecuencia_dias : null}
-                                    disabled={readOnly}
-                                    onChange={this.changeInput}
-                                    required>
-                                    <option value="-">Seleccione una opción</option>
-                                    <option value="1">1 día</option>
-                                    <option value="2">2 días</option>
-                                    <option value="3">3 días</option>
-                                    <option value="4">4 días</option>
-                                    <option value="5">5 días</option>
-                                    <option value="6">6 días</option>
-                                    <option value="7">7 días</option>
-                                </select>
-                                </Form.Field>
-                                <Form.Field>
-                                <label>Frecuencia (cada cuantas horas al día) *</label>
+                                <label>Frecuencia (cuantos días a la semana) *
                                     <select
-                                        name="frecuencia_horas"
-                                        value={readOnly ? ejercicio.frecuencia_horas : null}
+                                        name="frecuencia_dias"
+                                        value={readOnly ? ejercicio.frecuencia_dias : null}
                                         disabled={readOnly}
                                         onChange={this.changeInput}
                                         required>
-                                    <option value="-">Seleccione una opción</option>
-                                    <option value="3">Cada 3h</option>
-                                    <option value="4">Cada 4h</option>
-                                    <option value="6">Cada 6h</option>
-                                </select>
+                                        <option value="-">Seleccione una opción</option>
+                                        <option value="1">1 día</option>
+                                        <option value="2">2 días</option>
+                                        <option value="3">3 días</option>
+                                        <option value="4">4 días</option>
+                                        <option value="5">5 días</option>
+                                        <option value="6">6 días</option>
+                                        <option value="7">7 días</option>
+                                    </select>
+                                </label>
+                                </Form.Field>
+                                <Form.Field>
+                                <label>Frecuencia (cada cuantas horas al día) *
+                                        <select
+                                            name="frecuencia_horas"
+                                            value={readOnly ? ejercicio.frecuencia_horas : null}
+                                            disabled={readOnly}
+                                            onChange={this.changeInput}
+                                            required>
+                                        <option value="-">Seleccione una opción</option>
+                                        <option value="3">Cada 3h</option>
+                                        <option value="4">Cada 4h</option>
+                                        <option value="6">Cada 6h</option>
+                                    </select>
+                                </label>
                                 </Form.Field>
                             </Form.Group >
                             <Form.Group widths='equal'>                        
                                 <Form.Field>
-                                <label>Repeticiones *</label>
-                                <input
-                                    name="repeticiones"
-                                    type = 'number'                        
-                                    placeholder='Repeticiones'
-                                    min="1"
-                                    max="15"
-                                    step="1"
-                                    onChange={this.changeInput} 
-                                    disabled={readOnly}
-                                    value={readOnly ? ejercicio.repeticiones : null}
-                                    required/>
+                                <label>Repeticiones *
+                                    <input
+                                        name="repeticiones"
+                                        type = 'number'                        
+                                        placeholder='Repeticiones'
+                                        min="1"
+                                        max="15"
+                                        step="1"
+                                        onChange={this.changeInput} 
+                                        disabled={readOnly}
+                                        value={readOnly ? ejercicio.repeticiones : null}
+                                        autocomplete='number'
+                                        required/>
+                                </label>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Series</label>
-                                <input 
-                                    name="series"
-                                    placeholder='Series'
-                                    type='number'
-                                    min="1"
-                                    max="99"
-                                    step="1"
-                                    onChange={this.changeInput} 
-                                    disabled={readOnly}
-                                    value={readOnly ? ejercicio.series : null}
-                                    required/>
+                                <label>Series
+                                    <input 
+                                        name="series"
+                                        placeholder='Series'
+                                        type='number'
+                                        min="1"
+                                        max="99"
+                                        step="1"
+                                        onChange={this.changeInput} 
+                                        disabled={readOnly}
+                                        value={readOnly ? ejercicio.series : null}
+                                        autocomplete='number'
+                                        required/>
+                                </label>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Periodo de descanso (seg) *</label>
-                                <input 
-                                    name="periodos_descanso"
-                                    placeholder='Periodo de descanso'
-                                    type='number'
-                                    min="1"
-                                    max="99"
-                                    step="1"
-                                    onChange={this.changeInput} 
-                                    disabled={readOnly}
-                                    value={readOnly ? ejercicio.periodos_descanso: null}
-                                    required/>
+                                <label>Periodo de descanso (seg) *
+                                    <input 
+                                        name="periodos_descanso"
+                                        placeholder='Periodo de descanso'
+                                        type='number'
+                                        min="1"
+                                        max="99"
+                                        step="1"
+                                        onChange={this.changeInput} 
+                                        disabled={readOnly}
+                                        value={readOnly ? ejercicio.periodos_descanso: null}
+                                        autocomplete='number'
+                                        required/>
+                                </label>
                                 </Form.Field>
                                 {
                                     ejercicio.nombre !== "Predeterminado" ?
                                         <Form.Field>
-                                        <label>Fecha de inicio *</label>
-                                        <input name="fecha_inicio"
-                                            type="date"
-                                            onChange={this.changeInput}
-                                            placeholder='DD/MM/AAAA'
-                                            min={new Date().toISOString().split('T')[0]}
-                                            disabled={readOnly}
-                                            value={readOnly ? ejercicio.fecha_inicio : null}
-                                            required/>
+                                        <label>Fecha de inicio *
+                                            <input name="fecha_inicio"
+                                                type="date"
+                                                onChange={this.changeInput}
+                                                placeholder='DD/MM/AAAA'
+                                                min={new Date().toISOString().split('T')[0]}
+                                                disabled={readOnly}
+                                                value={readOnly ? ejercicio.fecha_inicio : null}
+                                                autocomplete='date'
+                                                required/>
+                                        </label>
                                         </Form.Field>
                                     :
                                         <></>
@@ -225,63 +238,68 @@ class Ejercicio extends Component {
                                 {
                                     ejercicio.nombre !== "Predeterminado" ?
                                         <Form.Field>
-                                        <label>Fecha de fin *</label>
+                                        <label>Fecha de fin *
                                         <input  name="fecha_fin"
                                             type='text'
                                             disabled={true}
-                                            value={ejercicio.fecha_fin}/>
+                                            value={ejercicio.fecha_fin}
+                                            autocomplete='text'/>
+                                        </label>
                                         </Form.Field>
                                     :
                                         <></>
                                 }
                                 <Form.Field>
-                                <label>Apnea (seg) *</label>
-                                <select
-                                    name="apnea"
-                                    value={readOnly ? ejercicio.apnea : null}
-                                    disabled={readOnly}
-                                    onChange={this.changeInput}
-                                    required>
-                                    <option value="-">Seleccione una opción</option>
-                                    <option value="1">1 seg</option>
-                                    <option value="2">2 seg</option>
-                                    <option value="3">3 seg</option>
-                                </select>
+                                <label>Apnea (seg) *
+                                    <select
+                                        name="apnea"
+                                        value={readOnly ? ejercicio.apnea : null}
+                                        disabled={readOnly}
+                                        onChange={this.changeInput}
+                                        required>
+                                        <option value="-">Seleccione una opción</option>
+                                        <option value="1">1 seg</option>
+                                        <option value="2">2 seg</option>
+                                        <option value="3">3 seg</option>
+                                    </select>
+                                </label>
                                 </Form.Field>                    
                                 <Form.Field>
-                                <label>Flujo (mL) *</label>
-                                <select
-                                    name="flujo"
-                                    value={readOnly ? ejercicio.flujo : null}
-                                    disabled={readOnly}
-                                    onChange={this.changeInput}
-                                    required>
-                                    <option value="-">Seleccione una opción</option>
-                                    <option value="600">600 mL</option>
-                                    <option value="900">900 mL</option>
-                                    <option value="1200">1200 mL</option>
-                                    <option value="1500">1500 mL</option>
-                                    <option value="1800">1800 mL</option>
-                                    <option value="2100">2100 mL</option>
-                                    <option value="2400">2400 mL</option>
-                                </select>
+                                <label>Flujo (mL) *
+                                    <select
+                                        name="flujo"
+                                        value={readOnly ? ejercicio.flujo : null}
+                                        disabled={readOnly}
+                                        onChange={this.changeInput}
+                                        required>
+                                        <option value="-">Seleccione una opción</option>
+                                        <option value="600">600 mL</option>
+                                        <option value="900">900 mL</option>
+                                        <option value="1200">1200 mL</option>
+                                        <option value="1500">1500 mL</option>
+                                        <option value="1800">1800 mL</option>
+                                        <option value="2100">2100 mL</option>
+                                        <option value="2400">2400 mL</option>
+                                    </select>
+                                </label>
                                 </Form.Field>
                                 <Form.Field style={{marginBottom: '20px'}}>
-                                <label>Hora de inicio de la terapia *</label>
-                                <select
-                                    name="hora_inicio"
-                                    value={readOnly ? ejercicio.hora_inicio : null}
-                                    disabled={readOnly}
-                                    onChange={this.changeInput}
-                                    required>
-                                    <option value={"-"}>Seleccione una opción</option>
-                                    <option value="6">6:00 am</option>
-                                    <option value="7">7:00 am</option>
-                                    <option value="8">8:00 am</option>
-                                    <option value="9">9:00 am</option>
-                                    <option value="10">10:00 am</option>
-                                    <option value="11">11:00 am</option>
-                                </select>
+                                <label>Hora de inicio de la terapia *
+                                    <select
+                                        name="hora_inicio"
+                                        value={readOnly ? ejercicio.hora_inicio : null}
+                                        disabled={readOnly}
+                                        onChange={this.changeInput}
+                                        required>
+                                        <option value={"-"}>Seleccione una opción</option>
+                                        <option value="6">6:00 am</option>
+                                        <option value="7">7:00 am</option>
+                                        <option value="8">8:00 am</option>
+                                        <option value="9">9:00 am</option>
+                                        <option value="10">10:00 am</option>
+                                        <option value="11">11:00 am</option>
+                                    </select>
+                                </label>
                                 </Form.Field>
                             </Form.Group>
 
