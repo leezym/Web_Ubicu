@@ -104,6 +104,9 @@ class LoginForm extends Component {
             <Message>
               ¿Nuevo Usuario? <Link to="/AgregarFisioterapeuta">Registrarse</Link>
             </Message>
+            <Message>
+              <Link to="/RecuperarContrasena">¿Olvidaste tu contraseña?</Link>
+            </Message>
           </Grid.Column>
         </Grid>
         {/*<Grid textAlign="center" style={{ height: '20vh' }} verticalAlign="middle">

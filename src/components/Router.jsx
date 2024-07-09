@@ -13,6 +13,8 @@ import AgregarEjercicio from "./ejercicios/Agregar";
 import VerResultados from "./ejercicios/VerResultados";
 import VerPerfil from "./users/VerPerfil";
 import VerCalibraciones from "./calibraciones/VerCalibraciones";
+import RecuperarContrasena from './users/RecuperarContrasena';
+import RestablecerContrasena from './users/RestablecerContrasena';
 import { isNull } from "util";
 
 class Router extends Component {
@@ -27,7 +29,7 @@ class Router extends Component {
 
                     <Route
                         exact path="/"
-                        component ={LoginForm}/>
+                        component = {LoginForm}/>
 
                     <Route
                     exact path="/Users/:id_user"
@@ -98,6 +100,19 @@ class Router extends Component {
                         }} />
                     
                     <Route
+                        exact path="/RestablecerContrasena/:token"
+                        render={ props => {
+                            const { match } = props;
+                            let token = match.params.token;
+                            return <RestablecerContrasena token={token} />;
+                        }}
+                    />
+
+                    <Route 
+                        exact path="/RecuperarContrasena"
+                        component={RecuperarContrasena} />
+                    
+                    <Route
                         component={NoRuta} />
                     
                     
@@ -108,78 +123,3 @@ class Router extends Component {
     }
 }
 export default Router;
-
-/*
-        <Container>     
-            <BrowserRouter>
-            <Switch>
-                <Route
-                    exact path="/"
-                    component ={LoginForm}/>
-                    
-                <Route
-                exact path="/Users/:id_user"
-                render={ props => {
-                    const { match } = props;
-                    let id_user = match.params.id_user;
-                    return <Users id_user={id_user} />;
-                }} />
-    
-                <Route
-                    exact path="/AgregarFisioterapeuta"
-                    component ={Agregar}/>
-                
-                <Route
-                    exact path="/AgregarPaciente/:id_user"
-                    render={ props => {
-                        const { match } = props;
-                        let id_user = match.params.id_user;
-                        return <AgregarPaciente id_user={id_user} />;
-                    }} />
-                
-                <Route
-                    exact path="/VerUser/:id_patient"
-                    render={ props => {
-                        const { match } = props;
-                        let id_patient = match.params.id_patient;
-                        return <Ver id_patient={id_patient} />;
-                    }} />
-                
-                <Route
-                    exact path="/AgregarEjercicio/:id_patient"
-                    render={ props => {
-                        const { match } = props;
-                        let id_patient = match.params.id_patient;
-                        return <AgregarEjercicio id_patient={id_patient} />;
-                    }} />            
-                                                                                                            
-                <Route
-                    exact path="/VerEjercicios/:id_patient"
-                    render={ props => {
-                        const { match } = props;
-                        let id_patient = !isNull(match.params.id_patient)
-                        ? match.params.id_patient
-                        : 0;
-                        return <Ejercicios id_patient={id_patient} />;
-                    }} />
-                
-                <Route
-                    exact path="/VerResultados/:id_patient/:id_ejercicio"
-                    render={ props => {
-                        const { match } = props;
-                        let id_patient = !isNull(match.params.id_patient)
-                        ? match.params.id_patient
-                        : 0;
-                        let id_ejercicio = !isNull(match.params.id_ejercicio)
-                        ? match.params.id_ejercicio
-                        : 0;
-                        return <VerResultados id_patient={id_patient} id_ejercicio={id_ejercicio} />;
-                    }} />
-                
-                <Route
-                    component={NoRuta} />
-                
-                
-            </Switch>
-            </BrowserRouter>
-            </Container>     */

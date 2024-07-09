@@ -193,9 +193,6 @@ class VerPerfil extends Component {
                                                     name="telefono"
                                                     placeholder='Teléfono'
                                                     type='tel'
-                                                    min="1000000000"
-                                                    max="9999999999"
-                                                    step="1"
                                                     onChange={this.changeInputUser}
                                                     disabled={readOnly}
                                                     value={readOnly ? user.telefono : null}

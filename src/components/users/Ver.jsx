@@ -208,9 +208,6 @@ class Ver extends Component {
                                                         name="telefono"
                                                         placeholder='Teléfono'
                                                         type='tel'
-                                                        min="1000000000"
-                                                        max="9999999999"
-                                                        step="1"
                                                         onChange={this.changeInput}
                                                         disabled={readOnly}
                                                         value={readOnly ? patient.telefono : null}
