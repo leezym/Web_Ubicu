@@ -63,7 +63,7 @@ class RecuperarContrasena extends Component {
                 value={cedula}
                 onChange={this.handleChange}
               />
-              <Button color="blue" fluid size="large" loading={isLoading}>
+              <Button color="blue" fluid size="large" loading={isLoading} style={{ backgroundColor: '#46bee0', color:"white"}}>
                 Enviar Solicitud
               </Button>
             </Segment>

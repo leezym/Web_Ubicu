@@ -99,7 +99,7 @@ class RestablecerContrasena extends Component {
                 required
                 icon={<Icon name={showPassword.repeat ? 'eye' : 'eye slash'} link onClick={() => this.togglePasswordVisibility('repeat')} />}
               />
-              <Button color="blue" fluid size="large" loading={isLoading}>
+              <Button color="blue" fluid size="large" loading={isLoading} style={{ backgroundColor: '#46bee0', color:"white"}}>
                 Restablecer Contraseña
               </Button>
             </Segment>
