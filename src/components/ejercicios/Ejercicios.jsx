@@ -17,60 +17,66 @@ class Ejercicios extends Component {
     ejercicioPredeterminado: null,
     pageCount: 1,
     currentPage: 0,
-    exercisesPerPage: 5
+    exercisesPerPage: 10,
+    currentExercises: []
   };
 
   componentDidMount() {
     const { id_patient } = this.props;
 
     fetch(URL+'getPatientbyId', {
-        method: 'POST',
-        body: JSON.stringify({id_patient}),
-        headers: {
-          'Content-Type': 'application/json',
-          'x-access-token': localStorage.getItem('token')
-        }
-      })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          return res.json().then(error => {
-            throw new Error(error.msg);
-          });
-        }
-      })
-      .then(resp => {        
+      method: 'POST',
+      body: JSON.stringify({id_patient}),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': localStorage.getItem('token')
+      }
+    })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        return res.json().then(error => {
+          throw new Error(error.msg);
+        });
+      }
+    })
+      .then(resp => {
         const user = resp;
         const capacidad_vital = this.getCapacidadVital(user).toFixed(2) + "L";
         this.setState({ user, capacidad_vital });
 
         fetch(URL+'allEjerciciosByPatient', {
-            method: 'POST',
-            body: JSON.stringify({id_patient}),
-            headers: {
-              'Content-Type': 'application/json',
-              'x-access-token': localStorage.getItem('token')
-            }
-          })
-          .then(res => {
-            if (res.ok) {
-              return res.json();
-            } else {
-              return res.json().then(error => {
-                throw new Error(error.msg);
-              });
-            }
-          })
-          .then(resp => {        
-            const ejercicios = resp.filter(ejercicio => ejercicio.nombre !== "Predeterminado")
-            const ejercicioPredeterminado = resp.find(ejercicio => ejercicio.nombre === "Predeterminado");
-            const pageCount = Math.ceil(ejercicios.length / this.state.exercisesPerPage); // Calcula el número de páginas
-           
-            this.setState({ ejercicios, ejercicioPredeterminado, pageCount });
-          })
-          .catch(err => {
-            alert('Error al consultar ejercicios. ' + err.message);
+          method: 'POST',
+          body: JSON.stringify({id_patient}),
+          headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': localStorage.getItem('token')
+          }
+        })
+        .then(res => {
+          if (res.ok) {
+            return res.json();
+          } else {
+            return res.json().then(error => {
+              throw new Error(error.msg);
+            });
+          }
+        })
+        .then(resp => {
+          const ejercicios = resp.filter(ejercicio => ejercicio.nombre !== "Predeterminado");
+          ejercicios.sort((a, b) => {
+            return moment(b.fecha_inicio, 'DD/MM/YYYY') - moment(a.fecha_inicio, 'DD/MM/YYYY');
+          });
+
+          const ejercicioPredeterminado = resp.find(ejercicio => ejercicio.nombre === "Predeterminado");
+          const pageCount = Math.ceil(ejercicios.length / this.state.exercisesPerPage);
+          const currentExercises = ejercicios.slice(0, this.state.exercisesPerPage);
+          
+          this.setState({ ejercicios, ejercicioPredeterminado, pageCount, currentExercises });
+        })
+        .catch(err => {
+          alert('Error al consultar ejercicios. ' + err.message);
         });
       })
       .catch(err => {
@@ -85,25 +91,17 @@ class Ejercicios extends Component {
       return (21.78 - (0.101 * user.edad)) * user.altura;
     
     return 0;
-  };  
+  };
 
   handlePageClick = ({ selected }) => {
-    this.setState({ currentPage: selected }, () => {
-      const { ejercicios, currentPage, exercisesPerPage } = this.state;
-      const offset = currentPage * exercisesPerPage;
-      let currentExercises = ejercicios.slice(offset, offset + exercisesPerPage);
-      this.setState({ currentExercises });
-    });
+    const offset = selected * this.state.exercisesPerPage;
+    const currentExercises = this.state.ejercicios.slice(offset, offset + this.state.exercisesPerPage);
+    this.setState({ currentPage: selected, currentExercises });
   };
 
   render() {
-    const { user, capacidad_vital, ejercicios, ejercicioPredeterminado, currentPage, exercisesPerPage } = this.state;
-    const offset = currentPage * exercisesPerPage;
-    let currentExercises = 0;
-    
-    if (ejercicios.length > 0)
-      currentExercises = ejercicios.slice(offset, offset + exercisesPerPage);
-    
+    const { user, capacidad_vital, ejercicioPredeterminado, currentExercises } = this.state;
+
     return (
       <div>
         <MenuNav />
@@ -144,48 +142,41 @@ class Ejercicios extends Component {
               {
                 ejercicioPredeterminado ?
                   <Ejercicio ejercicio={ejercicioPredeterminado} />
-                :
+                  :
                   (
                     <div>
-                      <p style={{ marginBottom:"10px", marginTop:"10px" }}>No hay ejercicios predeterminados disponibles, por favor agregar.</p>
+                      <p style={{ marginBottom: "10px", marginTop: "10px" }}>No hay ejercicios predeterminados disponibles, por favor agregar.</p>
                       <Link to={{ pathname: `/AgregarEjercicio/${user._id}`, nombre_terapia: "Predeterminado" }}>
-                        <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar ejercicio predeterminado</Button>
+                        <Button type='submit' style={{ backgroundColor: '#46bee0', color: "white" }}>Agregar ejercicio predeterminado</Button>
                       </Link>
                     </div>
                   )
-              }              
+              }
             </Segment>
             <Segment raised>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: "20px"}}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: "20px" }}>
                 {
-                  
-                  ejercicios.length === 0 || (ejercicios.length > 0 && moment().isAfter(moment(ejercicios[ejercicios.length - 1].fecha_fin, 'DD/MM/YYYY'))) ? 
-                    (
-                      <Link to={{ pathname: `/AgregarEjercicio/${user._id}`, nombre_terapia: "Inspiración profunda" }}>
-                        <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>
-                      </Link>
-                    ) 
-                  : 
-                    <></>
+                  (this.state.ejercicios.length === 0 || (this.state.ejercicios.length > 0 && moment().isAfter(moment(this.state.ejercicios[this.state.ejercicios.length - 1].fecha_fin, 'DD/MM/YYYY')))) &&
+                  (
+                    <Link to={{ pathname: `/AgregarEjercicio/${user._id}`, nombre_terapia: "Inspiración profunda" }}>
+                      <Button type='submit' style={{ backgroundColor: '#46bee0', color: "white" }}>Agregar</Button>
+                    </Link>
+                  )
                 }
                 <Link to={`/VerUser/${user._id}`}>
-                  <Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button>
+                  <Button style={{ backgroundColor: '#eb5a25', color: "white" }}>Regresar</Button>
                 </Link>
               </div>
-              <Label ribbon style={{color:"#28367b"}}>
+              <Label ribbon style={{ color: "#28367b" }}>
                 Prescripciones
               </Label>
               <Card.Group style={{ marginTop: '1em' }}>
-              {        
-                currentExercises.length > 0 ?
-                  currentExercises
-                  //.filter(ejercicio => ejercicio.nombre !== "Predeterminado") // Filtrar el ejercicio predeterminado
-                  .map((ejercicio, index) => {
-                    return <Ejercicio key={index} ejercicio={ejercicio} />;
-                  })
-                :
-                  <p style={{ marginBottom:"10px", marginTop:"10px" }}>No hay ejercicios disponibles.</p>
-              }
+                {
+                  currentExercises.length > 0 ?
+                    currentExercises.map((ejercicio) => <Ejercicio key={ejercicio._id} ejercicio={ejercicio} />)
+                    :
+                    <p style={{ marginBottom: "10px", marginTop: "10px" }}>No hay ejercicios disponibles.</p>
+                }
               </Card.Group>
             </Segment>
             <ReactPaginate

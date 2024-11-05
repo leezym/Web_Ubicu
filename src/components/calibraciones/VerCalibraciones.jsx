@@ -12,28 +12,20 @@ function fillGraph(data) {
   const seriesGraph = [];
   
   // Add series to options
-  const seriesFlujo = {
-    name: "Flujo",
-    data: []
-  };
-
-  const seriesVolumen = { //ISABELLA
-    name: "Volumen",
+  const series = {
+    name: "Serie",
     data: []
   };
   
   // Add data to series
   for (let j = 0; j < data.flujo.length; j++) {
     const flujo = data.flujo[j].toFixed(1);
-    const volumen = data.volumen[j].toFixed(1); //ISABELLA
     const tiempo = data.tiempo[j].toFixed(1) * 1000;
 
-    seriesFlujo.data.push([tiempo, flujo]);
-    seriesVolumen.data.push([tiempo, volumen]); //ISABELLA
+    series.data.push([tiempo, flujo]);
   }
 
-  seriesGraph.push(seriesFlujo);
-  seriesGraph.push(seriesVolumen); //ISABELLA
+  seriesGraph.push(series);
   
   return seriesGraph;
 }
@@ -82,7 +74,7 @@ class VerCalibraciones extends React.Component {
       },
       yaxis: {
         title: {
-          text: "Datos" //ISABELLA
+          text: "Flujo"
         },
         type: 'numeric'
       }

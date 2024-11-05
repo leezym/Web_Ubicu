@@ -15,7 +15,16 @@
     padding: 5px 10px;
     border: 1px solid #ccc;
     cursor: pointer;
+    border-radius: 4px;
   }
+
+  .pagination li a {
+    text-decoration: none;
+    color: inherit;
+    display: block; /* Expande el área clickeable a todo el botón */
+    width: 100%;
+    height: 100%;
+}
   
   .pagination li.active {
     background-color: #007bff;
@@ -24,7 +33,7 @@
   }
 
   .active-link {
-    color: #fff; /* Cambia este valor al color de texto deseado */
+    color: #fff;
   }
   
   .pagination li:hover {

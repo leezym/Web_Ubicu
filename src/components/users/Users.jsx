@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import User from "./User"
-import {Table, Button, Grid, Segment, Label, Input} from 'semantic-ui-react'
+import User from "./User";
+import {Table, Button, Grid, Segment, Label, Input} from 'semantic-ui-react';
 import MenuNav from '../pages/MenuNav';
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
@@ -10,11 +10,12 @@ import '../../styles/pagination_style.css';
 
 class Users extends Component {
   state = {
-    patients: {},
+    patients: [],
     pageCount: 1,
     currentPage: 0,
-    patientsPerPage: 5,
-    filteredPatients: []
+    patientsPerPage: 10,
+    filteredPatients: [],
+    currentPatients: []
   };
 
   componentDidMount() {
@@ -39,23 +40,26 @@ class Users extends Component {
     })
     .then(resp => {        
         const patients = resp;
-        const pageCount = Math.ceil(patients.length / this.state.patientsPerPage); // Calcula el número de páginas
-        this.setState({ patients, pageCount });
+        const pageCount = Math.ceil(patients.length / this.state.patientsPerPage);
+        this.setState({ patients, pageCount }, this.updateCurrentPatients);
     })
     .catch(err => {
       alert('Error al consultar paciente. ' + err.message);
     }); 
   }
 
+  updateCurrentPatients = () => {
+    const { patients, currentPage, patientsPerPage, filteredPatients } = this.state;
+    const offset = currentPage * patientsPerPage;
+    const currentPatients = filteredPatients.length > 0
+      ? filteredPatients.slice(offset, offset + patientsPerPage)
+      : patients.slice(offset, offset + patientsPerPage);
+
+    this.setState({ currentPatients });
+  };
+
   handlePageClick = ({ selected }) => {
-    this.setState({ currentPage: selected }, () => {
-      const { patients, currentPage, patientsPerPage, filteredPatients } = this.state;
-      const offset = currentPage * patientsPerPage;
-      const currentPatients = filteredPatients.length > 0 ?
-        filteredPatients.slice(offset, offset + patientsPerPage)
-        : patients.slice(offset, offset + patientsPerPage);
-      this.setState({ currentPatients });
-    });
+    this.setState({ currentPage: selected }, this.updateCurrentPatients);
   };
 
   handleNameFilter = (event) => {
@@ -68,18 +72,11 @@ class Users extends Component {
       currentPage: 0,
       filteredPatients,
       pageCount: Math.ceil(filteredPatients.length / this.state.patientsPerPage)
-    });
+    }, this.updateCurrentPatients);
   };
 
   render() {
-    const { patients, currentPage, patientsPerPage, filteredPatients } = this.state;
-    const offset = currentPage * patientsPerPage;
-    let currentPatients = 0;
-    
-    if (patients.length > 0)
-      currentPatients = filteredPatients.length > 0 ? 
-        filteredPatients.slice(offset, offset + patientsPerPage)
-        : patients.slice(offset, offset + patientsPerPage);
+    const { currentPatients } = this.state;
 
     return (
       <div>
