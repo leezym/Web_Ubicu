@@ -44,7 +44,7 @@ class Users extends Component {
         this.setState({ patients, pageCount }, this.updateCurrentPatients);
     })
     .catch(err => {
-      alert('Error al consultar paciente. ' + err.message);
+      alert('Error al consultar paciente. ' + err.response.data.msg);
     }); 
   }
 

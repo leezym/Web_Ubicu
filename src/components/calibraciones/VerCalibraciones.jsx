@@ -113,7 +113,7 @@ class VerCalibraciones extends React.Component {
         this.setState({ graph, pageCount });
       })
       .catch(err => {
-        alert('Error al consultar resultados de calibraciones. ' + err.message);
+        alert('Error al consultar resultados de calibraciones. ' + err.response.data.msg);
     });
   }
 

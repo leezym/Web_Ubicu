@@ -57,7 +57,7 @@ class LoginForm extends Component {
     })
     .catch(err => {
       submitButton.disabled = false;
-      alert('Error al iniciar sesión. ' + err.message);
+      alert('Error al iniciar sesión. ' + err.response.data.msg);
     });    
   }
 

@@ -30,7 +30,7 @@ export default function withAuth(ComponentToProtect) {
         }
       })
       .catch(err => {
-        alert('Error al autenticar. ' + err.message);
+        alert('Error al autenticar. ' + err.response.data.msg);
         this.setState({ loading: false, redirect: true });
       });
     }

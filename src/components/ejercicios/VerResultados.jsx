@@ -173,7 +173,7 @@ class VerResultados extends React.Component {
         });
       })
       .catch(err => {
-        alert('Error al consultar ejercicio. ' + err.message);
+        alert('Error al consultar ejercicio. ' + err.response.data.msg);
     });
   }
 

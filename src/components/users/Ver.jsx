@@ -38,7 +38,7 @@ class Ver extends Component {
             this.setState({ patient });
         })
         .catch(err => {
-            alert('Error al consultar paciente. ' + err.message);
+            alert('Error al consultar paciente. ' + err.response.data.msg);
         });
     }
 

@@ -76,11 +76,11 @@ class Ejercicios extends Component {
           this.setState({ ejercicios, ejercicioPredeterminado, pageCount, currentExercises });
         })
         .catch(err => {
-          alert('Error al consultar ejercicios. ' + err.message);
+          alert('Error al consultar ejercicios. ' + err.response.data.msg);
         });
       })
       .catch(err => {
-        alert('Error al consultar paciente. ' + err.message);
+        alert('Error al consultar paciente. ' + err.response.data.msg);
     });
   };
 

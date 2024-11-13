@@ -131,16 +131,16 @@ class AgregarPaciente extends Component {
                     }
                 })
                 .catch(err => {
-                    alert('Error al crear personalización. ' + err.message);
+                    alert('Error al crear personalización. ' + err.response.data.msg);
                 });
             })
             .catch(err => {
-                alert('Error al consultar paciente. ' + err.message);
+                alert('Error al consultar paciente. ' + err.response.data.msg);
             });
         })
         .catch(err => {
             submitButton.disabled = false;
-            alert('Error al crear paciente. ' + err.message);           
+            alert('Error al crear paciente. ' + err.response.data.msg);           
         });
     };
     

@@ -50,7 +50,7 @@ class VerPerfil extends Component {
             this.setState({ user });
         })
         .catch(err => {
-            alert('Error al consultar fisioterapeuta. ' + err.message);
+            alert('Error al consultar fisioterapeuta. ' + err.response.data.msg);
           });
     }
 
