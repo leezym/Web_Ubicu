@@ -5,6 +5,7 @@ import MenuNav from '../pages/MenuNav';
 import { Link, withRouter } from 'react-router-dom';
 import { updateUser, updatePassword } from '../../actions/usersAction';
 import { URL } from '../../actions/url.js';
+import '../../styles/label_style.css';
 
 class VerPerfil extends Component {
 

@@ -4,7 +4,7 @@ import {Link,withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
 import moment from "moment";
 import { updateEjercicio } from '../../actions/ejerciciosAction';
-
+import '../../styles/label_style.css';
 
 class Ejercicio extends Component {
     state = {

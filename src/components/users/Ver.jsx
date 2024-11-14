@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { updatePatient } from '../../actions/patientsAction';
 import ciudades from '../../colombia.json';
 import { URL } from '../../actions/url.js';
+import '../../styles/label_style.css';
 
 class Ver extends Component {
     state = {

@@ -5,6 +5,7 @@ import {crearEjercicio} from "../../actions/ejerciciosAction";
 import {Link,withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
 import moment from "moment";
+import '../../styles/label_style.css';
 
 class Agregar extends Component {        
     state = {

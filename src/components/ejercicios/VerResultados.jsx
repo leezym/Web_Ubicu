@@ -7,6 +7,7 @@ import Chart from 'react-apexcharts'
 import moment from "moment";
 import MenuNav from '../pages/MenuNav';
 import { URL } from '../../actions/url.js';
+import '../../styles/label_style.css';
 
 function fillGraph(data) {
   const seriesGraph = [];

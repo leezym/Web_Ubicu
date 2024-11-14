@@ -6,6 +6,7 @@ import Ejercicio from './Ejercicio';
 import { connect } from 'react-redux';
 import moment from "moment";
 import ReactPaginate from 'react-paginate';
+import '../../styles/label_style.css';
 import '../../styles/pagination_style.css';
 import { URL } from '../../actions/url.js';
 

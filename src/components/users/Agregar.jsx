@@ -3,6 +3,7 @@ import { Form,Button,Segment,Label,Grid, Icon, Input } from 'semantic-ui-react';
 import {crearUser} from "../../actions/usersAction";
 import {Link} from "react-router-dom";
 import { connect } from 'react-redux';
+import '../../styles/label_style.css';
 
 class Agregar extends Component {
 
