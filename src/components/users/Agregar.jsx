@@ -64,7 +64,7 @@ class Agregar extends Component {
                     </Label>
                     <Form style={{ marginTop: '1em' }} onSubmit={this.handleSave}>
                         <Form.Field>
-                        <label>Nombre *
+                        <label class="required">Nombre </label>
                             <input 
                                 name="nombre"
                                 placeholder='Nombre'
@@ -72,10 +72,9 @@ class Agregar extends Component {
                                 onChange={this.changeInput}
                                 autocomplete='text'
                                 required/>
-                        </label>
                         </Form.Field>
                         <Form.Field>
-                        <label>Cédula *
+                        <label class="required">Cédula </label>
                             <input 
                                 name="cedula"
                                 placeholder='Cédula'
@@ -86,10 +85,9 @@ class Agregar extends Component {
                                 onChange={this.changeInput}
                                 autocomplete='number'
                                 required/>
-                        </label>
                         </Form.Field>
                         <Form.Field>
-                        <label>Teléfono *
+                        <label class="required">Teléfono </label>
                             <input 
                                 name="telefono"
                                 placeholder='Teléfono'
@@ -100,10 +98,9 @@ class Agregar extends Component {
                                 onChange={this.changeInput}
                                 autocomplete='tel'
                                 required/>
-                        </label>
                         </Form.Field>
                         <Form.Field>
-                        <label>Correo *
+                        <label class="required">Correo </label>
                             <input 
                                 name="email"
                                 placeholder='Correo'
@@ -112,10 +109,9 @@ class Agregar extends Component {
                                 onChange={this.changeInput}
                                 autocomplete='email'
                                 required/>
-                        </label>
                         </Form.Field>
                         <Form.Field>
-                        <label>Contraseña *
+                        <label class="required">Contraseña </label>
                             <Input 
                                 name="password"
                                 placeholder='Contraseña'
@@ -127,7 +123,6 @@ class Agregar extends Component {
                                 required
                                 icon={<Icon name={showPassword ? 'eye' : 'eye slash'} link onClick={this.togglePasswordVisibility} />}
                             />
-                        </label>
                         <span style={{ color: 'blue', fontSize: 'small' }}>La contraseña debe contener al menos una mayúscula, un número y un carácter especial</span>                        
                         </Form.Field>
                         <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>

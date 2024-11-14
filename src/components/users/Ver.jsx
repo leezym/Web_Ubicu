@@ -108,7 +108,7 @@ class Ver extends Component {
                                         <Form onSubmit={this.handleSave}>
                                             <Form.Group widths='equal'>
                                                 <Form.Field >
-                                                <label>Nombre *
+                                                <label class="required">Nombre </label>
                                                     <input  
                                                         name="nombre"
                                                         placeholder='Nombre'
@@ -118,10 +118,9 @@ class Ver extends Component {
                                                         value={readOnly ? patient.nombre : null}
                                                         autocomplete='text'
                                                         required/>
-                                                </label>
                                                 </Form.Field>
                                                 <Form.Field >
-                                                <label>Cédula *
+                                                <label class="required">Cédula </label>
                                                     <input  
                                                         name="cedula"
                                                         placeholder='Cédula'
@@ -134,12 +133,11 @@ class Ver extends Component {
                                                         value={readOnly ? patient.cedula : null}
                                                         autocomplete='number'
                                                         required/>
-                                                </label>
                                                 </Form.Field>
                                             </Form.Group >
                                             <Form.Group widths='equal'>
                                                 <Form.Field>
-                                                <label>Edad *
+                                                <label class="required">Edad </label>
                                                     <input
                                                         name="edad"
                                                         placeholder='Edad'
@@ -152,10 +150,9 @@ class Ver extends Component {
                                                         value={readOnly ? patient.edad : null}
                                                         autocomplete='number'
                                                         required/>
-                                                </label>
                                                 </Form.Field>
                                                 <Form.Field>
-                                                <label>Sexo *
+                                                <label class="required">Sexo </label>
                                                     <select
                                                         name="sexo" 
                                                         value={readOnly ? patient.sexo : null} 
@@ -166,10 +163,9 @@ class Ver extends Component {
                                                         <option value="F">Femenino</option>
                                                         <option value="M">Masculino</option>
                                                     </select>
-                                                </label>
                                                 </Form.Field>
                                                 <Form.Field>
-                                                <label>Peso (kg) *
+                                                <label class="required">Peso (kg) </label>
                                                     <input  
                                                         name="peso"
                                                         placeholder='Peso'
@@ -182,10 +178,9 @@ class Ver extends Component {
                                                         value={readOnly ? patient.peso : null}
                                                         autocomplete='number'
                                                         required/>
-                                                </label>
                                                 </Form.Field>
                                                 <Form.Field>
-                                                <label>Altura (cm) *
+                                                <label class="required">Altura (cm)</label>
                                                     <input  
                                                         name="altura"
                                                         placeholder='Altura'
@@ -198,12 +193,11 @@ class Ver extends Component {
                                                         value={readOnly ? patient.altura : null}
                                                         autocomplete='number'
                                                         required/>
-                                                </label>
                                                 </Form.Field>
                                             </Form.Group >
                                             <Form.Group widths='equal'>
                                                 <Form.Field style={{ width: '400px' }}>
-                                                <label>Teléfono *
+                                                <label class="required">Teléfono </label>
                                                     <input
                                                         name="telefono"
                                                         placeholder='Teléfono'
@@ -213,10 +207,9 @@ class Ver extends Component {
                                                         value={readOnly ? patient.telefono : null}
                                                         autocomplete='tel'
                                                         required/>
-                                                </label>
                                                 </Form.Field>
                                                 <Form.Field style={{ width: '800px' }}>
-                                                <label>Correo *
+                                                <label class="required">Correo</label>
                                                     <input 
                                                         name="email"
                                                         placeholder='Correo'
@@ -227,12 +220,11 @@ class Ver extends Component {
                                                         value={readOnly ? patient.email : null}
                                                         autocomplete='email'
                                                         required/>
-                                                </label>
                                                 </Form.Field>
                                             </Form.Group >
                                             <Form.Group widths='equal' style={{ marginBottom: '20px' }}>
                                                 <Form.Field >
-                                                <label>Dirección *
+                                                <label class="required">Dirección</label>
                                                     <input  
                                                         name="direccion"
                                                         placeholder='Dirección'
@@ -242,10 +234,9 @@ class Ver extends Component {
                                                         value={readOnly ? patient.direccion : null}
                                                         autocomplete='text'
                                                         required/>
-                                                </label>
                                                 </Form.Field>
                                                 <Form.Field >
-                                                <label>Ciudad *
+                                                <label class="required">Ciudad </label>
                                                     <select 
                                                         name="ciudad" 
                                                         value={readOnly ? patient.ciudad : null} 
@@ -263,7 +254,6 @@ class Ver extends Component {
                                                             ))                            
                                                         ))}
                                                     </select>
-                                                </label>
                                                 </Form.Field>
                                             </Form.Group >
                                             { readOnly ?

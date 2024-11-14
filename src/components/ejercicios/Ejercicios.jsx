@@ -119,7 +119,7 @@ class Ejercicios extends Component {
                   </TableRow>
                   <TableRow>
                     <TableCell>Altura:</TableCell>
-                    <TableCell>{user.altura}</TableCell>
+                    <TableCell>{user.altura} cm</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>Edad:</TableCell>

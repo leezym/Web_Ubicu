@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import ciudades from '../../colombia.json';
 import AgregarEjercicio from "../ejercicios/Agregar";
 import { URL } from '../../actions/url.js';
+import '../../styles/label_style.css';
 
 class AgregarPaciente extends Component {
     state = {
@@ -32,7 +33,7 @@ class AgregarPaciente extends Component {
         const submitButton = e.target.querySelector('button[type="submit"]');
         submitButton.disabled = true;
 
-        const { crearPatient, id_user, } = this.props;
+        const { crearPatient, id_user, history } = this.props;
         const { nombre, cedula, telefono, email, edad, sexo, peso, altura, direccion, ciudad } = this.state;
 
         crearPatient({
@@ -51,6 +52,7 @@ class AgregarPaciente extends Component {
         }).then(resp => {
             submitButton.disabled = false;
             alert('Paciente creado'); 
+            history.push(`/Users/${id_user}`);
             
             fetch(URL+'getPatientbyCc', {
                 method: 'POST',
@@ -164,7 +166,7 @@ class AgregarPaciente extends Component {
                             </Label>
                             <Form onSubmit={this.handleSave} style={{ marginTop: '1em' }}>
                                 <Form.Field>
-                                <label>Nombre *
+                                <label class="required">Nombre</label>
                                     <input  
                                         name="nombre"
                                         placeholder='Nombre'
@@ -172,10 +174,9 @@ class AgregarPaciente extends Component {
                                         onChange={this.changeInput}
                                         autocomplete='text'
                                         required/>
-                                </label>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Cedula *
+                                <label class="required"> Cedula </label>                                    
                                     <input 
                                         name="cedula"
                                         placeholder='Cédula'
@@ -186,10 +187,9 @@ class AgregarPaciente extends Component {
                                         onChange={this.changeInput}
                                         autocomplete='number'
                                         required/>
-                                </label>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Edad *
+                                <label class="required">Edad </label>
                                     <input 
                                         name="edad"
                                         placeholder='Edad'
@@ -200,10 +200,9 @@ class AgregarPaciente extends Component {
                                         onChange={this.changeInput}
                                         autocomplete='number'
                                         required/>
-                                </label>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Sexo *
+                                <label class="required">Sexo </label>
                                     <select
                                         name="sexo"
                                         onChange={this.changeInput}
@@ -212,10 +211,9 @@ class AgregarPaciente extends Component {
                                         <option value="F">Femenino</option>
                                         <option value="M">Masculino</option>
                                     </select>
-                                </label>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Peso (kg)
+                                <label class="required">Peso (kg)</label>
                                     <input 
                                         name="peso"
                                         placeholder='Peso'
@@ -226,10 +224,9 @@ class AgregarPaciente extends Component {
                                         onChange={this.changeInput}
                                         autocomplete='number'
                                         required/>
-                                </label>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Altura (cm)
+                                <label class="required">Altura (cm) </label>
                                     <input 
                                         name="altura"
                                         placeholder='Altura'
@@ -240,10 +237,9 @@ class AgregarPaciente extends Component {
                                         onChange={this.changeInput}
                                         autocomplete='number'
                                         required/>
-                                </label>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Teléfono
+                                <label class="required">Teléfono </label>
                                     <input 
                                         name="telefono"
                                         placeholder='Teléfono'
@@ -251,10 +247,9 @@ class AgregarPaciente extends Component {
                                         onChange={this.changeInput}
                                         autocomplete='tel'
                                         required/>
-                                </label>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Correo
+                                <label class="required">Correo</label>
                                     <input 
                                         name="email"
                                         placeholder='Correo'
@@ -263,10 +258,9 @@ class AgregarPaciente extends Component {
                                         onChange={this.changeInput}
                                         autocomplete='email'
                                         required/>
-                                </label>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Dirección
+                                <label class="required">Dirección</label>
                                     <input 
                                         name="direccion"
                                         placeholder='Dirección'
@@ -274,10 +268,9 @@ class AgregarPaciente extends Component {
                                         onChange={this.changeInput}
                                         autocomplete='text'
                                         required/>
-                                </label>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Ciudad
+                                <label class="required">Ciudad</label>
                                     <select
                                         name="ciudad"
                                         onChange={this.changeInput}
@@ -293,7 +286,6 @@ class AgregarPaciente extends Component {
                                             ))                            
                                         ))}
                                     </select>
-                                </label>
                                 </Form.Field>
                                 <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>
                                 <Link to={`/Users/${this.props.id_user}`}><Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>

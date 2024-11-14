@@ -159,7 +159,7 @@ class VerPerfil extends Component {
                                     <Form onSubmit={this.handleSave}>
                                         <Form.Group widths='equal'>
                                             <Form.Field style={{ width: '300px' }}>
-                                            <label>Nombre *
+                                            <label class="required">Nombre </label>
                                                 <input  
                                                     name="nombre"
                                                     placeholder='Nombre'
@@ -169,10 +169,9 @@ class VerPerfil extends Component {
                                                     value={readOnly ? user.nombre : null}
                                                     autocomplete='text'
                                                     required/>
-                                            </label>
                                             </Form.Field>
                                             <Form.Field style={{ width: '300px' }}>
-                                            <label>Cédula *
+                                            <label class="required">Cédula </label>
                                                 <input  
                                                     name="cedula"
                                                     placeholder='Cédula'
@@ -185,10 +184,9 @@ class VerPerfil extends Component {
                                                     value={readOnly ? user.cedula : null}
                                                     autocomplete='number'
                                                     required/>
-                                            </label>
                                             </Form.Field>
                                             <Form.Field style={{ width: '300px' }}>
-                                            <label>Teléfono *
+                                            <label class="required">Teléfono </label>
                                                 <input
                                                     name="telefono"
                                                     placeholder='Teléfono'
@@ -198,10 +196,9 @@ class VerPerfil extends Component {
                                                     value={readOnly ? user.telefono : null}
                                                     autocomplete='tel'
                                                     required/>
-                                            </label>
                                             </Form.Field>
                                             <Form.Field style={{ width: '300px' }}>
-                                            <label>Correo *
+                                            <label class="required">Correo </label>
                                                 <input
                                                     name="email"
                                                     placeholder='Correo'
@@ -212,7 +209,6 @@ class VerPerfil extends Component {
                                                     value={readOnly ? user.email : null}
                                                     autocomplete='email'
                                                     required/>
-                                            </label>
                                             </Form.Field>                                        
                                         </Form.Group >
                                         { readOnly ?
@@ -235,7 +231,7 @@ class VerPerfil extends Component {
                                     <Form onSubmit={this.handleUpdate} style={{ marginTop: '10px'}}>
                                         <Form.Group widths='equal'>
                                             <Form.Field style={{ width: '400px' }}>
-                                            <label>Contraseña actual *
+                                            <label class="required">Contraseña actual </label>
                                                 <Input 
                                                     name="password_actual"
                                                     placeholder='Contraseña actual'
@@ -246,11 +242,10 @@ class VerPerfil extends Component {
                                                     required
                                                     icon={<Icon name={showPassword.current ? 'eye' : 'eye slash'} link onClick={() => this.togglePasswordVisibility('current')} />}
                                                     iconPosition="right"
-                                                />
-                                            </label>                      
+                                                />           
                                             </Form.Field>
                                             <Form.Field style={{ width: '400px' }}> 
-                                            <label>Nueva contraseña *
+                                            <label class="required">Nueva contraseña </label>
                                                 <Input 
                                                     name="password_nueva"
                                                     placeholder='Contraseña nueva'
@@ -263,10 +258,9 @@ class VerPerfil extends Component {
                                                     required
                                                     icon={<Icon name={showPassword.nueva ? 'eye' : 'eye slash'} link onClick={() => this.togglePasswordVisibility('nueva')} />}
                                                 />
-                                            </label>
                                             </Form.Field>
                                             <Form.Field style={{ marginBottom: '20px', width: '400px' }}>
-                                            <label>Repita nueva contraseña *
+                                            <label class="required">Repita nueva contraseña </label>
                                                 <Input 
                                                     name="repeat_password_nueva"
                                                     placeholder='Repita nueva contraseña'
@@ -279,7 +273,6 @@ class VerPerfil extends Component {
                                                     required
                                                     icon={<Icon name={showPassword.repeat ? 'eye' : 'eye slash'} link onClick={() => this.togglePasswordVisibility('repeat')} />}
                                                 />
-                                            </label>
                                             </Form.Field>
                                         </Form.Group>    
                                         <Button type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Actualizar</Button>

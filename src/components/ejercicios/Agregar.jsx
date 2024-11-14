@@ -81,7 +81,7 @@ class Agregar extends Component {
                 </Label>
                 <Form onSubmit={this.handleSave} style={{ marginTop: '1em' }}>
                     <Form.Field>
-                    <label>Duración total de la terapia (días) *
+                    <label class="required">Duración total de la terapia (días)</label>
                         <input 
                             name="duracion_total"
                             placeholder='Duración total'
@@ -92,10 +92,9 @@ class Agregar extends Component {
                             onChange={this.changeInput}
                             autocomplete='number'
                             required/>
-                    </label>
                     </Form.Field>
                     <Form.Field>
-                    <label>Frecuencia (cuantos días a la semana) *
+                    <label class="required">Frecuencia (cuantos días a la semana)</label>
                         <select
                             name="frecuencia_dias"
                             onChange={this.changeInput}
@@ -110,10 +109,9 @@ class Agregar extends Component {
                             <option value="6">6 días</option>
                             <option value="7">7 días</option>
                         </select>
-                    </label>
                     </Form.Field>
                     <Form.Field>
-                    <label>Frecuencia (cada cuantas horas al día) *
+                    <label class="required">Frecuencia (cada cuantas horas al día)</label>
                         <select 
                             name="frecuencia_horas"
                             onChange={this.changeInput}
@@ -124,10 +122,9 @@ class Agregar extends Component {
                             <option value="4">Cada 4h</option>
                             <option value="6">Cada 6h</option>
                         </select>
-                    </label>
                     </Form.Field>
                     <Form.Field>
-                    <label>Repeticiones *
+                    <label class="required">Repeticiones </label>
                         <input
                             name="repeticiones"
                             type = 'number'                    
@@ -138,10 +135,9 @@ class Agregar extends Component {
                             onChange={this.changeInput}
                             autocomplete='number'
                             required/>
-                    </label>
                     </Form.Field>
                     <Form.Field>
-                    <label>Series *
+                    <label class="required">Series </label>
                         <input
                             name="series"
                             placeholder='Series'
@@ -152,10 +148,9 @@ class Agregar extends Component {
                             onChange={this.changeInput}
                             autocomplete='number'
                             required/>
-                    </label>
                     </Form.Field>
                     <Form.Field>
-                    <label>Periodo de descanso (seg) *
+                    <label class="required">Periodo de descanso (seg) </label>
                         <input 
                             name="periodos_descanso"
                             placeholder='Periodo de descanso'
@@ -166,7 +161,6 @@ class Agregar extends Component {
                             onChange={this.changeInput}
                             autocomplete='number'
                             required/>
-                    </label>
                     </Form.Field>
                     {
                         nombre !== "Predeterminado" ? 
@@ -186,7 +180,7 @@ class Agregar extends Component {
                             <></>
                     }
                     <Form.Field>
-                    <label>Apnea (seg) *
+                    <label class="required">Apnea (seg) </label>
                         <select
                             name="apnea"
                             onChange={this.changeInput}
@@ -196,10 +190,9 @@ class Agregar extends Component {
                             <option value="2">2 seg</option>
                             <option value="3">3 seg</option>
                         </select>
-                    </label>
                     </Form.Field>                    
                     <Form.Field>
-                    <label>Flujo (mL) *
+                    <label class="required">Flujo (mL) </label>
                         <select
                             name="flujo"
                             onChange={this.changeInput}
@@ -213,10 +206,9 @@ class Agregar extends Component {
                             <option value="2100">2100 mL</option>
                             <option value="2400">2400 mL</option>
                         </select>
-                    </label>
                     </Form.Field>
                     <Form.Field>
-                    <label>Hora de inicio de la terapia *
+                    <label class="required">Hora de inicio de la terapia </label>
                         <select
                             id="hora_inicio_select"
                             name="hora_inicio"
@@ -230,7 +222,6 @@ class Agregar extends Component {
                             <option value="10">10:00 am</option>
                             <option value="11">11:00 am</option>
                         </select>
-                    </label>
                     </Form.Field>
                     <Button type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>
                     <Link to =
