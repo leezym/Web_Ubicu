@@ -7,6 +7,12 @@ import { Link, withRouter } from 'react-router-dom';
 
 class MenuNav extends Component {
   
+  /*componentDidUpdate(prevProps) {
+    if (this.props.match.params.id_user !== prevProps.match.params.id_user) {
+      this.forceUpdate();
+    }
+  }*/
+  
   handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('id_user');
@@ -21,7 +27,9 @@ class MenuNav extends Component {
         <Menu fixed='top' inverted style = {{ backgroundColor: "#28367b"}}>
           <Container>
             <Menu.Item as='a' header>
-            <Link to={`/Users/${id_user}`} style={{ display: 'flex', alignItems: 'center', color: 'white' }}>
+            <Link to={`/Users/${id_user}`} 
+              style={{ display: 'flex', alignItems: 'center', color: 'white' }}
+            >
               <Image size='mini' src={logo} style={{ marginRight: '1.5em' }} />
               <span>UBICU</span>
             </Link>                

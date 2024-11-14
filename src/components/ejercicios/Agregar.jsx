@@ -51,12 +51,8 @@ class Agregar extends Component {
             id_patient
         }).then(resp => {
             submitButton.disabled = false;
-            alert('Ejercicio creado.'); 
-
-            if(nombre === "Predeterminado")
-                this.props.history.push(`/Users/${id_user}`);
-            else
-                this.props.history.push(`/VerEjercicios/${id_patient}`);
+            alert('Ejercicio creado.');
+            this.props.history.push(`/VerEjercicios/${id_patient}`);
         })
         .catch(err => {
             submitButton.disabled = false;
@@ -69,7 +65,7 @@ class Agregar extends Component {
     }
     
     render() {
-        const { nombre, id_user, id_patient } = this.state;
+        const { nombre, id_patient } = this.state;
 
         return (
             <div>
@@ -166,7 +162,7 @@ class Agregar extends Component {
                     {
                         nombre !== "Predeterminado" ? 
                             <Form.Field>
-                            <label>Fecha de inicio *
+                            <label class="required">Fecha de inicio </label>
                                 <input
                                     name="fecha_inicio"
                                     type="date"
@@ -175,7 +171,6 @@ class Agregar extends Component {
                                     placeholder='DD/MM/AAAA'
                                     autocomplete='date'
                                     required/>
-                            </label>
                             </Form.Field>
                         :
                             <></>
@@ -225,13 +220,7 @@ class Agregar extends Component {
                         </select>
                     </Form.Field>
                     <Button type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>
-                    <Link to =
-                    {
-                        nombre === "Predeterminado" ?
-                            `/Users/${id_user}`
-                            :
-                            `/VerEjercicios/${id_patient}`
-                    }>
+                    <Link to={`/VerEjercicios/${id_patient}`}>
                     <Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
                 </Form>
             </Segment>
