@@ -47,14 +47,12 @@ class AgregarPaciente extends Component {
             altura,
             direccion,
             ciudad,
-            password: (telefono % 10000).toString(),
+            password: telefono.toString().slice(-4),
             id_user: id_user
         })
         .then(resp => {
             submitButton.disabled = false;
-            alert('Paciente creado'); 
-            console.log(resp)
-            history.push(`/Users/${id_user}`);
+            alert('Paciente creado');
             
             fetch(URL+'getPatientbyCc', {
                 method: 'POST',
