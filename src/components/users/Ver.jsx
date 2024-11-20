@@ -25,21 +25,19 @@ class Ver extends Component {
             'x-access-token': localStorage.getItem('token')
             }
         })
-        .then(res => {
-            if (res.ok) {
-              return res.json();
-            } else {
-              return res.json().then(error => {
-                throw new Error(error.msg);
-              });
+        .then(async res => {
+            if (!res.ok) {
+              const error = await res.json();
+              throw new Error(error.msg || 'Error desconocido');
             }
+            return res.json();
           })
         .then(resp => {        
             const patient = resp;
             this.setState({ patient });
         })
         .catch(err => {
-            alert('Error al consultar paciente. ' + err.response.data.msg);
+            alert('Error al consultar paciente. ' + (err?.response?.data?.msg || err.message));
         });
     }
 
@@ -62,7 +60,7 @@ class Ver extends Component {
             alert('Paciente actualizado.');
         }).catch(err => {
             submitButton.disabled = false;
-            alert('Error al actualizar paciente. ' + err.response.data.msg);         
+            alert('Error al actualizar paciente. ' + (err?.response?.data?.msg || err.message));         
         });
     }
 

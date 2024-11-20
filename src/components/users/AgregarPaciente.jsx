@@ -17,11 +17,11 @@ class AgregarPaciente extends Component {
         telefono: "",
         email: "",
         edad: "",
-        sexo: "-",
+        sexo: "",
         peso: "",
         altura: "",
         direccion: "",
-        ciudad:"-",
+        ciudad:"",
         password: "",
         id_user: this.props.id_user,
         id_patient: ""
@@ -49,9 +49,11 @@ class AgregarPaciente extends Component {
             ciudad,
             password: (telefono % 10000).toString(),
             id_user: id_user
-        }).then(resp => {
+        })
+        .then(resp => {
             submitButton.disabled = false;
             alert('Paciente creado'); 
+            console.log(resp)
             history.push(`/Users/${id_user}`);
             
             fetch(URL+'getPatientbyCc', {
@@ -62,15 +64,13 @@ class AgregarPaciente extends Component {
                     'x-access-token': localStorage.getItem('token')
                 }
             })
-            .then(res => {
-                if (res.ok) {
-                  return res.json();
-                } else {
-                  return res.json().then(error => {
-                    throw new Error(error.msg);
-                  });
+            .then(async res => {
+                if (!res.ok) {
+                  const error = await res.json();
+                  throw new Error(error.msg || 'Error desconocido');
                 }
-            })
+                return res.json();
+              })
             .then(resp => {
                 this.setState({
                     id_patient: resp._id,
@@ -95,17 +95,15 @@ class AgregarPaciente extends Component {
                         'x-access-token': localStorage.getItem('token')
                     }
                 })
-                .then(res => {
-                    if (res.ok) {
-                      return res.json();
-                    } else {
-                      return res.json().then(error => {
-                        throw new Error(error.msg);
-                      });
+                .then(async res => {
+                    if (!res.ok) {
+                      const error = await res.json();
+                      throw new Error(error.msg || 'Error desconocido');
                     }
-                })
+                    return res.json();
+                  })
                 .catch(err => {
-                    alert('Error al crear recompensas. ' + err.response.data.msg);
+                    alert('Error al crear recompensas. ' + (err?.response?.data?.msg || err.message));
                 });
 
                 fetch(URL+'createCustomizations', {
@@ -123,26 +121,24 @@ class AgregarPaciente extends Component {
                         'x-access-token': localStorage.getItem('token')
                     }
                 })
-                .then(res => {
-                    if (res.ok) {
-                      return res.json();
-                    } else {
-                      return res.json().then(error => {
-                        throw new Error(error.msg);
-                      });
+                .then(async res => {
+                    if (!res.ok) {
+                      const error = await res.json();
+                      throw new Error(error.msg || 'Error desconocido');
                     }
-                })
+                    return res.json();
+                  })
                 .catch(err => {
-                    alert('Error al crear personalización. ' + err.response.data.msg);
+                    alert('Error al crear personalización. ' + (err?.response?.data?.msg || err.message));
                 });
             })
             .catch(err => {
-                alert('Error al consultar paciente. ' + err.response.data.msg);
+                alert('Error al consultar paciente. ' + (err?.response?.data?.msg || err.message));
             });
         })
         .catch(err => {
             submitButton.disabled = false;
-            alert('Error al crear paciente. ' + err.response.data.msg);           
+            alert('Error al crear paciente. ' + (err?.response?.data?.msg || err.message));         
         });
     };
     
@@ -207,7 +203,7 @@ class AgregarPaciente extends Component {
                                         name="sexo"
                                         onChange={this.changeInput}
                                         required>                                        
-                                        <option value="-">Seleccione una opción</option>
+                                        <option value="">Seleccione una opción</option>
                                         <option value="F">Femenino</option>
                                         <option value="M">Masculino</option>
                                     </select>
@@ -244,6 +240,9 @@ class AgregarPaciente extends Component {
                                         name="telefono"
                                         placeholder='Teléfono'
                                         type='tel'
+                                        min="1000000000"
+                                        max="9999999999"
+                                        step="1"
                                         onChange={this.changeInput}
                                         autocomplete='tel'
                                         required/>
@@ -275,7 +274,7 @@ class AgregarPaciente extends Component {
                                         name="ciudad"
                                         onChange={this.changeInput}
                                         required>
-                                        <option value="-">Seleccione una opción</option>
+                                        <option value="">Seleccione una opción</option>
                                         {
                                         ciudades.map((lugar, index) => (
                                             lugar.ciudades.map((ciudad, index) => (

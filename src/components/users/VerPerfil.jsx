@@ -31,15 +31,13 @@ class VerPerfil extends Component {
             'x-access-token': localStorage.getItem('token')
             }
         })
-        .then(res => {
-            if (res.ok) {
-              return res.json();
-            } else {
-              return res.json().then(error => {
-                throw new Error(error.msg);
-              });
+        .then(async res => {
+            if (!res.ok) {
+              const error = await res.json();
+              throw new Error(error.msg || 'Error desconocido');
             }
-        })
+            return res.json();
+          })
         .then(resp => {        
             const user = {
                 ...resp,
@@ -51,7 +49,7 @@ class VerPerfil extends Component {
             this.setState({ user });
         })
         .catch(err => {
-            alert('Error al consultar fisioterapeuta. ' + err.response.data.msg);
+            alert('Error al consultar fisioterapeuta. ' + (err?.response?.data?.msg || err.message));
           });
     }
 
@@ -83,7 +81,7 @@ class VerPerfil extends Component {
         }).catch(err => {
             submitButton.disabled = false;
 
-            alert('Error al actualizar usuario. ' + err.response.data.msg);
+            alert('Error al actualizar usuario. ' + (err?.response?.data?.msg || err.message));
         });
     }
 
@@ -105,7 +103,7 @@ class VerPerfil extends Component {
             
             alert(resp.msg);
         }).catch(err => {
-            alert('Error al actualizar contraseña. ' + err.response.data.msg);         
+            alert('Error al actualizar contraseña. ' + (err?.response?.data?.msg || err.message));         
         });
     }
 

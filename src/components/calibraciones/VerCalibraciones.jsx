@@ -89,15 +89,13 @@ class VerCalibraciones extends React.Component {
           'Content-Type': 'application/json'
         }
       })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          return res.json().then(error => {
-            throw new Error(error.msg);
-          });
-        }
-      })
+      .then(async res => {
+    if (!res.ok) {
+      const error = await res.json();
+      throw new Error(error.msg || 'Error desconocido');
+    }
+    return res.json();
+  })
       .then(resp => {
         const graph = resp.sort((a, b) => {
           const [dayA, monthA, yearA] = a.fecha.split('/').map(Number); // Parsea la fecha
@@ -113,7 +111,7 @@ class VerCalibraciones extends React.Component {
         this.setState({ graph, pageCount });
       })
       .catch(err => {
-        alert('Error al consultar resultados de calibraciones. ' + err.response.data.msg);
+        alert('Error al consultar resultados de calibraciones. ' + (err?.response?.data?.msg || err.message));
     });
   }
 

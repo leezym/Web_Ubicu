@@ -56,7 +56,7 @@ class Agregar extends Component {
         })
         .catch(err => {
             submitButton.disabled = false;
-            alert('Error al crear ejercicio. ' + err.response.data.msg);
+            alert('Error al crear ejercicio. ' + (err?.response?.data?.msg || err.message));
         });        
     }
 

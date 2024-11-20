@@ -37,15 +37,13 @@ class LoginForm extends Component {
         'Content-Type': 'application/json'
       }
     })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        return res.json().then(error => {
-          throw new Error(error.msg);
-        });
-      }
-    })
+    .then(async res => {
+    if (!res.ok) {
+      const error = await res.json();
+      throw new Error(error.msg || 'Error desconocido');
+    }
+    return res.json();
+  })
     .then(resp => {
       submitButton.disabled = false;
     
@@ -57,7 +55,7 @@ class LoginForm extends Component {
     })
     .catch(err => {
       submitButton.disabled = false;
-      alert('Error al iniciar sesión. ' + err.response.data.msg);
+      alert('Error al iniciar sesión. ' + err.message);
     });    
   }
 

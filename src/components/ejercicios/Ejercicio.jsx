@@ -65,7 +65,7 @@ class Ejercicio extends Component {
             alert('Ejercicio actualizado.');
         }).catch(err => {
             submitButton.disabled = false;
-            alert('Error al actualizar ejercicio. ' + err.response.data.msg);         
+            alert('Error al actualizar ejercicio. ' + (err?.response?.data?.msg || err.message));         
         });
     }
 

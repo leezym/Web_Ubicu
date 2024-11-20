@@ -29,22 +29,20 @@ class Users extends Component {
         'x-access-token': localStorage.getItem('token')
         }
     })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        return res.json().then(error => {
-          throw new Error(error.msg);
-        });
-      }
-    })
+    .then(async res => {
+    if (!res.ok) {
+      const error = await res.json();
+      throw new Error(error.msg || 'Error desconocido');
+    }
+    return res.json();
+  })
     .then(resp => {        
         const patients = resp;
         const pageCount = Math.ceil(patients.length / this.state.patientsPerPage);
         this.setState({ patients, pageCount }, this.updateCurrentPatients);
     })
     .catch(err => {
-      alert('Error al consultar paciente. ' + err.response.data.msg);
+      alert('Error al consultar paciente. ' + (err?.response?.data?.msg || err.message));
     }); 
   }
 
