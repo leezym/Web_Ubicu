@@ -190,6 +190,8 @@ class VerPerfil extends Component {
                                                     name="telefono"
                                                     placeholder='Teléfono'
                                                     type='tel'
+                                                    pattern="\d{10}"
+                                                    step="1"
                                                     onChange={this.changeInputUser}
                                                     disabled={readOnly}
                                                     value={readOnly ? user.telefono : null}
