@@ -142,7 +142,7 @@ class Ejercicios extends Component {
                   :
                   (
                     <div>
-                      <p style={{ marginBottom: "10px", marginTop: "10px" }}>No hay ejercicios predeterminados disponibles, por favor agregar.</p>
+                      <p style={{ marginBottom: "10px", marginTop: "10px" }}>No hay ejercicio predeterminado disponible, por favor agregar.</p>
                       <Link to={{ pathname: `/AgregarEjercicio/${user._id}`, nombre_terapia: "Predeterminado" }}>
                         <Button type='submit' style={{ backgroundColor: '#46bee0', color: "white" }}>Agregar ejercicio predeterminado</Button>
                       </Link>

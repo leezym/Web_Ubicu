@@ -16,8 +16,8 @@ class Agregar extends Component {
         repeticiones: "",
         series: "",
         periodos_descanso: "",
-        fecha_inicio: "",
-        fecha_fin: "",
+        fecha_inicio: null,
+        fecha_fin: null,
         apnea: "-",
         flujo: "-",
         hora_inicio: "-",
@@ -74,7 +74,12 @@ class Agregar extends Component {
             <Grid.Column>
             <Segment raised>
                 <Label ribbon style={{color:"#28367b"}}>
-                Registrar Ejercicio Nuevo
+                {
+                    nombre !== "Predeterminado" ?
+                        "Registrar Ejercicio Nuevo"
+                    :
+                        "Registrar Ejercicio Pretederminado"
+                }
                 </Label>
                 <Form onSubmit={this.handleSave} style={{ marginTop: '1em' }}>
                     <Form.Field>

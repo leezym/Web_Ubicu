@@ -56,9 +56,15 @@ class Ejercicio extends Component {
         const { ejercicio } = this.state;
 
         this.handleEdit(true);
-        ejercicio.fecha_fin = moment(ejercicio.fecha_inicio, 'YYYY-MM-DD').add(ejercicio.frecuencia_dias - 1, 'days').format('DD/MM/YYYY').toString();
+        ejercicio.fecha_fin = ejercicio.nombre !== "Predeterminado" ?
+            moment(ejercicio.fecha_inicio, 'YYYY-MM-DD').add(ejercicio.frecuencia_dias - 1, 'days').format('DD/MM/YYYY').toString()
+        :
+            null
         const nuevo = { ...ejercicio };
-        nuevo.fecha_inicio = moment(ejercicio.fecha_inicio, 'YYYY-MM-DD').format('DD/MM/YYYY').toString();
+        nuevo.fecha_inicio = ejercicio.nombre !== "Predeterminado" ?
+            moment(ejercicio.fecha_inicio, 'YYYY-MM-DD').format('DD/MM/YYYY').toString()
+        :
+            null
         
         this.props.updateEjercicio(nuevo).then(resp => {
             submitButton.disabled = false;
