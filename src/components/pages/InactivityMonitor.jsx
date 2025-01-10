@@ -6,20 +6,14 @@ const InactivityMonitor = ({ timeout, onInactive }) => {
   const timerRef = useRef(null);
 
   const resetTimer = () => {
-    // Obtén la ruta actual considerando el hash
     const currentPath = location.hash || "#/";
-    console.log("Ruta actual:", currentPath);
 
-    // Si estamos en la página raíz ("/"), no iniciamos el temporizador
     if (currentPath === "#/") {
-      console.log("No se ejecuta el temporizador en la página raíz.");
       return;
     }
 
     clearTimeout(timerRef.current);
-    console.log("Reiniciando temporizador...");
     timerRef.current = setTimeout(() => {
-      console.log("Llamando a onInactive...");
       if (onInactive) onInactive();
     }, timeout);
   };
@@ -27,13 +21,11 @@ const InactivityMonitor = ({ timeout, onInactive }) => {
   useEffect(() => {
     const events = ["mousemove", "keydown", "mousedown", "touchstart"];
     const handleActivity = () => {
-      console.log("Actividad detectada, reiniciando temporizador.");
       resetTimer();
     };
 
     events.forEach((event) => window.addEventListener(event, handleActivity));
 
-    // Inicia el temporizador al montar
     resetTimer();
 
     return () => {
@@ -42,9 +34,9 @@ const InactivityMonitor = ({ timeout, onInactive }) => {
         window.removeEventListener(event, handleActivity)
       );
     };
-  }, [timeout, onInactive, location.hash]); // Escucha cambios en el hash
+  }, [timeout, onInactive, location.hash]);
 
-  return null; // Este componente no renderiza nada
+  return null;
 };
 
 export default InactivityMonitor;
