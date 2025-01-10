@@ -1,39 +1,48 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useHistory } from "react-router-dom";
+import React, { useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 
 const InactivityMonitor = ({ timeout, onInactive }) => {
-  const [timer, setTimer] = useState(null);
   const location = useLocation();
-  const history = useHistory();
+  const timerRef = useRef(null);
 
   const resetTimer = () => {
-    clearTimeout(timer);
-    setTimer(setTimeout(() => {
-      if (onInactive) onInactive();
-    }, timeout));
-  };
+    // Obtén la ruta actual considerando el hash
+    const currentPath = location.hash || "#/";
+    console.log("Ruta actual:", currentPath);
 
-  useEffect(() => {
-    // Si estamos en la página "/". No iniciar el temporizador.
-    if (location.pathname === "/") {
+    // Si estamos en la página raíz ("/"), no iniciamos el temporizador
+    if (currentPath === "#/") {
+      console.log("No se ejecuta el temporizador en la página raíz.");
       return;
     }
 
-    // Escucha eventos de actividad
+    clearTimeout(timerRef.current);
+    console.log("Reiniciando temporizador...");
+    timerRef.current = setTimeout(() => {
+      console.log("Llamando a onInactive...");
+      if (onInactive) onInactive();
+    }, timeout);
+  };
+
+  useEffect(() => {
     const events = ["mousemove", "keydown", "mousedown", "touchstart"];
-    const handleActivity = () => resetTimer();
+    const handleActivity = () => {
+      console.log("Actividad detectada, reiniciando temporizador.");
+      resetTimer();
+    };
 
     events.forEach((event) => window.addEventListener(event, handleActivity));
 
-    // Inicia el temporizador
+    // Inicia el temporizador al montar
     resetTimer();
 
     return () => {
-      // Limpia eventos y temporizador al desmontar
-      clearTimeout(timer);
-      events.forEach((event) => window.removeEventListener(event, handleActivity));
+      clearTimeout(timerRef.current);
+      events.forEach((event) =>
+        window.removeEventListener(event, handleActivity)
+      );
     };
-  }, [timeout, onInactive, location.pathname]);
+  }, [timeout, onInactive, location.hash]); // Escucha cambios en el hash
 
   return null; // Este componente no renderiza nada
 };
