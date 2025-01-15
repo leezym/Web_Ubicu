@@ -129,6 +129,30 @@ class AgregarPaciente extends Component {
                 .catch(err => {
                     alert('Error al crear personalización. ' + (err?.response?.data?.msg || err.message));
                 });
+
+                fetch(URL+'createExerciseDate', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        current_exercise_final_date: "",
+                        current_exercise_date: "",
+                        exercise_hour_array: "",
+                        id_patient: resp._id
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-access-token': localStorage.getItem('token')
+                    }
+                })
+                .then(async res => {
+                    if (!res.ok) {
+                      const error = await res.json();
+                      throw new Error(error.msg || 'Error desconocido');
+                    }
+                    return res.json();
+                  })
+                .catch(err => {
+                    alert('Error al crear la fecha del ejercicio. ' + (err?.response?.data?.msg || err.message));
+                });
             })
             .catch(err => {
                 alert('Error al consultar paciente. ' + (err?.response?.data?.msg || err.message));
