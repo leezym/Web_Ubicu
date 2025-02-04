@@ -32,7 +32,7 @@ class Ejercicio extends Component {
         const { ejercicio } = this.state;
         const fechaInicio = moment(ejercicio.fecha_inicio, 'DD/MM/YYYY').format('YYYY-MM-DD').toString();
         const fechaFin = moment(ejercicio.fecha_fin, 'DD/MM/YYYY').format('YYYY-MM-DD')
-        const isDisabled = moment(fechaFin).isBefore(moment(), 'day') && ejercicio.nombre !== "Predeterminado";
+        const isDisabled = moment(fechaFin).isBefore(moment(), 'day');
 
         this.setState({
             disabledEdit: isDisabled,
@@ -215,7 +215,7 @@ class Ejercicio extends Component {
                                         required/>
                                 </Form.Field>
                                 {
-                                    ejercicio.nombre !== "Predeterminado" ?
+                                    ejercicio.fecha_inicio !== null && ejercicio.fecha_fin !== null ?
                                         <Form.Field>
                                         <label>Fecha de inicio *
                                             <input name="fecha_inicio"
@@ -235,7 +235,7 @@ class Ejercicio extends Component {
                             </Form.Group>
                             <Form.Group widths='equal'>
                                 {
-                                    ejercicio.nombre !== "Predeterminado" ?
+                                    ejercicio.fecha_inicio !== null && ejercicio.fecha_fin !== null ? 
                                         <Form.Field>
                                         <label>Fecha de fin *
                                         <input  name="fecha_fin"
@@ -298,18 +298,19 @@ class Ejercicio extends Component {
                                     </select>
                                 </Form.Field>
                             </Form.Group>
-
                             {
-                            readOnly ?
-                                <Button disabled={disabledEdit} onClick={()=>{ this.handleEdit(false); this.copyOriginal() }} type="button" style={{ backgroundColor: '#eb5a25', color:"white" }}>Editar</Button>
-                                :
-                                <>
-                                    <Button type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Guardar</Button>
-                                    <Button onClick={()=>{ this.handleEdit(true); this.pasteOriginal(); }} type='button' style={{ backgroundColor: '#eb5a25', color:"white" }}>Cancelar</Button>
-                                </>
+                            ejercicio.nombre !== "Predeterminado" ? (
+                                readOnly ?                               
+                                    <Button disabled={disabledEdit} onClick={()=>{ this.handleEdit(false); this.copyOriginal() }} type="button" style={{ backgroundColor: '#eb5a25', color:"white" }}>Editar</Button>
+                                    :
+                                    <>
+                                        <Button type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Guardar</Button>
+                                        <Button onClick={()=>{ this.handleEdit(true); this.pasteOriginal(); }} type='button' style={{ backgroundColor: '#eb5a25', color:"white" }}>Cancelar</Button>
+                                    </>
+                            ) : null
                             }
                             {
-                            ejercicio.nombre !== "Predeterminado" ?
+                            ejercicio.fecha_inicio !== null && ejercicio.fecha_fin !== null ?
                                 <Link to={`/VerResultados/${ejercicio.id_patient}/${ejercicio._id}`}>
                                     <Button style={{ backgroundColor: '#46bee0', color:"white" }} floated='right'>
                                         Ver Gráfica

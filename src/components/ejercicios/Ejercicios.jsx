@@ -61,12 +61,13 @@ class Ejercicios extends Component {
           return res.json();
         })
         .then(resp => {
-          const ejercicios = resp.filter(ejercicio => ejercicio.nombre !== "Predeterminado");
-          ejercicios.sort((a, b) => {
-            return moment(b.fecha_inicio, 'DD/MM/YYYY') - moment(a.fecha_inicio, 'DD/MM/YYYY');
-          });
+          const ejercicios = resp
+            .filter(ejercicio => ejercicio.fecha_fin !== null && ejercicio.fecha_inicio !== null) // Filtrar valores no nulos
+            .sort((a, b) => 
+              moment(b.fecha_inicio, 'DD/MM/YYYY').valueOf() - moment(a.fecha_inicio, 'DD/MM/YYYY').valueOf()
+          );
 
-          const ejercicioPredeterminado = resp.find(ejercicio => ejercicio.nombre === "Predeterminado");
+          const ejercicioPredeterminado = resp.find(ejercicio => ejercicio.nombre === "Predeterminado" && ejercicio.fecha_fin === null && ejercicio.fecha_inicio === null);
           const pageCount = Math.ceil(ejercicios.length / this.state.exercisesPerPage);
           const currentExercises = ejercicios.slice(0, this.state.exercisesPerPage);
           
@@ -97,7 +98,7 @@ class Ejercicios extends Component {
   };
 
   render() {
-    const { user, capacidad_vital, ejercicioPredeterminado, currentExercises } = this.state;
+    const { user, capacidad_vital, ejercicioPredeterminado, ejercicios, currentExercises } = this.state;
 
     return (
       <div>
@@ -153,12 +154,12 @@ class Ejercicios extends Component {
             <Segment raised>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: "20px" }}>
                 {
-                  (this.state.ejercicios.length === 0 || (this.state.ejercicios.length > 0 && moment().isAfter(moment(this.state.ejercicios[this.state.ejercicios.length - 1].fecha_fin, 'DD/MM/YYYY')))) &&
+                  ejercicios.length === 0 || (ejercicios.length > 0 && moment().isAfter(moment(ejercicios[0].fecha_fin, 'DD/MM/YYYY'), 'day')) ?
                   (
                     <Link to={{ pathname: `/AgregarEjercicio/${user._id}`, nombre_terapia: "Inspiración profunda" }}>
                       <Button type='submit' style={{ backgroundColor: '#46bee0', color: "white" }}>Agregar</Button>
                     </Link>
-                  )
+                  ) : null
                 }
                 <Link to={`/VerUser/${user._id}`}>
                   <Button style={{ backgroundColor: '#eb5a25', color: "white" }}>Regresar</Button>

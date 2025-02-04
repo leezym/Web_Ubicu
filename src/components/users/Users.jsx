@@ -60,10 +60,11 @@ class Users extends Component {
     this.setState({ currentPage: selected }, this.updateCurrentPatients);
   };
 
-  handleNameFilter = (event) => {
+  handleFilter = (event) => {
     const filterValue = event.target.value.toLowerCase();
     const filteredPatients = this.state.patients.filter((patient) =>
-      patient.nombre.toLowerCase().includes(filterValue)
+      patient.nombre.toLowerCase().includes(filterValue) ||
+      patient.cedula.toLowerCase().includes(filterValue)
     );
     
     this.setState({
@@ -89,8 +90,8 @@ class Users extends Component {
                 name='search'
                 icon='search'
                 iconPosition='left'
-                placeholder='Filtrar por nombre...'
-                onChange={this.handleNameFilter}
+                placeholder='Filtrar'
+                onChange={this.handleFilter}
               />
               <Table celled compact definition unstackable>
                 <Table.Header fullWidth>
