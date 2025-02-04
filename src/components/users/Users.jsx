@@ -64,7 +64,7 @@ class Users extends Component {
     const filterValue = event.target.value.toLowerCase();
     const filteredPatients = this.state.patients.filter((patient) =>
       patient.nombre.toLowerCase().includes(filterValue) ||
-      patient.cedula.toLowerCase().includes(filterValue)
+      patient.cedula.toString().includes(filterValue)
     );
     
     this.setState({
