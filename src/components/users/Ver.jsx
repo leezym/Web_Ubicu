@@ -42,7 +42,7 @@ class Ver extends Component {
         .catch(err => {
             this.setState({
                 openConfirm: true,
-                confirmMessage: 'Error al consultar paciente. ' + err.response.data.msg
+                confirmMessage: 'Error al consultar paciente. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
             });
         });
     }
@@ -71,7 +71,7 @@ class Ver extends Component {
             submitButton.disabled = false;
             this.setState({
                 openConfirm: true,
-                confirmMessage: 'Error al actualizar paciente. ' + err.response.data.msg
+                confirmMessage: 'Error al actualizar paciente. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
             });
         });
     }
@@ -279,10 +279,10 @@ class Ver extends Component {
                                 </Card.Content >
                             </Card>
                             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Link to={`/VerEjercicios/${patient._id}`}>
+                                <Link to={{ pathname: `/VerEjercicios/${patient._id}`, state: { id_user: patient.id_user }}}>
                                     <Button style={{ backgroundColor: '#46bee0', color:"white" }}>Ejercicios</Button>
                                 </Link>
-                                <Link to={`/Users/${patient.id_user}`}>
+                                <Link to={`/Fisioterapeuta/${patient.id_user}`}>
                                     <Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button>
                                 </Link>
                             </div>

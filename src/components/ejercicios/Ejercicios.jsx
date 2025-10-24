@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { Button, Table, Grid, Segment, Label, Card, TableBody, TableCell, TableRow, Confirm } from 'semantic-ui-react';
 import MenuNav from '../pages/MenuNav';
 import { Link, withRouter } from 'react-router-dom';
@@ -11,7 +11,7 @@ import { URL } from '../../actions/url.js';
 
 class Ejercicios extends Component {
   state = {
-    user: {},
+    patient: {},
     capacidad_vital: 0,
     ejercicios: [],
     ejercicioPredeterminado: null,
@@ -20,6 +20,7 @@ class Ejercicios extends Component {
     exercisesPerPage: 5,
     openConfirm: false,
     confirmMessage: '',
+    id_user: this.props.location.state.id_user
   };
 
   componentDidMount() {
@@ -43,9 +44,9 @@ class Ejercicios extends Component {
         }
       })
       .then(resp => {        
-        const user = resp;
-        const capacidad_vital = this.getCapacidadVital(user).toFixed(2) + "L";
-        this.setState({ user, capacidad_vital });
+        const patient = resp;
+        const capacidad_vital = this.getCapacidadVital(patient).toFixed(2) + "L";
+        this.setState({ patient, capacidad_vital });
 
         fetch(URL+'allEjerciciosByPatient', {
             method: 'POST',
@@ -74,23 +75,23 @@ class Ejercicios extends Component {
           .catch(err => {
             this.setState({
               openConfirm: true,
-              confirmMessage: 'Error al consultar ejercicios. ' + err.response.data.msg
+              confirmMessage: 'Error al consultar ejercicios. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
             });
         });
       })
       .catch(err => {
         this.setState({
           openConfirm: true,
-          confirmMessage: 'Error al consultar paciente. ' + err.response.data.msg
+          confirmMessage: 'Error al consultar paciente. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
         });
     });
   };
 
-  getCapacidadVital = (user) => { // Valores en mL/kg
-    if (user.sexo === 'M')
-      return (27.63 - (0.112 * user.edad)) * user.altura;
-    else if (user.sexo === 'F')
-      return (21.78 - (0.101 * user.edad)) * user.altura;
+  getCapacidadVital = (patient) => { // Valores en mL/kg
+    if (patient.sexo === 'M')
+      return (27.63 - (0.112 * patient.edad)) * patient.altura;
+    else if (patient.sexo === 'F')
+      return (21.78 - (0.101 * patient.edad)) * patient.altura;
     
     return 0;
   };  
@@ -109,13 +110,16 @@ class Ejercicios extends Component {
   };
 
   render() {
-    const { user, capacidad_vital, ejercicios, ejercicioPredeterminado, currentPage, exercisesPerPage, openConfirm, confirmMessage } = this.state;
+    const { patient, capacidad_vital, ejercicios, ejercicioPredeterminado, currentPage, exercisesPerPage, openConfirm, confirmMessage, id_user } = this.state;
+    
     const offset = currentPage * exercisesPerPage;
     let currentExercises = 0;
     
     if (ejercicios.length > 0)
       currentExercises = ejercicios.slice(offset, offset + exercisesPerPage);
-    
+
+    console.log("Ejercicios: ",id_user)
+        
     return (
       <>
         <MenuNav />
@@ -129,19 +133,19 @@ class Ejercicios extends Component {
                 <TableBody>
                   <TableRow>
                     <TableCell>Nombre del paciente</TableCell>
-                    <TableCell>{user.nombre}</TableCell>
+                    <TableCell>{patient.nombre}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>Altura:</TableCell>
-                    <TableCell>{user.altura}</TableCell>
+                    <TableCell>{patient.altura}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>Edad:</TableCell>
-                    <TableCell>{user.edad}</TableCell>
+                    <TableCell>{patient.edad}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>Sexo:</TableCell>
-                    <TableCell>{user.sexo}</TableCell>
+                    <TableCell>{patient.sexo}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>Capacidad vital:</TableCell>
@@ -160,7 +164,7 @@ class Ejercicios extends Component {
                   (
                     <div>
                       <p style={{ marginBottom:"10px", marginTop:"10px" }}>No hay ejercicio predeterminado disponible, por favor agregar.</p>
-                      <Link to={{ pathname: `/AgregarEjercicio/${user._id}`, nombre_terapia: "Predeterminado" }}>
+                      <Link to={{ pathname: `/AgregarEjercicio/${patient._id}`, nombre_terapia: "Predeterminado", state: { id_user: id_user }}}>
                         <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar ejercicio predeterminado</Button>
                       </Link>
                     </div>
@@ -173,14 +177,14 @@ class Ejercicios extends Component {
                   
                   ejercicios.length === 0 || (ejercicios.length > 0 && moment().isAfter(moment(ejercicios[ejercicios.length - 1].fecha_fin, 'DD/MM/YYYY'))) ? 
                     (
-                      <Link to={{ pathname: `/AgregarEjercicio/${user._id}`, nombre_terapia: "Inspiración profunda" }}>
+                      <Link to={{ pathname: `/AgregarEjercicio/${patient._id}`, nombre_terapia: "Inspiración profunda", state: { id_user: id_user }}}>
                         <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>
                       </Link>
                     ) 
                   : 
                     <></>
                 }
-                <Link to={`/VerUser/${user._id}`}>
+                <Link to={`/VerPaciente/${patient._id}`}>
                   <Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button>
                 </Link>
               </div>
@@ -191,9 +195,8 @@ class Ejercicios extends Component {
               {        
                 currentExercises.length > 0 ?
                   currentExercises
-                  //.filter(ejercicio => ejercicio.nombre !== "Predeterminado") // Filtrar el ejercicio predeterminado
                   .map((ejercicio, index) => {
-                    return <Ejercicio key={index} ejercicio={ejercicio} />;
+                    return <Ejercicio key={index} ejercicio={ejercicio} id_user={id_user}/>;
                   })
                 :
                   <p style={{ marginBottom:"10px", marginTop:"10px" }}>No hay ejercicios disponibles.</p>

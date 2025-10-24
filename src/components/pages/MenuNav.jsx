@@ -33,7 +33,7 @@ class MenuNav extends Component {
         <Menu fixed='top' inverted style={{ backgroundColor: "#28367b" }}>
           <Container>
             
-            <Menu.Item as={Link} to={`/Users/${id_user}`} header>
+            <Menu.Item as={Link} to={`/Fisioterapeuta/${id_user}`} header>
               <Image size='mini' src={logo} style={{ marginRight: '1.5em' }} />
               UBICU
             </Menu.Item>

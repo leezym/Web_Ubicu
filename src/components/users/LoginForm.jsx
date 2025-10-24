@@ -55,13 +55,13 @@ class LoginForm extends Component {
       localStorage.setItem('id_user', resp.user._id);
     
       optionHeaders.headers['x-access-token'] = localStorage.getItem('token');
-      this.props.history.push(`/Users/${resp.user._id}`);
+      this.props.history.push(`/Fisioterapeuta/${resp.user._id}`);
     })
     .catch(err => {
       submitButton.disabled = false;
       this.setState({
         openConfirm: true,
-        confirmMessage: 'Error al iniciar sesión. ' + err.response.data.msg
+        confirmMessage: 'Error al iniciar sesión. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
       });
     });
   }

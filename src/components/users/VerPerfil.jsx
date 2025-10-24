@@ -54,7 +54,7 @@ class VerPerfil extends Component {
         .catch(err => {
             this.setState({
                 openConfirm: true,
-                confirmMessage: 'Error al consultar fisioterapeuta. ' + err.response.data.msg
+                confirmMessage: 'Error al consultar fisioterapeuta. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
             });
           });
     }
@@ -92,7 +92,7 @@ class VerPerfil extends Component {
 
             this.setState({
                 openConfirm: true,
-                confirmMessage: 'Error al actualizar usuario. ' + err.response.data.msg
+                confirmMessage: 'Error al actualizar usuario. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
             });
         });
     }
@@ -120,7 +120,7 @@ class VerPerfil extends Component {
         }).catch(err => {
             this.setState({
                 openConfirm: true,
-                confirmMessage: 'Error al actualizar contraseña. ' + err.response.data.msg
+                confirmMessage: 'Error al actualizar contraseña. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
             });
         });
     }
@@ -306,7 +306,7 @@ class VerPerfil extends Component {
                                 </Card.Content >
                             </Card> 
                         
-                            <Link to={`/Users/${user._id}`}><Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
+                            <Link to={`/Fisioterapeuta/${user._id}`}><Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
                         </Grid.Column>
                     </Grid>
                 </Segment>

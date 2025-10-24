@@ -46,7 +46,7 @@ function getDatesBetween(startDate, endDate) {
 }
 
 function getHoursOptions(startHour, hourInterval) {
-  const hours = [];  
+  const hours = [];
   let currentHour = startHour;
   let i = 0
   while (i < ((12/hourInterval)+1)){
@@ -61,6 +61,7 @@ class VerResultados extends React.Component {
   state = {
     id_patient: this.props.id_patient,
     id_ejercicio: this.props.id_ejercicio,
+    id_user: this.props.location.state.id_user,
     flujo: "",
     hora: "",
     fecha: "",
@@ -177,7 +178,7 @@ class VerResultados extends React.Component {
       .catch(err => {
         this.setState({
           openConfirm: true,
-          confirmMessage: 'Error al consultar ejercicio. ' + err.response.data.msg
+          confirmMessage: 'Error al consultar ejercicio. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
         });
     });
   }
@@ -210,7 +211,7 @@ class VerResultados extends React.Component {
     }).catch(err => {
       this.setState({
         openConfirm: true,
-        confirmMessage: 'Error al consultar resultados. ' + err.response.data.msg
+        confirmMessage: 'Error al consultar resultados. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
       });
     });
   }
@@ -224,7 +225,9 @@ class VerResultados extends React.Component {
   };
 
   render() {
-    const { id_patient, series, options, dateOptions, hourOptions, msg, openConfirm, confirmMessage } = this.state;
+    const { id_patient, id_user, series, options, dateOptions, hourOptions, msg, openConfirm, confirmMessage } = this.state;
+
+    console.log("Ver resltados: ",id_user)
 
     return (
       <>
@@ -252,7 +255,9 @@ class VerResultados extends React.Component {
                   </Form.Group>
                   <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '2em' }}>
                     <Button onClick={this.handleClick} type='button' style={{ backgroundColor: '#46bee0', color:"white" }}>Buscar</Button>
-                    <Link to={`/VerEjercicios/${id_patient}`}><Button type='submit' style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
+                    <Link to={{ pathname: `/VerEjercicios/${id_patient}`, state: { id_user: id_user }}}>
+                      <Button type='submit' style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button>
+                    </Link>
                   </div>
                 </Form>
             </Segment>

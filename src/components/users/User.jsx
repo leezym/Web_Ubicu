@@ -27,7 +27,7 @@ class User extends Component {
             <Table.Cell>{patient.cedula}</Table.Cell>
             <Table.Cell>{patient.nombre}</Table.Cell>
             <Table.Cell>
-            <Link to={`/VerUser/${patient._id}`}>
+            <Link to={`/VerPaciente/${patient._id}`}>
                 <Button style={{ backgroundColor: '#46bee0', color:"white" }} floated="right">Ver</Button>
             </Link>
             </Table.Cell>

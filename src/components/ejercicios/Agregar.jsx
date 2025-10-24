@@ -6,7 +6,7 @@ import {Link,withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
 import moment from "moment";
 
-class Agregar extends Component {        
+class Agregar extends Component {
     state = {
         nombre: this.props.nombre_terapia,
         duracion_total: "",
@@ -21,9 +21,9 @@ class Agregar extends Component {
         flujo: "-",
         hora_inicio: "-",
         id_patient: this.props.id_patient,
-        id_user: this.props.id_user,
+        id_user: this.props.location.state.id_user,
         openConfirm: false,
-        confirmMessage: '',
+        confirmMessage: ''
     };
     
     handleSave = async (e) => {
@@ -33,6 +33,7 @@ class Agregar extends Component {
         submitButton.disabled = true;
 
         const { nombre, duracion_total, frecuencia_dias, frecuencia_horas, repeticiones, series, periodos_descanso, fecha_inicio, apnea, flujo, hora_inicio, id_patient, id_user } = this.state;
+
         const duracion = nombre === "Predeterminado" ? 0 : duracion_total;
         const inicio = nombre === "Predeterminado" ? null : moment(fecha_inicio, 'YYYY-MM-DD').format('DD/MM/YYYY').toString();
         const fin = nombre === "Predeterminado" ? null : moment(fecha_inicio, 'YYYY-MM-DD').add(frecuencia_dias - 1, 'days').format('DD/MM/YYYY').toString();
@@ -58,10 +59,10 @@ class Agregar extends Component {
                 confirmMessage: 'Ejercicio creado.'
             });
 
-            if(nombre === "Predeterminado")
-                this.props.history.push(`/Users/${id_user}`);
-            else
-                this.props.history.push(`/VerEjercicios/${id_patient}`);
+            this.props.history.push({
+                pathname: `/VerEjercicios/${id_patient}`,
+                state: { id_user: id_user }
+            });
         })
         .catch(err => {
             submitButton.disabled = false;
@@ -82,7 +83,6 @@ class Agregar extends Component {
 
     render() {
         const { nombre, id_user, id_patient, openConfirm, confirmMessage } = this.state;
-
         return (
             <>
             <MenuNav/>
@@ -247,14 +247,9 @@ class Agregar extends Component {
                     </select>
                     </Form.Field>
                     <Button type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>
-                    <Link to =
-                    {
-                        nombre === "Predeterminado" ?
-                            `/Users/${id_user}`
-                            :
-                            `/VerEjercicios/${id_patient}`
-                    }>
-                    <Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
+                    <Link to={{ pathname: `/VerEjercicios/${id_patient}`, state: { id_user: id_user }}}>                    
+                        <Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button>
+                    </Link>
                 </Form>
             </Segment>
             </Grid.Column>

@@ -47,7 +47,7 @@ class Users extends Component {
     .catch(err => {
       this.setState({
         openConfirm: true,
-        confirmMessage: 'Error al consultar paciente. ' + err.response.data.msg
+        confirmMessage: 'Error al consultar paciente. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
       });
     });
   }

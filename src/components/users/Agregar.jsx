@@ -50,7 +50,7 @@ class Agregar extends Component {
             submitButton.disabled = false;
             this.setState({
                 openConfirm: true,
-                confirmMessage: 'Error al crear el usuario. ' + err.response.data.msg
+                confirmMessage: 'Error al crear el usuario. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
             });
         });
     };

@@ -4,11 +4,13 @@ import { optionHeaders } from './headers.js';
 import { URL } from './url.js';
 
 export const crearPatient = (user) => async dispatch => {
-    const respuesta = await axios.post(URL + "createPatient", user, optionHeaders);
-    dispatch({
-        type: CREAR_USER,
-        payload: respuesta.data
-    });
+  const respuesta = await axios.post(URL + "createPatient", user, optionHeaders);
+  dispatch({
+    type: CREAR_USER,
+    payload: respuesta.data
+  });
+
+  return respuesta.data;
 };
 
 export const updatePatient = (patient) => async dispatch => {

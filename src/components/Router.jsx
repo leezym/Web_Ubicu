@@ -25,7 +25,7 @@ class Router extends Component {
                         component ={LoginForm}/>
 
                     <Route
-                    exact path="/Users/:id_user"
+                    exact path="/Fisioterapeuta/:id_user"
                     render={ props => {
                         const { match } = props;
                         let id_user = match.params.id_user;
@@ -53,7 +53,7 @@ class Router extends Component {
                         }} />
                     
                     <Route
-                        exact path="/VerUser/:id_patient"
+                        exact path="/VerPaciente/:id_patient"
                         render={ props => {
                             const { match } = props;
                             let id_patient = match.params.id_patient;

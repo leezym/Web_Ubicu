@@ -5,12 +5,10 @@ import {crearPatient} from "../../actions/patientsAction";
 import {Link, withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
 import ciudades from '../../colombia.json';
-import AgregarEjercicio from "../ejercicios/Agregar";
 import { URL } from '../../actions/url.js';
 
 class AgregarPaciente extends Component {
     state = {
-        createUser: false,
         nombre: "",
         cedula: "",
         telefono: "",
@@ -51,10 +49,12 @@ class AgregarPaciente extends Component {
             password: (telefono % 10000).toString(),
             id_user: id_user
         }).then(resp => {
+            console.log("resp: ",resp)
             submitButton.disabled = false;
             this.setState({
+                id_patient: resp._id,
                 openConfirm: true,
-                confirmMessage: 'Paciente creado'
+                confirmMessage: 'Paciente creado',
             });
             
             fetch(URL+'getPatientbyCc', {
@@ -75,11 +75,6 @@ class AgregarPaciente extends Component {
                 }
             })
             .then(resp => {
-                this.setState({
-                    id_patient: resp._id,
-                    createUser: true
-                });
-
                 fetch(URL+'createRewards', {
                     method: 'POST',
                     body: JSON.stringify({
@@ -110,7 +105,7 @@ class AgregarPaciente extends Component {
                 .catch(err => {
                     this.setState({
                         openConfirm: true,
-                        confirmMessage: 'Error al crear recompensas. ' + err.response.data.msg
+                        confirmMessage: 'Error al crear recompensas. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
                     });
                 });
 
@@ -141,22 +136,28 @@ class AgregarPaciente extends Component {
                 .catch(err => {
                     this.setState({
                         openConfirm: true,
-                        confirmMessage: 'Error al crear personalización. ' + err.response.data.msg
+                        confirmMessage: 'Error al crear personalización. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
                     });
                 });
             })
             .catch(err => {
                 this.setState({
                     openConfirm: true,
-                    confirmMessage: 'Error al consultar paciente. ' + err.response.data.msg
+                    confirmMessage: 'Error al consultar paciente. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
                 });
+            });
+
+            this.props.history.push({
+                pathname: `/AgregarEjercicio/${resp._id}`,
+                nombre_terapia: "Predeterminado",
+                state: { id_user: id_user }
             });
         })
         .catch(err => {
             submitButton.disabled = false;
             this.setState({
                 openConfirm: true,
-                confirmMessage: 'Error al crear paciente. ' + err.response.data.msg
+                confirmMessage: 'Error al crear paciente. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
             });
         });
     };
@@ -172,13 +173,13 @@ class AgregarPaciente extends Component {
     render() {
         const { id_patient, id_user, openConfirm, confirmMessage } = this.state;
 
+        console.log(id_patient)
+
         return (
             <>
                 <MenuNav/>
                 <Grid style={{ marginTop: '7em' }} columns={1}>
-                <Grid.Column>
-                    {
-                        !this.state.createUser ? 
+                    <Grid.Column>
                         <Segment raised>
                             <Label ribbon style={{color:"#28367b"}}>
                             Registrar Paciente
@@ -229,7 +230,7 @@ class AgregarPaciente extends Component {
                                 </select>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Peso (kg)</label>
+                                <label>Peso (kg) *</label>
                                 <input 
                                     name="peso"
                                     placeholder='Peso'
@@ -241,7 +242,7 @@ class AgregarPaciente extends Component {
                                     required/>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Altura (cm)</label>
+                                <label>Altura (cm) *</label>
                                 <input 
                                     name="altura"
                                     placeholder='Altura'
@@ -253,7 +254,7 @@ class AgregarPaciente extends Component {
                                     required/>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Teléfono</label>
+                                <label>Teléfono *</label>
                                 <input 
                                     name="telefono"
                                     placeholder='Teléfono'
@@ -265,7 +266,7 @@ class AgregarPaciente extends Component {
                                     required/>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Correo</label>
+                                <label>Correo *</label>
                                 <input 
                                     name="email"
                                     placeholder='Correo'
@@ -275,7 +276,7 @@ class AgregarPaciente extends Component {
                                     required/>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Dirección</label>
+                                <label>Dirección *</label>
                                 <input 
                                     name="direccion"
                                     placeholder='Dirección'
@@ -284,7 +285,7 @@ class AgregarPaciente extends Component {
                                     required/>
                                 </Form.Field>
                                 <Form.Field>
-                                <label>Ciudad</label>
+                                <label>Ciudad *</label>
                                 <select
                                     name="ciudad"
                                     onChange={this.changeInput}
@@ -301,15 +302,12 @@ class AgregarPaciente extends Component {
                                     ))}
                                 </select>
                                 </Form.Field>
+                                
                                 <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>
-                                <Link to={`/Users/${this.props.id_user}`}><Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
+                                <Link to={`/Fisioterapeuta/${id_user}`}><Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
                             </Form>
                         </Segment>
-                        :
-                        <AgregarEjercicio id_patient={id_patient} nombre_terapia={"Predeterminado"} id_user={id_user}/>
-                    }
-                
-                </Grid.Column>
+                    </Grid.Column>
                 </Grid>
                 
                 <Confirm

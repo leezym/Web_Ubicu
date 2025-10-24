@@ -14,6 +14,7 @@ class Ejercicio extends Component {
         disabledEdit: false,
         openConfirm: false,
         confirmMessage: '',
+        id_user: this.props.id_user
     };
     
     componentDidUpdate(prevProps) {
@@ -72,7 +73,7 @@ class Ejercicio extends Component {
             submitButton.disabled = false;
             this.setState({
                 openConfirm: true,
-                confirmMessage: 'Error al actualizar ejercicio. ' + err.response.data.msg
+                confirmMessage: 'Error al actualizar ejercicio. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
             });
         });
     }
@@ -107,8 +108,9 @@ class Ejercicio extends Component {
     };
 
     render() {
-        const { readOnly, ejercicio, disabledEdit, openConfirm, confirmMessage } = this.state;
+        const { readOnly, ejercicio, disabledEdit, openConfirm, confirmMessage, id_user } = this.state;
 
+        console.log("Ejercicio: ",id_user)
         return (
             <>
                 <Card fluid color="blue" >
@@ -313,7 +315,7 @@ class Ejercicio extends Component {
                             }
                             {
                             ejercicio.nombre !== "Predeterminado" ?
-                                <Link to={`/VerResultados/${ejercicio.id_patient}/${ejercicio._id}`}>
+                                <Link to={{ pathname: `/VerResultados/${ejercicio.id_patient}/${ejercicio._id}`, state: { id_user: id_user }}}>
                                     <Button style={{ backgroundColor: '#46bee0', color:"white" }} floated='right'>
                                         Ver Gráfica
                                     </Button>
