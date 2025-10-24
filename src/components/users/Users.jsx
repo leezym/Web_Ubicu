@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import User from "./User"
-import {Table, Button, Grid, Segment, Label, Input} from 'semantic-ui-react'
+import {Table, Button, Grid, Segment, Label, Input, Confirm} from 'semantic-ui-react'
 import MenuNav from '../pages/MenuNav';
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
@@ -14,7 +14,9 @@ class Users extends Component {
     pageCount: 1,
     currentPage: 0,
     patientsPerPage: 5,
-    filteredPatients: []
+    filteredPatients: [],
+    openConfirm: false,
+    confirmMessage: '',
   };
 
   componentDidMount() {
@@ -43,8 +45,11 @@ class Users extends Component {
         this.setState({ patients, pageCount });
     })
     .catch(err => {
-      alert('Error al consultar paciente. ' + err.message);
-    }); 
+      this.setState({
+        openConfirm: true,
+        confirmMessage: 'Error al consultar paciente. ' + err.message
+      });
+    });
   }
 
   handlePageClick = ({ selected }) => {
@@ -71,8 +76,12 @@ class Users extends Component {
     });
   };
 
+  handleCancel = () => {
+    this.setState({ openConfirm: false });
+  };
+
   render() {
-    const { patients, currentPage, patientsPerPage, filteredPatients } = this.state;
+    const { patients, currentPage, patientsPerPage, filteredPatients, openConfirm, confirmMessage } = this.state;
     const offset = currentPage * patientsPerPage;
     let currentPatients = 0;
     
@@ -123,7 +132,7 @@ class Users extends Component {
                     <Table.HeaderCell />
                     <Table.HeaderCell colSpan='2'>
                       <Link to={`/AgregarPaciente/${this.props.id_user}`}>
-                        <Button floated='right' style={{ backgroundColor: '#eb5a25', color:"white" }}>Agregar</Button>
+                        <Button floated='right' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>
                       </Link>
                     </Table.HeaderCell>
                   </Table.Row>
@@ -146,6 +155,14 @@ class Users extends Component {
             />
           </Grid.Column>
         </Grid>
+
+        <Confirm
+          open={openConfirm}
+          content={confirmMessage}
+          confirmButton='Aceptar'
+          cancelButton={null}
+          onConfirm={this.handleCancel}
+        />
       </div>
     );
   }

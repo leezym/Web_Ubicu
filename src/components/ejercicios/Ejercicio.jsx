@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Button, Form, Card} from 'semantic-ui-react'
+import {Button, Form, Card, Confirm} from 'semantic-ui-react'
 import {Link,withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
 import moment from "moment";
@@ -11,7 +11,9 @@ class Ejercicio extends Component {
         readOnly: true,
         original: {},
         ejercicio: this.props.ejercicio,
-        disabledEdit: false
+        disabledEdit: false,
+        openConfirm: false,
+        confirmMessage: '',
     };
     
     componentDidUpdate(prevProps) {
@@ -30,7 +32,6 @@ class Ejercicio extends Component {
     
     componentDidMount() {
         const { ejercicio } = this.state;
-        console.log(ejercicio)
         const fechaInicio = moment(ejercicio.fecha_inicio, 'DD/MM/YYYY').format('YYYY-MM-DD').toString();
         const fechaFin = moment(ejercicio.fecha_fin, 'DD/MM/YYYY').format('YYYY-MM-DD')
         const isDisabled = moment(fechaFin).isBefore(moment(), 'day') && ejercicio.nombre !== "Predeterminado";
@@ -63,10 +64,16 @@ class Ejercicio extends Component {
         
         this.props.updateEjercicio(nuevo).then(resp => {
             submitButton.disabled = false;
-            alert('Ejercicio actualizado.');
+            this.setState({
+                openConfirm: true,
+                confirmMessage: 'Ejercicio actualizado.'
+            });
         }).catch(err => {
             submitButton.disabled = false;
-            alert('Error al actualizar ejercicio. ' + err.response.data.msg);         
+            this.setState({
+                openConfirm: true,
+                confirmMessage: 'Error al actualizar ejercicio. ' + err.response.data.msg
+            });
         });
     }
 
@@ -95,15 +102,20 @@ class Ejercicio extends Component {
         });
     }
 
+    handleCancel = () => {
+        this.setState({ openConfirm: false });
+    };
+
     render() {
-        const { readOnly, ejercicio, disabledEdit } = this.state;
-                        
+        const { readOnly, ejercicio, disabledEdit, openConfirm, confirmMessage } = this.state;
+
         return (
-            <Card fluid color="blue" >
-                <Card.Content >
-                    <Card.Header></Card.Header>
-                    <Card.Description width="60%">                        
-                        <Form onSubmit={this.handleSave}>
+            <div>
+                <Card fluid color="blue" >
+                    <Card.Content >
+                        <Card.Header></Card.Header>
+                        <Card.Description width="60%">
+                            <Form onSubmit={this.handleSave}>
                             <Form.Group widths='equal'>
                                 <Form.Field>
                                 <label>Nombre *</label>
@@ -287,7 +299,7 @@ class Ejercicio extends Component {
 
                             {
                             readOnly ?
-                                <Button disabled={disabledEdit} onClick={()=>{ this.handleEdit(false); this.copyOriginal() }} type="button" style={{ backgroundColor: '#eb5a25', color:"white" }}>Editar</Button>
+                                <Button disabled={disabledEdit} onClick={()=>{ this.handleEdit(false); this.copyOriginal() }} type="button" style={{ backgroundColor: '#46bee0', color:"white" }}>Editar</Button>
                                 :
                                 <>
                                     <Button type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Guardar</Button>
@@ -307,7 +319,16 @@ class Ejercicio extends Component {
                         </Form>
                     </Card.Description>
                 </Card.Content>
-            </Card>       
+            </Card>
+
+            <Confirm
+                open={openConfirm}
+                content={confirmMessage}
+                confirmButton='Aceptar'
+                cancelButton={null}
+                onConfirm={this.handleCancel}
+            />
+        </div>
         );
     }
 }

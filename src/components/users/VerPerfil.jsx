@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Label, Segment, Button, Icon, Form, Card, Input} from 'semantic-ui-react';
+import { Grid, Label, Segment, Button, Icon, Form, Card, Input, Confirm} from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import MenuNav from '../pages/MenuNav';
 import { Link, withRouter } from 'react-router-dom';
@@ -16,7 +16,9 @@ class VerPerfil extends Component {
             current: false,
             nueva: false,
             repeat: false
-        }
+        },
+        openConfirm: false,
+        confirmMessage: '',
     };
 
     componentDidMount() {
@@ -50,7 +52,10 @@ class VerPerfil extends Component {
             this.setState({ user });
         })
         .catch(err => {
-            alert('Error al consultar fisioterapeuta. ' + err.message);
+            this.setState({
+                openConfirm: true,
+                confirmMessage: 'Error al consultar fisioterapeuta. ' + err.message
+            });
           });
     }
 
@@ -78,11 +83,17 @@ class VerPerfil extends Component {
         this.handleEdit(true);
         this.props.updateUser(user).then(resp => {
             submitButton.disabled = false;
-            alert('Usuario actualizado.');
+            this.setState({
+                openConfirm: true,
+                confirmMessage: 'Usuario actualizado.'
+            });
         }).catch(err => {
             submitButton.disabled = false;
 
-            alert('Error al actualizar usuario. ' + err.response.data.msg);
+            this.setState({
+                openConfirm: true,
+                confirmMessage: 'Error al actualizar usuario. ' + err.response.data.msg
+            });
         });
     }
 
@@ -101,10 +112,16 @@ class VerPerfil extends Component {
                     repeat_password_nueva: ''
                 }
             });
-            
-            alert(resp.msg);
+
+            this.setState({
+                openConfirm: true,
+                confirmMessage: resp.msg
+            });
         }).catch(err => {
-            alert('Error al actualizar contraseña. ' + err.response.data.msg);         
+            this.setState({
+                openConfirm: true,
+                confirmMessage: 'Error al actualizar contraseña. ' + err.response.data.msg
+            });
         });
     }
 
@@ -141,8 +158,12 @@ class VerPerfil extends Component {
         });
     }
 
+    handleCancel = () => {
+        this.setState({ openConfirm: false });
+    };
+
     render() {
-        const { readOnly, user, showPassword } = this.state;
+        const { readOnly, user, showPassword, openConfirm, confirmMessage } = this.state;
 
         return (
         <div>
@@ -155,6 +176,10 @@ class VerPerfil extends Component {
                         </Label>
                         <Card fluid color="blue" >
                             <Card.Content >
+                                <Card.Header textAlign="center" style={{ marginBottom: '1em' }}>
+                                    <h3 style={{ color: '#28367b', margin: 0 }}>Actualizar Datos</h3>
+                                </Card.Header>
+
                                 <Card.Description width="100%">                        
                                     <Form onSubmit={this.handleSave}>
                                         <Form.Group widths='equal'>
@@ -212,7 +237,7 @@ class VerPerfil extends Component {
                                             </Form.Field>                                        
                                         </Form.Group >
                                         { readOnly ?
-                                            <Button onClick={()=>{ this.handleEdit(false); this.copyOriginal(); }} type='button' style={{ backgroundColor: '#eb5a25', color:"white" }}>Editar</Button>
+                                            <Button onClick={()=>{ this.handleEdit(false); this.copyOriginal(); }} type='button' style={{ backgroundColor: '#46bee0', color:"white" }}>Actualizar</Button>
                                             :
                                             <>
                                                 <Button type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Guardar</Button>
@@ -226,8 +251,11 @@ class VerPerfil extends Component {
 
                         <Card fluid color="blue" >
                             <Card.Content >
+                                <Card.Header textAlign="center" style={{ marginBottom: '1em' }}>
+                                    <h3 style={{ color: '#28367b', margin: 0 }}>Actualizar Contraseña</h3>
+                                </Card.Header>
                                 <Card.Description width="100%">   
-                                    <span style={{ color: 'blue', fontSize: 'small'}}>La contraseña debe contener al menos una mayúscula, un número y un carácter especial</span>                        
+                                    <span style={{ color: 'blue', fontSize: 'small'}}>La contraseña debe contener al menos una mayúscula, un número y un caracter especial.</span>                        
                                     <Form onSubmit={this.handleUpdate} style={{ marginTop: '10px'}}>
                                         <Form.Group widths='equal'>
                                             <Form.Field style={{ width: '400px' }}>
@@ -277,10 +305,19 @@ class VerPerfil extends Component {
                                 </Card.Description>
                             </Card.Content >
                         </Card> 
-                            <Link to={`/Users/${user._id}`}><Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
-                        </Grid.Column>            
-                    </Grid> 
-            </Segment> 
+                    
+                        <Link to={`/Users/${user._id}`}><Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
+                    </Grid.Column>
+                </Grid>
+            </Segment>
+
+            <Confirm
+                open={openConfirm}
+                content={confirmMessage}
+                confirmButton='Aceptar'
+                cancelButton={null}
+                onConfirm={this.handleCancel}
+            />            
         </div>
         );
     }

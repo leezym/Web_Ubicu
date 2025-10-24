@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Table, Grid, Segment, Label, Card, TableBody, TableCell, TableRow } from 'semantic-ui-react';
+import { Button, Table, Grid, Segment, Label, Card, TableBody, TableCell, TableRow, Confirm } from 'semantic-ui-react';
 import MenuNav from '../pages/MenuNav';
 import { Link, withRouter } from 'react-router-dom';
 import Ejercicio from './Ejercicio';
@@ -12,12 +12,14 @@ import { URL } from '../../actions/url.js';
 class Ejercicios extends Component {
   state = {
     user: {},
-    capacidad_vital: 0, 
+    capacidad_vital: 0,
     ejercicios: [],
     ejercicioPredeterminado: null,
     pageCount: 1,
     currentPage: 0,
-    exercisesPerPage: 5
+    exercisesPerPage: 5,
+    openConfirm: false,
+    confirmMessage: '',
   };
 
   componentDidMount() {
@@ -70,11 +72,17 @@ class Ejercicios extends Component {
             this.setState({ ejercicios, ejercicioPredeterminado, pageCount });
           })
           .catch(err => {
-            alert('Error al consultar ejercicios. ' + err.message);
+            this.setState({
+              openConfirm: true,
+              confirmMessage: 'Error al consultar ejercicios. ' + err.message
+            });
         });
       })
       .catch(err => {
-        alert('Error al consultar paciente. ' + err.message);
+        this.setState({
+          openConfirm: true,
+          confirmMessage: 'Error al consultar paciente. ' + err.message
+        });
     });
   };
 
@@ -96,8 +104,12 @@ class Ejercicios extends Component {
     });
   };
 
+  handleCancel = () => {
+    this.setState({ openConfirm: false });
+  };
+
   render() {
-    const { user, capacidad_vital, ejercicios, ejercicioPredeterminado, currentPage, exercisesPerPage } = this.state;
+    const { user, capacidad_vital, ejercicios, ejercicioPredeterminado, currentPage, exercisesPerPage, openConfirm, confirmMessage } = this.state;
     const offset = currentPage * exercisesPerPage;
     let currentExercises = 0;
     
@@ -204,6 +216,14 @@ class Ejercicios extends Component {
             />
           </Grid.Column>
         </Grid>
+        
+        <Confirm
+          open={openConfirm}
+          content={confirmMessage}
+          confirmButton='Aceptar'
+          cancelButton={null}
+          onConfirm={this.handleCancel}
+        />
       </div>
     );
   }

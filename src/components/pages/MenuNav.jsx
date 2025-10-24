@@ -1,13 +1,24 @@
-import React,{ Component }  from 'react'
-import {Container,Dropdown,Image,Menu} from 'semantic-ui-react'
-import logo from '../../logo.png'; // Tell Webpack this JS file uses this image
+import React, { Component } from 'react';
+import { Container, Image, Menu, Icon, Confirm } from 'semantic-ui-react';
+import logo from '../../logo.png';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 
-
 class MenuNav extends Component {
-  
-  handleLogout = () => {
+  state = {
+    openConfirm: false, // controla el popup
+  };
+
+  handleOpenConfirm = () => {
+    this.setState({ openConfirm: true });
+  };
+
+  handleCancel = () => {
+    this.setState({ openConfirm: false });
+  };
+
+  handleConfirm = () => {
+    this.setState({ openConfirm: false });
     localStorage.removeItem('token');
     localStorage.removeItem('id_user');
     this.props.history.push('/');
@@ -15,25 +26,45 @@ class MenuNav extends Component {
 
   render() {
     const id_user = localStorage.getItem('id_user');
-    
+    const { openConfirm } = this.state;
+
     return (
       <div>
-        <Menu fixed='top' inverted style = {{ backgroundColor: "#28367b"}}>
+        <Menu fixed='top' inverted style={{ backgroundColor: "#28367b" }}>
           <Container>
-            <Menu.Item as='a' header>
-            <Link to={`/Users/${id_user}`} style={{ display: 'flex', alignItems: 'center', color: 'white' }}>
+            
+            <Menu.Item as={Link} to={`/Users/${id_user}`} header>
               <Image size='mini' src={logo} style={{ marginRight: '1.5em' }} />
-              <span>UBICU</span>
-            </Link>                
+              UBICU
             </Menu.Item>
-            <Dropdown item simple text='Mi Cuenta'>
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={() => {this.props.history.push(`/VerPerfil/${id_user}`)}}>Ver perfil</Dropdown.Item>
-                <Dropdown.Item onClick={this.handleLogout}>Cerrar Sesión</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+
+            <Menu.Menu position='right'>
+              <Menu.Item
+                as={Link}
+                to={`/VerPerfil/${id_user}`}
+                title="Ver perfil"
+              >
+                <Icon name='user circle' size='large' />
+              </Menu.Item>
+
+              <Menu.Item
+                onClick={this.handleOpenConfirm}
+                title="Cerrar sesión"
+              >
+                <Icon name='sign-out' size='large' />
+              </Menu.Item>
+            </Menu.Menu>
           </Container>
         </Menu>
+
+        <Confirm
+          open={openConfirm}
+          content='¿Está seguro de que desea cerrar sesión?'
+          cancelButton='No'
+          confirmButton='Sí, cerrar sesión'
+          onCancel={this.handleCancel}
+          onConfirm={this.handleConfirm}
+        />
       </div>
     );
   }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form,Button,Segment,Label,Grid, Icon, Input } from 'semantic-ui-react';
+import { Form,Button,Segment,Label,Grid, Icon, Input, Confirm } from 'semantic-ui-react';
 import {crearUser} from "../../actions/usersAction";
 import {Link} from "react-router-dom";
 import { connect } from 'react-redux';
@@ -12,7 +12,9 @@ class Agregar extends Component {
         telefono: "",
         email: "",
         password:"",
-        showPassword: false
+        showPassword: false,
+        openConfirm: false,
+        confirmMessage: '',
     };
 
     togglePasswordVisibility = () => {
@@ -38,12 +40,18 @@ class Agregar extends Component {
             password
         }).then(resp => {
             submitButton.disabled = false;
-            alert('Fisioterapeuta creado');
+            this.setState({
+                openConfirm: true,
+                confirmMessage: 'Fisioterapeuta creado'
+            });
             history.push('/');
         })
         .catch(err => {
             submitButton.disabled = false;
-            alert('Error al crear el usuario. ' + err.response.data.msg);
+            this.setState({
+                openConfirm: true,
+                confirmMessage: 'Error al crear el usuario. ' + err.response.data.msg
+            });
         });
     };
     
@@ -51,8 +59,12 @@ class Agregar extends Component {
         this.setState({[event.target.name]:event.target.value});
     }
     
+    handleCancel = () => {
+        this.setState({ openConfirm: false });
+    };
+
     render() {
-        const { showPassword } = this.state;
+        const { showPassword, openConfirm, confirmMessage } = this.state;
 
         return (
             <div>
@@ -118,15 +130,23 @@ class Agregar extends Component {
                             required
                             icon={<Icon name={showPassword ? 'eye' : 'eye slash'} link onClick={this.togglePasswordVisibility} />}
                         />
-                        <span style={{ color: 'blue', fontSize: 'small' }}>La contraseña debe contener al menos una mayúscula, un número y un carácter especial</span>                        
+                        <span style={{ color: 'blue', fontSize: 'small' }}>La contraseña debe contener al menos una mayúscula, un número y un caracter especial</span>                        
                         </Form.Field>
                         <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>
                         <Link to="/"><Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
                     </Form>
                 </Segment>
-                </Grid.Column>
-                </Grid>
-            </div>
+            </Grid.Column>
+            </Grid>
+
+            <Confirm
+                open={openConfirm}
+                content={confirmMessage}
+                confirmButton='Aceptar'
+                cancelButton={null}
+                onConfirm={this.handleCancel}
+            />
+        </div>
         );
     }
 }

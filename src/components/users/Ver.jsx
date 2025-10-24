@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Label, Segment, Button, Form, Card} from 'semantic-ui-react';
+import { Grid, Label, Segment, Button, Form, Card, Confirm} from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import MenuNav from '../pages/MenuNav';
 import { connect } from 'react-redux';
@@ -11,7 +11,9 @@ class Ver extends Component {
     state = {
         readOnly: true,
         original: {},
-        patient: {}
+        patient: {},
+        openConfirm: false,
+        confirmMessage: '',
     };
 
     componentDidMount() {
@@ -38,7 +40,10 @@ class Ver extends Component {
             this.setState({ patient });
         })
         .catch(err => {
-            alert('Error al consultar paciente. ' + err.message);
+            this.setState({
+                openConfirm: true,
+                confirmMessage: 'Error al consultar paciente. ' + err.message
+            });
         });
     }
 
@@ -58,10 +63,16 @@ class Ver extends Component {
         patient.password = (patient.telefono % 10000).toString();
         this.props.updatePatient(patient).then(resp => {
             submitButton.disabled = false;
-            alert('Paciente actualizado.');
+            this.setState({
+                openConfirm: true,
+                confirmMessage: 'Paciente actualizado.'
+            });
         }).catch(err => {
             submitButton.disabled = false;
-            alert('Error al actualizar paciente. ' + err.response.data.msg);         
+            this.setState({
+                openConfirm: true,
+                confirmMessage: 'Error al actualizar paciente. ' + err.response.data.msg
+            });
         });
     }
 
@@ -90,8 +101,12 @@ class Ver extends Component {
         });
     }
 
+    handleCancel = () => {
+        this.setState({ openConfirm: false });
+    };
+
     render() {
-        const { readOnly, patient } = this.state;
+        const { readOnly, patient, openConfirm, confirmMessage } = this.state;
 
         return (
             <div>
@@ -252,7 +267,7 @@ class Ver extends Component {
                                                 </Form.Field>
                                             </Form.Group >
                                             { readOnly ?
-                                                <Button onClick={()=>{ this.handleEdit(false); this.copyOriginal(); }} type="button" style={{ backgroundColor: '#eb5a25', color:"white" }}>Editar</Button>
+                                                <Button onClick={()=>{ this.handleEdit(false); this.copyOriginal(); }} type="button" style={{ backgroundColor: '#46bee0', color:"white" }}>Editar</Button>
                                                 :
                                                 <>
                                                     <Button type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Guardar</Button>
@@ -271,9 +286,17 @@ class Ver extends Component {
                                     <Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button>
                                 </Link>
                             </div>
-                        </Grid.Column>            
-                    </Grid> 
-                </Segment>   
+                        </Grid.Column>
+                    </Grid>
+                </Segment>
+
+                <Confirm
+                    open={openConfirm}
+                    content={confirmMessage}
+                    confirmButton='Aceptar'
+                    cancelButton={null}
+                    onConfirm={this.handleCancel}
+                />
             </div>
         );
     }

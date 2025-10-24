@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Form, Grid, Header, Message, Segment, Image } from 'semantic-ui-react';
+import { Button, Form, Grid, Header, Message, Segment, Image, Confirm } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { authenticateUser } from '../../actions/usersAction';
 import 'semantic-ui-css/semantic.min.css';
@@ -13,6 +13,8 @@ class LoginForm extends Component {
   state = {
     cedula: '',
     password: '',
+    openConfirm: false,
+    confirmMessage: '',
   };
 
   handleChange = (event) => {
@@ -57,12 +59,19 @@ class LoginForm extends Component {
     })
     .catch(err => {
       submitButton.disabled = false;
-      alert('Error al iniciar sesión. ' + err.message);
-    });    
+      this.setState({
+        openConfirm: true,
+        confirmMessage: 'Error al iniciar sesión. ' + err.message
+      });
+    });
   }
 
+  handleCancel = () => {
+    this.setState({ openConfirm: false });
+  };
+
   render() {
-    const { cedula, password } = this.state;
+    const { cedula, password, openConfirm, confirmMessage } = this.state;
     
     return (
       <div>
@@ -111,6 +120,14 @@ class LoginForm extends Component {
               <button>Descargar App</button>
             </a>
         </Grid>*/}
+        
+        <Confirm
+          open={openConfirm}
+          content={confirmMessage}
+          confirmButton='Aceptar'
+          cancelButton={null}
+          onConfirm={this.handleCancel}
+        />
       </div>
     );
   }

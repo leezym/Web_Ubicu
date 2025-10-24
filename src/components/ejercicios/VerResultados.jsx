@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Grid, Button, Card, Segment} from "semantic-ui-react";
+import {Form, Grid, Button, Card, Segment, Confirm} from "semantic-ui-react";
 import {Link,withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import{allResultsByEjercicio} from "../../actions/resultsAction";
@@ -67,7 +67,9 @@ class VerResultados extends React.Component {
     dateOptions: "",
     hourOptions: "",
     msg: "",
-    series: [],    
+    series: [],
+    openConfirm: false,
+    confirmMessage: '',
     options:{
       chart: {
         stacked: false
@@ -173,7 +175,10 @@ class VerResultados extends React.Component {
         });
       })
       .catch(err => {
-        alert('Error al consultar ejercicio. ' + err.message);
+        this.setState({
+          openConfirm: true,
+          confirmMessage: 'Error al consultar ejercicio. ' + err.message
+        });
     });
   }
 
@@ -203,16 +208,23 @@ class VerResultados extends React.Component {
       
       this.forceUpdate();
     }).catch(err => {
-      alert('Error al consultar resultados. ' + err.response.data.msg);
-    }); 
+      this.setState({
+        openConfirm: true,
+        confirmMessage: 'Error al consultar resultados. ' + err.response.data.msg
+      });
+    });
   }
   
   changeInput = (event) => {
     this.setState({[event.target.name]:event.target.value});
   }
 
+  handleCancel = () => {
+    this.setState({ openConfirm: false });
+  };
+
   render() {
-    const { id_patient, series, options, dateOptions, hourOptions, msg } = this.state;
+    const { id_patient, series, options, dateOptions, hourOptions, msg, openConfirm, confirmMessage } = this.state;
 
     return (
       <div>
@@ -250,6 +262,14 @@ class VerResultados extends React.Component {
             </Segment>
           </Grid.Column>
         </Grid>
+        
+        <Confirm
+          open={openConfirm}
+          content={confirmMessage}
+          confirmButton='Aceptar'
+          cancelButton={null}
+          onConfirm={this.handleCancel}
+        />
       </div>
     );
   }

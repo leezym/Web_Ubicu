@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
+import { Confirm } from 'semantic-ui-react';
 import { URL } from '../actions/url.js';
 
 export default function withAuth(ComponentToProtect) {
@@ -10,6 +11,8 @@ export default function withAuth(ComponentToProtect) {
       this.state = {
         loading: true,
         redirect: false,
+        openConfirm: false,
+        confirmMessage: '',
       };
     }
     componentDidMount() {
@@ -30,12 +33,20 @@ export default function withAuth(ComponentToProtect) {
         }
       })
       .catch(err => {
-        alert('Error al autenticar. ' + err.message);
-        this.setState({ loading: false, redirect: true });
+        this.setState({
+          loading: false,
+          redirect: true,
+          openConfirm: true,
+          confirmMessage: 'Error al autenticar. ' + err.message
+        });
       });
     }
+    handleCancel = () => {
+      this.setState({ openConfirm: false });
+    };
+
     render() {
-      const { loading, redirect } = this.state;
+      const { loading, redirect, openConfirm, confirmMessage } = this.state;
       if (loading) {
         return null;
       }
@@ -45,6 +56,14 @@ export default function withAuth(ComponentToProtect) {
       return (
         <React.Fragment>
           <ComponentToProtect {...this.props} />
+          
+          <Confirm
+            open={openConfirm}
+            content={confirmMessage}
+            confirmButton='Aceptar'
+            cancelButton={null}
+            onConfirm={this.handleCancel}
+          />
         </React.Fragment>
       );
     }

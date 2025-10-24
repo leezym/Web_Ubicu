@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import MenuNav from '../pages/MenuNav';
-import { Form, Button, Segment, Label, Grid } from 'semantic-ui-react';
+import { Form, Button, Segment, Label, Grid, Confirm } from 'semantic-ui-react';
 import {crearEjercicio} from "../../actions/ejerciciosAction";
 import {Link,withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
@@ -21,7 +21,9 @@ class Agregar extends Component {
         flujo: "-",
         hora_inicio: "-",
         id_patient: this.props.id_patient,
-        id_user: this.props.id_user
+        id_user: this.props.id_user,
+        openConfirm: false,
+        confirmMessage: '',
     };
     
     handleSave = async (e) => {
@@ -50,7 +52,10 @@ class Agregar extends Component {
             id_patient
         }).then(resp => {
             submitButton.disabled = false;
-            alert('Ejercicio creado.'); 
+            this.setState({
+                openConfirm: true,
+                confirmMessage: 'Ejercicio creado.'
+            });
 
             if(nombre === "Predeterminado")
                 this.props.history.push(`/Users/${id_user}`);
@@ -59,16 +64,23 @@ class Agregar extends Component {
         })
         .catch(err => {
             submitButton.disabled = false;
-            alert('Error al crear ejercicio. ' + err.response.data.msg);
-        });        
+            this.setState({
+                openConfirm: true,
+                confirmMessage: 'Error al crear ejercicio. ' + err.response.data.msg
+            });
+        });
     }
 
     changeInput = (event) => {    
         this.setState({[event.target.name]:event.target.value});
     }
     
+    handleCancel = () => {
+        this.setState({ openConfirm: false });
+    };
+
     render() {
-        const { nombre, id_user, id_patient } = this.state;
+        const { nombre, id_user, id_patient, openConfirm, confirmMessage } = this.state;
 
         return (
             <div>
@@ -230,6 +242,14 @@ class Agregar extends Component {
             </Segment>
             </Grid.Column>
             </Grid>
+            
+            <Confirm
+                open={openConfirm}
+                content={confirmMessage}
+                confirmButton='Aceptar'
+                cancelButton={null}
+                onConfirm={this.handleCancel}
+            />
             </div>
         );
     }

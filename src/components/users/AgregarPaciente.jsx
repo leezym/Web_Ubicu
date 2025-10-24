@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import MenuNav from '../pages/MenuNav';
-import { Form,Button,Segment,Label,Grid } from 'semantic-ui-react';
+import { Form,Button,Segment,Label,Grid, Confirm } from 'semantic-ui-react';
 import {crearPatient} from "../../actions/patientsAction";
 import {Link, withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
@@ -23,7 +23,9 @@ class AgregarPaciente extends Component {
         ciudad:"-",
         password: "",
         id_user: this.props.id_user,
-        id_patient: ""
+        id_patient: "",
+        openConfirm: false,
+        confirmMessage: '',
     };
     
     handleSave = async (e) => {
@@ -50,7 +52,10 @@ class AgregarPaciente extends Component {
             id_user: id_user
         }).then(resp => {
             submitButton.disabled = false;
-            alert('Paciente creado'); 
+            this.setState({
+                openConfirm: true,
+                confirmMessage: 'Paciente creado'
+            });
             
             fetch(URL+'getPatientbyCc', {
                 method: 'POST',
@@ -103,7 +108,10 @@ class AgregarPaciente extends Component {
                     }
                 })
                 .catch(err => {
-                    alert('Error al crear recompensas. ' + err.response.data.msg);
+                    this.setState({
+                        openConfirm: true,
+                        confirmMessage: 'Error al crear recompensas. ' + err.response.data.msg
+                    });
                 });
 
                 fetch(URL+'createCustomizations', {
@@ -131,16 +139,25 @@ class AgregarPaciente extends Component {
                     }
                 })
                 .catch(err => {
-                    alert('Error al crear personalización. ' + err.message);
+                    this.setState({
+                        openConfirm: true,
+                        confirmMessage: 'Error al crear personalización. ' + err.message
+                    });
                 });
             })
             .catch(err => {
-                alert('Error al consultar paciente. ' + err.message);
+                this.setState({
+                    openConfirm: true,
+                    confirmMessage: 'Error al consultar paciente. ' + err.message
+                });
             });
         })
         .catch(err => {
             submitButton.disabled = false;
-            alert('Error al crear paciente. ' + err.message);           
+            this.setState({
+                openConfirm: true,
+                confirmMessage: 'Error al crear paciente. ' + err.message
+            });
         });
     };
     
@@ -148,8 +165,12 @@ class AgregarPaciente extends Component {
         this.setState({[event.target.name]:event.target.value});
     }
 
+    handleCancel = () => {
+        this.setState({ openConfirm: false });
+    };
+
     render() {
-        const { id_patient, id_user } = this.state;
+        const { id_patient, id_user, openConfirm, confirmMessage } = this.state;
 
         return (
             <div>
@@ -290,6 +311,14 @@ class AgregarPaciente extends Component {
                 
                 </Grid.Column>
                 </Grid>
+                
+                <Confirm
+                    open={openConfirm}
+                    content={confirmMessage}
+                    confirmButton='Aceptar'
+                    cancelButton={null}
+                    onConfirm={this.handleCancel}
+                />
             </div>
         );
     }
