@@ -47,7 +47,7 @@ class Users extends Component {
     .catch(err => {
       this.setState({
         openConfirm: true,
-        confirmMessage: 'Error al consultar paciente. ' + err.message
+        confirmMessage: 'Error al consultar paciente. ' + err.response.data.msg
       });
     });
   }
@@ -91,7 +91,7 @@ class Users extends Component {
         : patients.slice(offset, offset + patientsPerPage);
 
     return (
-      <div>
+      <>
         <MenuNav/> 
         <Grid stackable style={{ marginTop: '6em' }}>
           <Grid.Column>
@@ -163,7 +163,7 @@ class Users extends Component {
           cancelButton={null}
           onConfirm={this.handleCancel}
         />
-      </div>
+      </>
     );
   }
 }

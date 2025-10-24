@@ -61,7 +61,7 @@ class LoginForm extends Component {
       submitButton.disabled = false;
       this.setState({
         openConfirm: true,
-        confirmMessage: 'Error al iniciar sesión. ' + err.message
+        confirmMessage: 'Error al iniciar sesión. ' + err.response.data.msg
       });
     });
   }
@@ -74,7 +74,7 @@ class LoginForm extends Component {
     const { cedula, password, openConfirm, confirmMessage } = this.state;
     
     return (
-      <div>
+      <>
         <Grid textAlign="center" style={{ height: '100vh' }} verticalAlign="middle">
           <Grid.Column style={{ maxWidth: 450 }}>
             <Image src={logo} centered style={{ width: '350px', height: 'auto' }} />
@@ -128,7 +128,7 @@ class LoginForm extends Component {
           cancelButton={null}
           onConfirm={this.handleCancel}
         />
-      </div>
+      </>
     );
   }
 }

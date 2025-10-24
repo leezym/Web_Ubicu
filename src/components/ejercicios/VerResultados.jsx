@@ -177,7 +177,7 @@ class VerResultados extends React.Component {
       .catch(err => {
         this.setState({
           openConfirm: true,
-          confirmMessage: 'Error al consultar ejercicio. ' + err.message
+          confirmMessage: 'Error al consultar ejercicio. ' + err.response.data.msg
         });
     });
   }
@@ -227,7 +227,7 @@ class VerResultados extends React.Component {
     const { id_patient, series, options, dateOptions, hourOptions, msg, openConfirm, confirmMessage } = this.state;
 
     return (
-      <div>
+      <>
         <MenuNav />
         <Grid style={{ marginTop: '5em' }} columns={1}>
           <Grid.Column>
@@ -270,7 +270,7 @@ class VerResultados extends React.Component {
           cancelButton={null}
           onConfirm={this.handleCancel}
         />
-      </div>
+      </>
     );
   }
 }

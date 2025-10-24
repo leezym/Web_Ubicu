@@ -74,14 +74,14 @@ class Ejercicios extends Component {
           .catch(err => {
             this.setState({
               openConfirm: true,
-              confirmMessage: 'Error al consultar ejercicios. ' + err.message
+              confirmMessage: 'Error al consultar ejercicios. ' + err.response.data.msg
             });
         });
       })
       .catch(err => {
         this.setState({
           openConfirm: true,
-          confirmMessage: 'Error al consultar paciente. ' + err.message
+          confirmMessage: 'Error al consultar paciente. ' + err.response.data.msg
         });
     });
   };
@@ -117,7 +117,7 @@ class Ejercicios extends Component {
       currentExercises = ejercicios.slice(offset, offset + exercisesPerPage);
     
     return (
-      <div>
+      <>
         <MenuNav />
         <Grid style={{ marginTop: '7em' }} columns={1}>
           <Grid.Column>
@@ -159,7 +159,7 @@ class Ejercicios extends Component {
                 :
                   (
                     <div>
-                      <p style={{ marginBottom:"10px", marginTop:"10px" }}>No hay ejercicios predeterminados disponibles, por favor agregar.</p>
+                      <p style={{ marginBottom:"10px", marginTop:"10px" }}>No hay ejercicio predeterminado disponible, por favor agregar.</p>
                       <Link to={{ pathname: `/AgregarEjercicio/${user._id}`, nombre_terapia: "Predeterminado" }}>
                         <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar ejercicio predeterminado</Button>
                       </Link>
@@ -224,7 +224,7 @@ class Ejercicios extends Component {
           cancelButton={null}
           onConfirm={this.handleCancel}
         />
-      </div>
+      </>
     );
   }
 }

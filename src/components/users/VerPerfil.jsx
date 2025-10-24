@@ -54,7 +54,7 @@ class VerPerfil extends Component {
         .catch(err => {
             this.setState({
                 openConfirm: true,
-                confirmMessage: 'Error al consultar fisioterapeuta. ' + err.message
+                confirmMessage: 'Error al consultar fisioterapeuta. ' + err.response.data.msg
             });
           });
     }
@@ -166,159 +166,159 @@ class VerPerfil extends Component {
         const { readOnly, user, showPassword, openConfirm, confirmMessage } = this.state;
 
         return (
-        <div>
-            <MenuNav/>
-            <Segment style={{ marginTop: '6em' }}>
-                <Grid stackable>
-                    <Grid.Column>
-                        <Label ribbon style={{color:"#28367b"}}>
-                        Perfil
-                        </Label>
-                        <Card fluid color="blue" >
-                            <Card.Content >
-                                <Card.Header textAlign="center" style={{ marginBottom: '1em' }}>
-                                    <h3 style={{ color: '#28367b', margin: 0 }}>Actualizar Datos</h3>
-                                </Card.Header>
+            <>
+                <MenuNav/>
+                <Segment style={{ marginTop: '6em' }}>
+                    <Grid stackable>
+                        <Grid.Column>
+                            <Label ribbon style={{color:"#28367b"}}>
+                            Perfil
+                            </Label>
+                            <Card fluid color="blue" >
+                                <Card.Content >
+                                    <Card.Header textAlign="center" style={{ marginBottom: '1em' }}>
+                                        <h3 style={{ color: '#28367b', margin: 0 }}>Actualizar Datos</h3>
+                                    </Card.Header>
 
-                                <Card.Description width="100%">                        
-                                    <Form onSubmit={this.handleSave}>
-                                        <Form.Group widths='equal'>
-                                            <Form.Field style={{ width: '300px' }}>
-                                            <label>Nombre *</label>
-                                            <input  
-                                                name="nombre"
-                                                placeholder='Nombre'
-                                                type='text'
-                                                onChange={this.changeInputUser}
-                                                disabled={readOnly}
-                                                value={readOnly ? user.nombre : null}
-                                                required/>
-                                            </Form.Field>
-                                            <Form.Field style={{ width: '300px' }}>
-                                            <label>Cédula *</label>
-                                            <input  
-                                                name="cedula"
-                                                placeholder='Cédula'
-                                                type='number'
-                                                min="1"
-                                                max="9999999999"
-                                                step="1"
-                                                onChange={this.changeInputUser}
-                                                disabled={readOnly}
-                                                value={readOnly ? user.cedula : null}
-                                                required/>
-                                            </Form.Field>
-                                            <Form.Field style={{ width: '300px' }}>
-                                            <label>Teléfono *</label>
-                                            <input
-                                                name="telefono"
-                                                placeholder='Teléfono'
-                                                type='number'
-                                                min="1000000000"
-                                                max="9999999999"
-                                                step="1"
-                                                onChange={this.changeInputUser}
-                                                disabled={readOnly}
-                                                value={readOnly ? user.telefono : null}
-                                                required/>
-                                            </Form.Field>
-                                            <Form.Field style={{ width: '300px' }}>
-                                            <label>Correo *</label>
-                                            <input
-                                                name="email"
-                                                placeholder='Correo'
-                                                type='email'
-                                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                                                onChange={this.changeInputUser}
-                                                disabled={readOnly}
-                                                value={readOnly ? user.email : null}
-                                                required/>
-                                                
-                                            </Form.Field>                                        
-                                        </Form.Group >
-                                        { readOnly ?
-                                            <Button onClick={()=>{ this.handleEdit(false); this.copyOriginal(); }} type='button' style={{ backgroundColor: '#46bee0', color:"white" }}>Actualizar</Button>
-                                            :
-                                            <>
-                                                <Button type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Guardar</Button>
-                                                <Button onClick={()=>{ this.handleEdit(true); this.pasteOriginal(); }} type='button' style={{ backgroundColor: '#eb5a25', color:"white" }}>Cancelar</Button>
-                                            </>
-                                        }                                   
-                                    </Form>
-                                </Card.Description>
-                            </Card.Content >
-                        </Card> 
+                                    <Card.Description width="100%">                        
+                                        <Form onSubmit={this.handleSave}>
+                                            <Form.Group widths='equal'>
+                                                <Form.Field style={{ width: '300px' }}>
+                                                <label>Nombre *</label>
+                                                <input  
+                                                    name="nombre"
+                                                    placeholder='Nombre'
+                                                    type='text'
+                                                    onChange={this.changeInputUser}
+                                                    disabled={readOnly}
+                                                    value={readOnly ? user.nombre : null}
+                                                    required/>
+                                                </Form.Field>
+                                                <Form.Field style={{ width: '300px' }}>
+                                                <label>Cédula *</label>
+                                                <input  
+                                                    name="cedula"
+                                                    placeholder='Cédula'
+                                                    type='number'
+                                                    min="1"
+                                                    max="9999999999"
+                                                    step="1"
+                                                    onChange={this.changeInputUser}
+                                                    disabled={readOnly}
+                                                    value={readOnly ? user.cedula : null}
+                                                    required/>
+                                                </Form.Field>
+                                                <Form.Field style={{ width: '300px' }}>
+                                                <label>Teléfono *</label>
+                                                <input
+                                                    name="telefono"
+                                                    placeholder='Teléfono'
+                                                    type='number'
+                                                    min="1000000000"
+                                                    max="9999999999"
+                                                    step="1"
+                                                    onChange={this.changeInputUser}
+                                                    disabled={readOnly}
+                                                    value={readOnly ? user.telefono : null}
+                                                    required/>
+                                                </Form.Field>
+                                                <Form.Field style={{ width: '300px' }}>
+                                                <label>Correo *</label>
+                                                <input
+                                                    name="email"
+                                                    placeholder='Correo'
+                                                    type='email'
+                                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                                    onChange={this.changeInputUser}
+                                                    disabled={readOnly}
+                                                    value={readOnly ? user.email : null}
+                                                    required/>
+                                                    
+                                                </Form.Field>                                        
+                                            </Form.Group >
+                                            { readOnly ?
+                                                <Button onClick={()=>{ this.handleEdit(false); this.copyOriginal(); }} type='button' style={{ backgroundColor: '#46bee0', color:"white" }}>Actualizar</Button>
+                                                :
+                                                <>
+                                                    <Button type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Guardar</Button>
+                                                    <Button onClick={()=>{ this.handleEdit(true); this.pasteOriginal(); }} type='button' style={{ backgroundColor: '#eb5a25', color:"white" }}>Cancelar</Button>
+                                                </>
+                                            }                                   
+                                        </Form>
+                                    </Card.Description>
+                                </Card.Content >
+                            </Card> 
 
-                        <Card fluid color="blue" >
-                            <Card.Content >
-                                <Card.Header textAlign="center" style={{ marginBottom: '1em' }}>
-                                    <h3 style={{ color: '#28367b', margin: 0 }}>Actualizar Contraseña</h3>
-                                </Card.Header>
-                                <Card.Description width="100%">   
-                                    <span style={{ color: 'blue', fontSize: 'small'}}>La contraseña debe contener al menos una mayúscula, un número y un caracter especial.</span>                        
-                                    <Form onSubmit={this.handleUpdate} style={{ marginTop: '10px'}}>
-                                        <Form.Group widths='equal'>
-                                            <Form.Field style={{ width: '400px' }}>
-                                            <label>Contraseña actual *</label>
-                                            <Input 
-                                                name="password_actual"
-                                                placeholder='Contraseña actual'
-                                                type={showPassword.current ? 'text' : 'password'}
-                                                onChange={this.changeInputPass}
-                                                value={user.password_actual}
-                                                required
-                                                icon={<Icon name={showPassword.current ? 'eye' : 'eye slash'} link onClick={() => this.togglePasswordVisibility('current')} />}
-                                                iconPosition="right"
-                                            />                      
-                                            </Form.Field>
-                                            <Form.Field style={{ width: '400px' }}> 
-                                            <label>Nueva contraseña *</label>
-                                            <Input 
-                                                name="password_nueva"
-                                                placeholder='Contraseña nueva'
-                                                type={showPassword.nueva ? 'text' : 'password'}
-                                                minLength="8"
-                                                pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$"
-                                                onChange={this.changeInputPass}
-                                                value={user.password_nueva}
-                                                required
-                                                icon={<Icon name={showPassword.nueva ? 'eye' : 'eye slash'} link onClick={() => this.togglePasswordVisibility('nueva')} />}
-                                            />
-                                            </Form.Field>
-                                            <Form.Field style={{ marginBottom: '20px', width: '400px' }}>
-                                            <label>Repita nueva contraseña *</label>
-                                            <Input 
-                                                name="repeat_password_nueva"
-                                                placeholder='Repita nueva contraseña'
-                                                type={showPassword.repeat ? 'text' : 'password'}
-                                                minLength="8"
-                                                pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$"
-                                                onChange={this.changeInputPass}
-                                                value={user.repeat_password_nueva}
-                                                required
-                                                icon={<Icon name={showPassword.repeat ? 'eye' : 'eye slash'} link onClick={() => this.togglePasswordVisibility('repeat')} />}
-                                            />
-                                            </Form.Field>
-                                        </Form.Group>    
-                                        <Button type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Actualizar</Button>
-                                    </Form>
-                                </Card.Description>
-                            </Card.Content >
-                        </Card> 
-                    
-                        <Link to={`/Users/${user._id}`}><Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
-                    </Grid.Column>
-                </Grid>
-            </Segment>
+                            <Card fluid color="blue" >
+                                <Card.Content >
+                                    <Card.Header textAlign="center" style={{ marginBottom: '1em' }}>
+                                        <h3 style={{ color: '#28367b', margin: 0 }}>Actualizar Contraseña</h3>
+                                    </Card.Header>
+                                    <Card.Description width="100%">   
+                                        <span style={{ color: 'blue', fontSize: 'small'}}>La contraseña debe contener al menos una mayúscula, un número y un caracter especial.</span>                        
+                                        <Form onSubmit={this.handleUpdate} style={{ marginTop: '10px'}}>
+                                            <Form.Group widths='equal'>
+                                                <Form.Field style={{ width: '400px' }}>
+                                                <label>Contraseña actual *</label>
+                                                <Input 
+                                                    name="password_actual"
+                                                    placeholder='Contraseña actual'
+                                                    type={showPassword.current ? 'text' : 'password'}
+                                                    onChange={this.changeInputPass}
+                                                    value={user.password_actual}
+                                                    required
+                                                    icon={<Icon name={showPassword.current ? 'eye' : 'eye slash'} link onClick={() => this.togglePasswordVisibility('current')} />}
+                                                    iconPosition="right"
+                                                />                      
+                                                </Form.Field>
+                                                <Form.Field style={{ width: '400px' }}> 
+                                                <label>Nueva contraseña *</label>
+                                                <Input 
+                                                    name="password_nueva"
+                                                    placeholder='Contraseña nueva'
+                                                    type={showPassword.nueva ? 'text' : 'password'}
+                                                    minLength="8"
+                                                    pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$"
+                                                    onChange={this.changeInputPass}
+                                                    value={user.password_nueva}
+                                                    required
+                                                    icon={<Icon name={showPassword.nueva ? 'eye' : 'eye slash'} link onClick={() => this.togglePasswordVisibility('nueva')} />}
+                                                />
+                                                </Form.Field>
+                                                <Form.Field style={{ marginBottom: '20px', width: '400px' }}>
+                                                <label>Repita nueva contraseña *</label>
+                                                <Input 
+                                                    name="repeat_password_nueva"
+                                                    placeholder='Repita nueva contraseña'
+                                                    type={showPassword.repeat ? 'text' : 'password'}
+                                                    minLength="8"
+                                                    pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$"
+                                                    onChange={this.changeInputPass}
+                                                    value={user.repeat_password_nueva}
+                                                    required
+                                                    icon={<Icon name={showPassword.repeat ? 'eye' : 'eye slash'} link onClick={() => this.togglePasswordVisibility('repeat')} />}
+                                                />
+                                                </Form.Field>
+                                            </Form.Group>    
+                                            <Button type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Actualizar</Button>
+                                        </Form>
+                                    </Card.Description>
+                                </Card.Content >
+                            </Card> 
+                        
+                            <Link to={`/Users/${user._id}`}><Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
+                        </Grid.Column>
+                    </Grid>
+                </Segment>
 
-            <Confirm
-                open={openConfirm}
-                content={confirmMessage}
-                confirmButton='Aceptar'
-                cancelButton={null}
-                onConfirm={this.handleCancel}
-            />            
-        </div>
+                <Confirm
+                    open={openConfirm}
+                    content={confirmMessage}
+                    confirmButton='Aceptar'
+                    cancelButton={null}
+                    onConfirm={this.handleCancel}
+                />            
+            </>
         );
     }
 }

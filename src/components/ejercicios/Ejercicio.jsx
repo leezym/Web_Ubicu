@@ -110,7 +110,7 @@ class Ejercicio extends Component {
         const { readOnly, ejercicio, disabledEdit, openConfirm, confirmMessage } = this.state;
 
         return (
-            <div>
+            <>
                 <Card fluid color="blue" >
                     <Card.Content >
                         <Card.Header></Card.Header>
@@ -126,20 +126,25 @@ class Ejercicio extends Component {
                                     disabled={true}
                                     value={ejercicio.nombre}/>
                                 </Form.Field>
-                                <Form.Field>
-                                <label>Duración total de la terapia (días) *</label>
-                                <input
-                                    name="duracion_total"
-                                    placeholder='Duración total'
-                                    type='number'
-                                    min="1"
-                                    max="999"
-                                    step="1"
-                                    onChange={this.changeInput}
-                                    disabled={readOnly}
-                                    value={readOnly ? ejercicio.duracion_total : null}
-                                    required/>                            
-                                </Form.Field>
+                                {
+                                    ejercicio.nombre !== "Predeterminado" ?
+                                        <Form.Field>
+                                        <label>Duración total de la terapia (días) *</label>
+                                        <input
+                                            name="duracion_total"
+                                            placeholder='Duración total'
+                                            type='number'
+                                            min="1"
+                                            max="999"
+                                            step="1"
+                                            onChange={this.changeInput}
+                                            disabled={readOnly}
+                                            value={readOnly ? ejercicio.duracion_total : null}
+                                            required/>                            
+                                        </Form.Field>
+                                    :
+                                        <></>
+                                }
                                 <Form.Field>
                                 <label>Frecuencia (cuantos días a la semana) *</label>
                                 <select
@@ -247,53 +252,53 @@ class Ejercicio extends Component {
                                         <></>
                                 }
                                 <Form.Field>
-                                <label>Apnea (seg) *</label>
-                                <select
-                                    name="apnea"
-                                    value={readOnly ? ejercicio.apnea : null}
-                                    disabled={readOnly}
-                                    onChange={this.changeInput}
-                                    required>
-                                    <option value="-">Seleccione una opción</option>
-                                    <option value="1">1 seg</option>
-                                    <option value="2">2 seg</option>
-                                    <option value="3">3 seg</option>
-                                </select>
+                                    <label>Apnea (seg) *</label>
+                                    <select
+                                        name="apnea"
+                                        value={readOnly ? ejercicio.apnea : null}
+                                        disabled={readOnly}
+                                        onChange={this.changeInput}
+                                        required>
+                                        <option value="-">Seleccione una opción</option>
+                                        <option value="1">1 seg</option>
+                                        <option value="2">2 seg</option>
+                                        <option value="3">3 seg</option>
+                                    </select>
                                 </Form.Field>                    
                                 <Form.Field>
-                                <label>Flujo (mL) *</label>
-                                <select
-                                    name="flujo"
-                                    value={readOnly ? ejercicio.flujo : null}
-                                    disabled={readOnly}
-                                    onChange={this.changeInput}
-                                    required>
-                                    <option value="-">Seleccione una opción</option>
-                                    <option value="600">600 mL</option>
-                                    <option value="900">900 mL</option>
-                                    <option value="1200">1200 mL</option>
-                                    <option value="1500">1500 mL</option>
-                                    <option value="1800">1800 mL</option>
-                                    <option value="2100">2100 mL</option>
-                                    <option value="2400">2400 mL</option>
-                                </select>
+                                    <label>Flujo (mL) *</label>
+                                    <select
+                                        name="flujo"
+                                        value={readOnly ? ejercicio.flujo : null}
+                                        disabled={readOnly}
+                                        onChange={this.changeInput}
+                                        required>
+                                        <option value="-">Seleccione una opción</option>
+                                        <option value="600">600 mL</option>
+                                        <option value="900">900 mL</option>
+                                        <option value="1200">1200 mL</option>
+                                        <option value="1500">1500 mL</option>
+                                        <option value="1800">1800 mL</option>
+                                        <option value="2100">2100 mL</option>
+                                        <option value="2400">2400 mL</option>
+                                    </select>
                                 </Form.Field>
                                 <Form.Field style={{marginBottom: '20px'}}>
-                                <label>Hora de inicio de la terapia *</label>
-                                <select
-                                    name="hora_inicio"
-                                    value={readOnly ? ejercicio.hora_inicio : null}
-                                    disabled={readOnly}
-                                    onChange={this.changeInput}
-                                    required>
-                                    <option value={"-"}>Seleccione una opción</option>
-                                    <option value="6">6:00 am</option>
-                                    <option value="7">7:00 am</option>
-                                    <option value="8">8:00 am</option>
-                                    <option value="9">9:00 am</option>
-                                    <option value="10">10:00 am</option>
-                                    <option value="11">11:00 am</option>
-                                </select>
+                                    <label>Hora de inicio de la terapia *</label>
+                                    <select
+                                        name="hora_inicio"
+                                        value={readOnly ? ejercicio.hora_inicio : null}
+                                        disabled={readOnly}
+                                        onChange={this.changeInput}
+                                        required>
+                                        <option value={"-"}>Seleccione una opción</option>
+                                        <option value="6">6:00 am</option>
+                                        <option value="7">7:00 am</option>
+                                        <option value="8">8:00 am</option>
+                                        <option value="9">9:00 am</option>
+                                        <option value="10">10:00 am</option>
+                                        <option value="11">11:00 am</option>
+                                    </select>
                                 </Form.Field>
                             </Form.Group>
 
@@ -328,7 +333,7 @@ class Ejercicio extends Component {
                 cancelButton={null}
                 onConfirm={this.handleCancel}
             />
-        </div>
+        </>
         );
     }
 }

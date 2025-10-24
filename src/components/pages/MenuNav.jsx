@@ -29,7 +29,7 @@ class MenuNav extends Component {
     const { openConfirm } = this.state;
 
     return (
-      <div>
+      <>
         <Menu fixed='top' inverted style={{ backgroundColor: "#28367b" }}>
           <Container>
             
@@ -65,7 +65,7 @@ class MenuNav extends Component {
           onCancel={this.handleCancel}
           onConfirm={this.handleConfirm}
         />
-      </div>
+      </>
     );
   }
 }

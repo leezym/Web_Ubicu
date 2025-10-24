@@ -42,7 +42,7 @@ class Ver extends Component {
         .catch(err => {
             this.setState({
                 openConfirm: true,
-                confirmMessage: 'Error al consultar paciente. ' + err.message
+                confirmMessage: 'Error al consultar paciente. ' + err.response.data.msg
             });
         });
     }
@@ -109,7 +109,7 @@ class Ver extends Component {
         const { readOnly, patient, openConfirm, confirmMessage } = this.state;
 
         return (
-            <div>
+            <>
                 <MenuNav/>
                 <Segment style={{ marginTop: '6em' }} >
                     <Grid stackable>
@@ -297,7 +297,7 @@ class Ver extends Component {
                     cancelButton={null}
                     onConfirm={this.handleCancel}
                 />
-            </div>
+            </>
         );
     }
 }

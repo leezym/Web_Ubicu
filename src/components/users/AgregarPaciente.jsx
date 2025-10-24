@@ -141,14 +141,14 @@ class AgregarPaciente extends Component {
                 .catch(err => {
                     this.setState({
                         openConfirm: true,
-                        confirmMessage: 'Error al crear personalización. ' + err.message
+                        confirmMessage: 'Error al crear personalización. ' + err.response.data.msg
                     });
                 });
             })
             .catch(err => {
                 this.setState({
                     openConfirm: true,
-                    confirmMessage: 'Error al consultar paciente. ' + err.message
+                    confirmMessage: 'Error al consultar paciente. ' + err.response.data.msg
                 });
             });
         })
@@ -156,7 +156,7 @@ class AgregarPaciente extends Component {
             submitButton.disabled = false;
             this.setState({
                 openConfirm: true,
-                confirmMessage: 'Error al crear paciente. ' + err.message
+                confirmMessage: 'Error al crear paciente. ' + err.response.data.msg
             });
         });
     };
@@ -173,7 +173,7 @@ class AgregarPaciente extends Component {
         const { id_patient, id_user, openConfirm, confirmMessage } = this.state;
 
         return (
-            <div>
+            <>
                 <MenuNav/>
                 <Grid style={{ marginTop: '7em' }} columns={1}>
                 <Grid.Column>
@@ -319,7 +319,7 @@ class AgregarPaciente extends Component {
                     cancelButton={null}
                     onConfirm={this.handleCancel}
                 />
-            </div>
+            </>
         );
     }
 }

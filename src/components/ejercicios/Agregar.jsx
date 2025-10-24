@@ -33,12 +33,13 @@ class Agregar extends Component {
         submitButton.disabled = true;
 
         const { nombre, duracion_total, frecuencia_dias, frecuencia_horas, repeticiones, series, periodos_descanso, fecha_inicio, apnea, flujo, hora_inicio, id_patient, id_user } = this.state;
+        const duracion = nombre === "Predeterminado" ? 0 : duracion_total;
         const inicio = nombre === "Predeterminado" ? null : moment(fecha_inicio, 'YYYY-MM-DD').format('DD/MM/YYYY').toString();
         const fin = nombre === "Predeterminado" ? null : moment(fecha_inicio, 'YYYY-MM-DD').add(frecuencia_dias - 1, 'days').format('DD/MM/YYYY').toString();
         
         this.props.crearEjercicio({
             nombre,
-            duracion_total,
+            duracion_total: duracion,
             frecuencia_dias,
             frecuencia_horas,
             repeticiones,
@@ -83,27 +84,43 @@ class Agregar extends Component {
         const { nombre, id_user, id_patient, openConfirm, confirmMessage } = this.state;
 
         return (
-            <div>
+            <>
             <MenuNav/>
             <Grid style={{ marginTop: '7em' }} columns={1}>
             <Grid.Column>
             <Segment raised>
                 <Label ribbon style={{color:"#28367b"}}>
-                Registrar Ejercicio Nuevo
+                {
+                    nombre !== "Predeterminado" ?
+                        "Registrar Ejercicio Nuevo"
+                    :
+                        "Registrar Ejercicio Predeterminado"
+                }
                 </Label>
+                {
+                    nombre === "Predeterminado" ?
+                        <h5>Recuerda que este ejercicio se utiliza cuando el paciente no tiene conexión a internet. </h5>
+                    :
+                        <></>
+                }
                 <Form onSubmit={this.handleSave} style={{ marginTop: '1em' }}>
-                    <Form.Field>
-                    <label>Duración total de la terapia (días) *</label>
-                    <input 
-                        name="duracion_total"
-                        placeholder='Duración total'
-                        type='number'
-                        min="1"
-                        max="999"
-                        step="1"
-                        onChange={this.changeInput}
-                        required/>
-                    </Form.Field>
+                    {
+                        nombre !== "Predeterminado" ?
+                            <Form.Field>
+                            <label>Duración total de la terapia (días) *</label>
+                            <input 
+                                name="duracion_total"
+                                placeholder='Duración total'
+                                type='number'
+                                min="1"
+                                max="999"
+                                step="1"
+                                onChange={this.changeInput}
+                                required/>
+                            </Form.Field>
+                        :
+                            <></>
+                    }
                     <Form.Field>
                     <label>Frecuencia (cuantos días a la semana) *</label>
                     <select
@@ -250,7 +267,7 @@ class Agregar extends Component {
                 cancelButton={null}
                 onConfirm={this.handleCancel}
             />
-            </div>
+            </>
         );
     }
 }

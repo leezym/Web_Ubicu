@@ -37,7 +37,7 @@ export default function withAuth(ComponentToProtect) {
           loading: false,
           redirect: true,
           openConfirm: true,
-          confirmMessage: 'Error al autenticar. ' + err.message
+          confirmMessage: 'Error al autenticar. ' + err.response.data.msg
         });
       });
     }
