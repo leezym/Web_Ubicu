@@ -19,8 +19,8 @@ function fillGraph(data) {
 
     // Add data to series
     for (let j = 0; j < data[i].flujo.length; j++) {
-      const tiempo = data[i].tiempo[j].toFixed(1) * 1000;
-      const flujo = data[i].flujo[j].toFixed(1);
+      const tiempo = data[i].tiempo[j] * 1000; //probar quitar decimales
+      const flujo = data[i].flujo[j].toFixed(2); //redondear a dos decimales
       series.data.push([tiempo, flujo]);
     }
 

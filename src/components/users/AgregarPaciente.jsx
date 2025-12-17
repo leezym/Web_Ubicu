@@ -21,7 +21,6 @@ class AgregarPaciente extends Component {
         ciudad:"-",
         password: "",
         id_user: this.props.id_user,
-        id_patient: "",
         openConfirm: false,
         confirmMessage: '',
     };
@@ -32,134 +31,49 @@ class AgregarPaciente extends Component {
         const submitButton = e.target.querySelector('button[type="submit"]');
         submitButton.disabled = true;
 
-        const { crearPatient, id_user, } = this.props;
-        const { nombre, cedula, telefono, email, edad, sexo, peso, altura, direccion, ciudad } = this.state;
+        try {
+            const { crearPatient, id_user } = this.props;
+            const {
+                nombre, cedula, telefono, email,
+                edad, sexo, peso, altura, direccion, ciudad
+            } = this.state;
 
-        crearPatient({
-            nombre,
-            cedula,
-            telefono,
-            email,
-            edad,
-            sexo,
-            peso,
-            altura,
-            direccion,
-            ciudad,
-            password: (telefono % 10000).toString(),
-            id_user: id_user
-        }).then(resp => {
-            console.log("resp: ",resp)
-            submitButton.disabled = false;
+            const resp = await crearPatient({
+                nombre,
+                cedula,
+                telefono,
+                email,
+                edad,
+                sexo,
+                peso,
+                altura,
+                direccion,
+                ciudad,
+                password: (telefono % 10000).toString(),
+                id_user
+            });
+
             this.setState({
-                id_patient: resp._id,
                 openConfirm: true,
                 confirmMessage: 'Paciente creado',
-            });
-            
-            fetch(URL+'getPatientbyCc', {
-                method: 'POST',
-                body: JSON.stringify({cedula}),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-access-token': localStorage.getItem('token')
-                }
-            })
-            .then(res => {
-                if (res.ok) {
-                  return res.json();
-                } else {
-                  return res.json().then(error => {
-                    throw new Error(error.msg);
-                  });
-                }
-            })
-            .then(resp => {
-                fetch(URL+'createRewards', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        all_badges_array: "0,0,0,0,0,0,0;0,0,0,0,0,0,0;0,0,0,0,0,0,0;0,0,0,0,0,0,0;", //7 isnignias por 4 items
-                        session_reward: 0,
-                        day_reward: 0,
-                        total_reward: 0,
-                        total_series: 0,
-                        total_sessions: 0,
-                        total_days: 0,
-                        total_weeks: 0,
-                        id_patient: resp._id
-                    }),
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-access-token': localStorage.getItem('token')
-                    }
-                })
-                .then(res => {
-                    if (res.ok) {
-                      return res.json();
-                    } else {
-                      return res.json().then(error => {
-                        throw new Error(error.msg);
-                      });
-                    }
-                })
-                .catch(err => {
-                    this.setState({
-                        openConfirm: true,
-                        confirmMessage: 'Error al crear recompensas. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
-                    });
-                });
-
-                fetch(URL+'createCustomizations', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        id_customization: 0,
-                        id_item_fondos_array: "0,-1,-1,-1,-1", //5 temas, el primero es gratis
-                        id_item_figuras_array: "0,-1,-1,-1,-1", //5 temas, el primero es gratis
-                        all_fondos_items_array: "1,1,1;0,0,0;0,0,0;0,0,0;0,0,0;", //3 items por cada 5 temas, el primero es gratis
-                        all_figuras_items_array: "1,1,1;0,0,0;0,0,0;0,0,0;0,0,0;", //3 items por cada 5 temas, el primero es gratis
-                        id_patient: resp._id
-                    }),
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-access-token': localStorage.getItem('token')
-                    }
-                })
-                .then(res => {
-                    if (res.ok) {
-                      return res.json();
-                    } else {
-                      return res.json().then(error => {
-                        throw new Error(error.msg);
-                      });
-                    }
-                })
-                .catch(err => {
-                    this.setState({
-                        openConfirm: true,
-                        confirmMessage: 'Error al crear personalización. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
-                    });
-                });
-            })
-            .catch(err => {
-                this.setState({
-                    openConfirm: true,
-                    confirmMessage: 'Error al consultar paciente. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
-                });
             });
 
             this.props.history.push({
                 pathname: `/AgregarEjercicio/${resp._id}`,
                 nombre_terapia: "Predeterminado",
-                state: { id_user: id_user }
+                state: { id_user }
             });
-        })
-        .catch(err => {
-            submitButton.disabled = false;
+
+        } catch (err) {
             this.setState({
                 openConfirm: true,
-                confirmMessage: 'Error al crear paciente. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
+                confirmMessage:
+                    'Error al crear paciente. ' +
+                    (err?.response?.data?.msg || err.message || 'Error desconocido.')
             });
-        });
+        } finally {
+            submitButton.disabled = false;
+        }
     };
     
     changeInput = (event) => {
@@ -171,9 +85,7 @@ class AgregarPaciente extends Component {
     };
 
     render() {
-        const { id_patient, id_user, openConfirm, confirmMessage } = this.state;
-
-        console.log(id_patient)
+        const { id_user, openConfirm, confirmMessage } = this.state;
 
         return (
             <>
