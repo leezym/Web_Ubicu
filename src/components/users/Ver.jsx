@@ -12,6 +12,8 @@ class Ver extends Component {
         readOnly: true,
         original: {},
         patient: {},
+        departamento: "",
+        ciudad: "",
         openConfirm: false,
         confirmMessage: '',
     };
@@ -35,8 +37,20 @@ class Ver extends Component {
               });
             }
           })
-        .then(resp => {        
+        .then(resp => {
             const patient = resp;
+            if (patient.ciudad) {
+                const [dep, city] = patient.ciudad.split(', ');
+                this.setState({
+                    departamento: dep || "",
+                    ciudad: city || ""
+                })
+            } else {
+                this.setState({
+                    departamento: "",
+                    ciudad: ""
+                })
+            }
             this.setState({ patient });
         })
         .catch(err => {
@@ -57,10 +71,12 @@ class Ver extends Component {
         const submitButton = e.target.querySelector('button[type="submit"]');
         submitButton.disabled = true;
         
-        const { patient } = this.state;
+        const { patient, departamento, ciudad } = this.state;
 
         this.handleEdit(true);
-        patient.password = (patient.telefono % 10000).toString();
+        patient.password = (patient.telefono % 10000).toString();        
+        patient.ciudad = `${departamento}, ${ciudad}`;
+        
         this.props.updatePatient(patient).then(resp => {
             submitButton.disabled = false;
             this.setState({
@@ -79,7 +95,9 @@ class Ver extends Component {
     copyOriginal = () => {
         this.setState({
             original: {
-                ...this.state.patient
+                ...this.state.patient,
+                departamento: this.state.departamento,
+                ciudad: this.state.ciudad
             }
         });
     }
@@ -88,17 +106,33 @@ class Ver extends Component {
         this.setState({
             patient: {
                 ...this.state.original
-            }
+            },
+            departamento: this.state.original.departamento,
+            ciudad: this.state.original.ciudad
         });
     }
 
     changeInput = (event) => {
+        const { name, value } = event.target;
         this.setState({
             patient: {
             ...this.state.patient,
-            [event.target.name]: event.target.value
+            [name]: value
           }
         });
+        if (name === "departamento") {
+            this.setState({
+                ...this.state,
+                departamento: value,
+                ciudad: ""
+            });
+        }
+        if (name === "ciudad") {
+            this.setState({
+                ...this.state,
+                ciudad: value
+            });
+        }
     }
 
     handleCancel = () => {
@@ -106,7 +140,8 @@ class Ver extends Component {
     };
 
     render() {
-        const { readOnly, patient, openConfirm, confirmMessage } = this.state;
+        const { readOnly, patient, departamento, ciudad, openConfirm, confirmMessage } = this.state;
+        const availableCities = departamento !== "" ? ciudades.find(l => l.departamento === departamento)?.ciudades || [] : [];
 
         return (
             <>
@@ -124,18 +159,18 @@ class Ver extends Component {
                                             <Form.Group widths='equal'>
                                                 <Form.Field >
                                                 <label>Nombre *</label>
-                                                <input  
+                                                <input
                                                     name="nombre"
                                                     placeholder='Nombre'
                                                     type='text'
                                                     onChange={this.changeInput}
                                                     disabled={readOnly}
-                                                    value={readOnly ? patient.nombre : null}
+                                                    value={patient.nombre}
                                                     required/>
                                                 </Form.Field>
                                                 <Form.Field >
                                                 <label>Cédula *</label>
-                                                <input  
+                                                <input
                                                     name="cedula"
                                                     placeholder='Cédula'
                                                     type='number'
@@ -144,7 +179,7 @@ class Ver extends Component {
                                                     step="1"
                                                     onChange={this.changeInput}
                                                     disabled={readOnly}
-                                                    value={readOnly ? patient.cedula : null}
+                                                    value={patient.cedula}
                                                     required/>
                                                 </Form.Field>
                                             </Form.Group >
@@ -160,25 +195,25 @@ class Ver extends Component {
                                                     step="1"
                                                     onChange={this.changeInput}
                                                     disabled={readOnly}
-                                                    value={readOnly ? patient.edad : null}
+                                                    value={patient.edad}
                                                     required/>
                                                 </Form.Field>
                                                 <Form.Field>
                                                 <label>Sexo *</label>
                                                 <select
-                                                    name="sexo" 
-                                                    value={readOnly ? patient.sexo : null} 
-                                                    disabled={readOnly} 
+                                                    name="sexo"
+                                                    value={patient.sexo}
+                                                    disabled={readOnly}
                                                     onChange={this.changeInput}
                                                     required>
-                                                    <option value="-">Seleccione una opción</option>
+                                                    <option value="">Seleccione una opción</option>
                                                     <option value="F">Femenino</option>
                                                     <option value="M">Masculino</option>
                                                 </select>
                                                 </Form.Field>
                                                 <Form.Field>
                                                 <label>Peso (kg) *</label>
-                                                <input  
+                                                <input
                                                     name="peso"
                                                     placeholder='Peso'
                                                     type='number'
@@ -187,12 +222,12 @@ class Ver extends Component {
                                                     step="0.01"
                                                     onChange={this.changeInput}
                                                     disabled={readOnly}
-                                                    value={readOnly ? patient.peso : null}
+                                                    value={patient.peso}
                                                     required/>
                                                 </Form.Field>
                                                 <Form.Field>
                                                 <label>Altura (cm) *</label>
-                                                <input  
+                                                <input
                                                     name="altura"
                                                     placeholder='Altura'
                                                     type='number'
@@ -201,7 +236,7 @@ class Ver extends Component {
                                                     step="1"
                                                     onChange={this.changeInput}
                                                     disabled={readOnly}
-                                                    value={readOnly ? patient.altura : null}
+                                                    value={patient.altura}
                                                     required/>
                                                 </Form.Field>
                                             </Form.Group >
@@ -217,51 +252,65 @@ class Ver extends Component {
                                                     step="1"
                                                     onChange={this.changeInput}
                                                     disabled={readOnly}
-                                                    value={readOnly ? patient.telefono : null}
+                                                    value={patient.telefono}
                                                     required/>
                                                 </Form.Field>
                                                 <Form.Field style={{ width: '800px' }}>
                                                 <label>Correo *</label>
-                                                <input 
+                                                <input
                                                     name="email"
                                                     placeholder='Correo'
                                                     type='email'
                                                     pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                                                     onChange={this.changeInput}
                                                     disabled={readOnly}
-                                                    value={readOnly ? patient.email : null}
+                                                    value={patient.email}
                                                     required/>
                                                 </Form.Field>
                                             </Form.Group >
                                             <Form.Group widths='equal' style={{ marginBottom: '20px' }}>
                                                 <Form.Field >
                                                 <label>Dirección *</label>
-                                                <input  
+                                                <input
                                                     name="direccion"
                                                     placeholder='Dirección'
                                                     type='text'
                                                     onChange={this.changeInput}
                                                     disabled={readOnly}
-                                                    value={readOnly ? patient.direccion : null}
+                                                    value={patient.direccion}
                                                     required/>
                                                 </Form.Field>
                                                 <Form.Field >
-                                                <label>Ciudad *</label>
-                                                <select 
-                                                    name="ciudad" 
-                                                    value={readOnly ? patient.ciudad : null} 
-                                                    disabled={readOnly} 
+                                                <label>Departamento *</label>
+                                                <select
+                                                    name="departamento"
+                                                    value={departamento}
+                                                    disabled={readOnly}
                                                     onChange={this.changeInput}
                                                     required>
-                                                    <option value="-">Seleccione una opción</option>
+                                                    <option value="">Seleccione un departamento</option>
                                                     {
                                                     ciudades.map((lugar, index) => (
-                                                        lugar.ciudades.map((ciudad, index) => (
-                                                            <option key={index} value={lugar.departamento+", "+ciudad}>
-                                                                {lugar.departamento+", "+ciudad}
-                                                            </option>
-                                                            
-                                                        ))                            
+                                                        <option key={index} value={lugar.departamento}>
+                                                            {lugar.departamento}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                </Form.Field>
+                                                <Form.Field >
+                                                <label>Ciudad *</label>
+                                                <select
+                                                    name="ciudad"
+                                                    value={ciudad}
+                                                    disabled={readOnly}
+                                                    onChange={this.changeInput}
+                                                    required>
+                                                    <option value="">Seleccione una ciudad</option>
+                                                    {
+                                                    availableCities.map((ciudad, index) => (
+                                                        <option key={index} value={ciudad}>
+                                                            {ciudad}
+                                                        </option>
                                                     ))}
                                                 </select>
                                                 </Form.Field>

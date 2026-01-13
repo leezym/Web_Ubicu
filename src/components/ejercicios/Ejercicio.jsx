@@ -155,7 +155,7 @@ class Ejercicio extends Component {
                                     disabled={readOnly}
                                     onChange={this.changeInput}
                                     required>
-                                    <option value="-">Seleccione una opción</option>
+                                    <option value="">Seleccione una opción</option>
                                     <option value="1">1 día</option>
                                     <option value="2">2 días</option>
                                     <option value="3">3 días</option>
@@ -173,7 +173,7 @@ class Ejercicio extends Component {
                                         disabled={readOnly}
                                         onChange={this.changeInput}
                                         required>
-                                    <option value="-">Seleccione una opción</option>
+                                    <option value="">Seleccione una opción</option>
                                     <option value="3">Cada 3h</option>
                                     <option value="4">Cada 4h</option>
                                     <option value="6">Cada 6h</option>
@@ -188,7 +188,7 @@ class Ejercicio extends Component {
                                     type = 'number'                        
                                     placeholder='Repeticiones'
                                     min="1"
-                                    max="15"
+                                    max="50"
                                     step="1"
                                     onChange={this.changeInput} 
                                     disabled={readOnly}
@@ -261,7 +261,7 @@ class Ejercicio extends Component {
                                         disabled={readOnly}
                                         onChange={this.changeInput}
                                         required>
-                                        <option value="-">Seleccione una opción</option>
+                                        <option value="">Seleccione una opción</option>
                                         <option value="1">1 seg</option>
                                         <option value="2">2 seg</option>
                                         <option value="3">3 seg</option>
@@ -275,7 +275,7 @@ class Ejercicio extends Component {
                                         disabled={readOnly}
                                         onChange={this.changeInput}
                                         required>
-                                        <option value="-">Seleccione una opción</option>
+                                        <option value="">Seleccione una opción</option>
                                         <option value="600">600 mL</option>
                                         <option value="900">900 mL</option>
                                         <option value="1200">1200 mL</option>
@@ -293,7 +293,7 @@ class Ejercicio extends Component {
                                         disabled={readOnly}
                                         onChange={this.changeInput}
                                         required>
-                                        <option value={"-"}>Seleccione una opción</option>
+                                        <option value="">Seleccione una opción</option>
                                         <option value="6">6:00 am</option>
                                         <option value="7">7:00 am</option>
                                         <option value="8">8:00 am</option>

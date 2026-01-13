@@ -10,16 +10,16 @@ class Agregar extends Component {
     state = {
         nombre: this.props.nombre_terapia,
         duracion_total: "",
-        frecuencia_dias: "-",
-        frecuencia_horas: "-",
+        frecuencia_dias: "",
+        frecuencia_horas: "",
         repeticiones: "",
         series: "",
         periodos_descanso: "",
         fecha_inicio: "",
         fecha_fin: "",
-        apnea: "-",
-        flujo: "-",
-        hora_inicio: "-",
+        apnea: "",
+        flujo: "",
+        hora_inicio: "",
         id_patient: this.props.id_patient,
         id_user: this.props.location.state.id_user,
         openConfirm: false,
@@ -128,7 +128,7 @@ class Agregar extends Component {
                         onChange={this.changeInput}
                         onBlur={this.validarFrecuenciaDias}
                         required>
-                        <option value="-">Seleccione una opción</option>
+                        <option value="">Seleccione una opción</option>
                         <option value="1">1 día</option>
                         <option value="2">2 días</option>
                         <option value="3">3 días</option>
@@ -145,7 +145,7 @@ class Agregar extends Component {
                             onChange={this.changeInput}
                             onBlur={this.validarFrecuenciaHoras}
                             required>
-                        <option value="-">Seleccione una opción</option>
+                        <option value="">Seleccione una opción</option>
                         <option value="3">Cada 3h</option>
                         <option value="4">Cada 4h</option>
                         <option value="6">Cada 6h</option>
@@ -158,7 +158,7 @@ class Agregar extends Component {
                         type = 'number'                    
                         placeholder='Repeticiones'
                         min="1"
-                        max="15"
+                        max="50"
                         step="1"
                         onChange={this.changeInput}
                         required/>
@@ -208,7 +208,7 @@ class Agregar extends Component {
                         name="apnea"
                         onChange={this.changeInput}
                         required>
-                        <option value="-">Seleccione una opción</option>
+                        <option value="">Seleccione una opción</option>
                         <option value="1">1 seg</option>
                         <option value="2">2 seg</option>
                         <option value="3">3 seg</option>
@@ -220,7 +220,7 @@ class Agregar extends Component {
                         name="flujo"
                         onChange={this.changeInput}
                         required>
-                        <option value="-">Seleccione una opción</option>
+                        <option value="">Seleccione una opción</option>
                         <option value="600">600 mL</option>
                         <option value="900">900 mL</option>
                         <option value="1200">1200 mL</option>
@@ -237,7 +237,7 @@ class Agregar extends Component {
                         name="hora_inicio"
                         onChange={this.changeInput}
                         required>
-                        <option value={"-"}>Seleccione una opción</option>
+                        <option value="">Seleccione una opción</option>
                         <option value="6">6:00 am</option>
                         <option value="7">7:00 am</option>
                         <option value="8">8:00 am</option>

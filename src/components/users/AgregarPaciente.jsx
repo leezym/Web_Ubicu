@@ -14,11 +14,12 @@ class AgregarPaciente extends Component {
         telefono: "",
         email: "",
         edad: "",
-        sexo: "-",
+        sexo: "",
         peso: "",
         altura: "",
         direccion: "",
-        ciudad:"-",
+        departamento: "",
+        ciudad:"",
         password: "",
         id_user: this.props.id_user,
         openConfirm: false,
@@ -35,7 +36,7 @@ class AgregarPaciente extends Component {
             const { crearPatient, id_user } = this.props;
             const {
                 nombre, cedula, telefono, email,
-                edad, sexo, peso, altura, direccion, ciudad
+                edad, sexo, peso, altura, direccion, departamento, ciudad
             } = this.state;
 
             const resp = await crearPatient({
@@ -48,7 +49,7 @@ class AgregarPaciente extends Component {
                 peso,
                 altura,
                 direccion,
-                ciudad,
+                ciudad: `${departamento}, ${ciudad}`,
                 password: (telefono % 10000).toString(),
                 id_user
             });
@@ -77,7 +78,11 @@ class AgregarPaciente extends Component {
     };
     
     changeInput = (event) => {
-        this.setState({[event.target.name]:event.target.value});
+        const { name, value } = event.target;
+        this.setState({ [name]: value });
+        if (name === "departamento") {
+            this.setState({ ciudad: "" });
+        }
     }
 
     handleCancel = () => {
@@ -85,7 +90,8 @@ class AgregarPaciente extends Component {
     };
 
     render() {
-        const { id_user, openConfirm, confirmMessage } = this.state;
+        const { id_user, openConfirm, confirmMessage, departamento } = this.state;
+        const availableCities = departamento !== "" ? ciudades.find(l => l.departamento === departamento)?.ciudades || [] : [];
 
         return (
             <>
@@ -136,7 +142,7 @@ class AgregarPaciente extends Component {
                                     name="sexo"
                                     onChange={this.changeInput}
                                     required>                                        
-                                    <option value="-">Seleccione una opción</option>
+                                    <option value="">Seleccione una opción</option>
                                     <option value="F">Femenino</option>
                                     <option value="M">Masculino</option>
                                 </select>
@@ -189,7 +195,7 @@ class AgregarPaciente extends Component {
                                 </Form.Field>
                                 <Form.Field>
                                 <label>Dirección *</label>
-                                <input 
+                                <input
                                     name="direccion"
                                     placeholder='Dirección'
                                     type='text'
@@ -197,20 +203,34 @@ class AgregarPaciente extends Component {
                                     required/>
                                 </Form.Field>
                                 <Form.Field>
+                                <label>Departamento *</label>
+                                <select
+                                    name="departamento"
+                                    value={departamento}
+                                    onChange={this.changeInput}
+                                    required>
+                                    <option value="">Seleccione un departamento</option>
+                                    {
+                                    ciudades.map((lugar, index) => (
+                                        <option key={index} value={lugar.departamento}>
+                                            {lugar.departamento}
+                                        </option>
+                                    ))}
+                                </select>
+                                </Form.Field>
+                                <Form.Field>
                                 <label>Ciudad *</label>
                                 <select
                                     name="ciudad"
+                                    value={this.state.ciudad}
                                     onChange={this.changeInput}
                                     required>
-                                    <option value="-">Seleccione una opción</option>
+                                    <option value="">Seleccione una ciudad</option>
                                     {
-                                    ciudades.map((lugar, index) => (
-                                        lugar.ciudades.map((ciudad, index) => (
-                                            <option key={index} value={lugar.departamento+", "+ciudad}>
-                                                {lugar.departamento+", "+ciudad}
-                                            </option>
-                                            
-                                        ))                            
+                                    availableCities.map((ciudad, index) => (
+                                        <option key={index} value={ciudad}>
+                                            {ciudad}
+                                        </option>
                                     ))}
                                 </select>
                                 </Form.Field>

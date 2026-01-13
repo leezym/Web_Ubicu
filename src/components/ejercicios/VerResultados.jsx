@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Grid, Button, Card, Segment, Confirm} from "semantic-ui-react";
+import {Form, Grid, Button, Segment, Confirm} from "semantic-ui-react";
 import {Link,withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import{allResultsByEjercicio} from "../../actions/resultsAction";
@@ -13,14 +13,14 @@ function fillGraph(data) {
   // Add series to options
   for (let i = 0; i < data.length; i++) {
     const series = {
-      name: "Serie "+(i+1),
+      name: "Serie "+ (i + 1),
       data: []
     };
 
     // Add data to series
     for (let j = 0; j < data[i].flujo.length; j++) {
-      const tiempo = data[i].tiempo[j] * 1000; //probar quitar decimales
-      const flujo = data[i].flujo[j].toFixed(2); //redondear a dos decimales
+      const tiempo = data[i].tiempo[j] * 1000;
+      const flujo = data[i].flujo[j];
       series.data.push([tiempo, flujo]);
     }
 
@@ -65,15 +65,30 @@ class VerResultados extends React.Component {
     flujo: "",
     hora: "",
     fecha: "",
-    dateOptions: "",
-    hourOptions: "",
+    dates: [],
+    hours: [],
+    available: {},
+    selectedDate: "",
+    selectedHour: "",
     msg: "",
     series: [],
+    rawData: null,
     openConfirm: false,
     confirmMessage: '',
     options:{
       chart: {
-        stacked: false
+        stacked: false,
+        toolbar: {
+          show: true,
+          tools: {
+            download: false
+          }
+        }
+      },
+      grid: {
+        padding: {
+          top: 20
+        }
       },
       tooltip:{
         followCursor: true,
@@ -150,30 +165,40 @@ class VerResultados extends React.Component {
       .then(resp => {
         const ejercicio = resp;
         
-        const dateOptions = getDatesBetween(ejercicio.fecha_inicio, ejercicio.fecha_fin).map(date => (
-          <option value={date.toLocaleDateString('es-ES', { 
-            day: '2-digit', 
-            month: '2-digit', 
-            year: 'numeric' 
-          }).toString()}>
-            {date.toLocaleDateString('es-ES', { 
-              day: '2-digit', 
-              month: '2-digit', 
-              year: 'numeric' 
-            }).toString()}
-          </option>
-        ));
-        const hourOptions = getHoursOptions(ejercicio.hora_inicio, ejercicio.frecuencia_horas).map(hour => (
-          <option value={hour}>
-            {hour > 12 ? (hour - 12)+":00 pm" : hour < 12 ? hour+":00 am": hour+":00 pm"}
-          </option>
-        ));
-        
+        const dates = getDatesBetween(ejercicio.fecha_inicio, ejercicio.fecha_fin).map(date =>
+          date.toLocaleDateString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+          })
+        );
+        const hours = getHoursOptions(ejercicio.hora_inicio, ejercicio.frecuencia_horas);
+
         this.setState({
           flujo:ejercicio.flujo,
-          dateOptions:dateOptions,
-          hourOptions:hourOptions
+          dates: dates,
+          hours: hours
         });
+
+        fetch(URL+'allResultsByDate', {
+          method: 'POST',
+          body: JSON.stringify({id_ejercicio:this.state.id_ejercicio}),
+          headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': localStorage.getItem('token')
+          }
+        })
+        .then(res => res.json())
+        .then(resp => {
+          const available = {};
+          resp.forEach(result => {
+            const date = result.fecha;
+            const hour = result.hora;
+            if (!available[date]) available[date] = [];
+            if (!available[date].includes(hour) && result.datos !== "") available[date].push(hour);
+          });
+          this.setState({ available });
+        })
       })
       .catch(err => {
         this.setState({
@@ -199,14 +224,16 @@ class VerResultados extends React.Component {
       if(resp.datos === "")
         this.setState({
           series:[],
+          rawData: null,
           msg:resp.msg
         })
         else
         this.setState({
           series:fillGraph(JSON.parse(resp.datos)),
+          rawData: resp.datos,
           msg:""
         });
-      
+
       this.forceUpdate();
     }).catch(err => {
       this.setState({
@@ -216,6 +243,16 @@ class VerResultados extends React.Component {
     });
   }
   
+  handleSelectDate = (date) => {
+    this.setState({ selectedDate: date, hora: '', fecha: date, selectedHour: '' });
+  }
+
+  handleSelectHour = (hour) => {
+    this.setState({ hora: hour, selectedHour: hour }, () => {
+      this.handleClick();
+    });
+  }
+
   changeInput = (event) => {
     this.setState({[event.target.name]:event.target.value});
   }
@@ -224,10 +261,55 @@ class VerResultados extends React.Component {
     this.setState({ openConfirm: false });
   };
 
-  render() {
-    const { id_patient, id_user, series, options, dateOptions, hourOptions, msg, openConfirm, confirmMessage } = this.state;
+  handleDownloadCSV = () => {
+    const { rawData } = this.state;
+    if (!rawData) {
+      this.setState({
+        openConfirm: true,
+        confirmMessage: 'No hay datos disponibles para descargar.'
+      });
+      return;
+    }
+    const data = JSON.parse(rawData);
+    const csvData = [['Series Name', 'Time', 'Flow']];
+    data.forEach((serie, index) => {
+      serie.flujo.forEach((flow, j) => {
+        csvData.push([`Serie ${index + 1}`, serie.tiempo[j], flow]);
+      });
+    });
+    const csvString = csvData.map(row => row.map(cell => `${cell}`).join('|')).join('\n');
+    const dataUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvString);
+    const a = document.createElement('a');
+    a.href = dataUri;
+    a.download = 'chart_data.csv';
+    a.click();
+  };
 
-    console.log("Ver resltados: ",id_user)
+  handleDownloadJSON = () => {
+    const { rawData } = this.state;
+    if (!rawData) {
+      this.setState({
+        openConfirm: true,
+        confirmMessage: 'No hay datos disponibles para descargar.'
+      });
+      return;
+    }
+    const data = JSON.parse(rawData);
+    const adjustedData = data.map((serie, index) => ({
+      name: `Serie ${index + 1}`,
+      tiempo: serie.tiempo,
+      flujo: serie.flujo
+    }));
+    const jsonString = JSON.stringify(adjustedData, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(jsonString);
+    const a = document.createElement('a');
+    a.href = dataUri;
+    a.download = 'chart_data.json';
+    a.click();
+  };
+
+  render() {
+    const { id_patient, id_user, series, options, dates, hours, available, selectedDate, selectedHour, msg, openConfirm, confirmMessage } = this.state;
 
     return (
       <>
@@ -236,25 +318,53 @@ class VerResultados extends React.Component {
           <Grid.Column>
             <Segment raised>
                 <Form >
-                  <label>Para ver la gráfica de la fisioterapia por favor selecciona el día de la semana y la hora del día:</label>
-                  <Form.Group style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '1em' }}>
-                    <Form.Field style={{ marginRight: '3em' }}>
-                      <label>Fecha de la fisioterapia</label>
-                      <select name="fecha" onChange={this.changeInput}>
-                        <option value={"-"}>Seleccione una opción</option>
-                        {dateOptions}
-                      </select>
-                    </Form.Field>
-                    <Form.Field style={{ marginRight: '3em' }}>
-                      <label>Hora de la fisioterapia</label>
-                      <select name="hora" onChange={this.changeInput}>
-                        <option value={"-"}>Seleccione una opción</option>
-                        {hourOptions}
-                      </select>
-                    </Form.Field>                    
-                  </Form.Group>
+                  <label>Para ver la gráfica de la fisioterapia por favor selecciona el día de la semana y la hora del día.</label>
+                  <div style={{ marginTop: '1em' }}>
+                    <label>Fecha de la fisioterapia:</label>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '0.5em' }}>
+                      {dates.map(date => {
+                        return (
+                          <Button
+                            key={date}
+                            onClick={() => this.handleSelectDate(date)}
+                            style={{
+                              backgroundColor: selectedDate === date ? '#28a745' : '#46bee0',
+                              color: 'white',
+                              margin: '0.5em'
+                            }}
+                            type='button'
+                          >
+                            {date}
+                          </Button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  {selectedDate && (
+                    <div style={{ marginTop: '1em' }}>
+                      <label>Hora de la fisioterapia:</label>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '0.5em' }}>
+                        {hours.map(hour => {
+                          const hasData = available[selectedDate] && available[selectedDate].includes(hour);
+                          return (
+                            <Button
+                              key={hour}
+                              onClick={() => this.handleSelectHour(hour)}
+                              style={{
+                                backgroundColor: selectedHour === hour ? '#28a745' : hasData ? '#46bee0' : '#ccc',
+                                color: 'white',
+                                margin: '0.5em'
+                              }}
+                              type='button'
+                            >
+                              {hour > 12 ? (hour - 12) + ":00 pm" : hour < 12 ? hour + ":00 am" : hour + ":00 pm"}
+                            </Button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                   <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '2em' }}>
-                    <Button onClick={this.handleClick} type='button' style={{ backgroundColor: '#46bee0', color:"white" }}>Buscar</Button>
                     <Link to={{ pathname: `/VerEjercicios/${id_patient}`, state: { id_user: id_user }}}>
                       <Button type='submit' style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button>
                     </Link>
@@ -263,7 +373,11 @@ class VerResultados extends React.Component {
             </Segment>
             <Segment raised>
               {msg}
-              <Chart type="area" height={350} series={series} options={options}></Chart>
+              <Chart type="area" height={350} series={series} options={options}/>
+              <div style={{ marginTop: '1em', display: 'flex', gap: '1em' }}>
+                <Button onClick={this.handleDownloadCSV} style={{ backgroundColor: '#46bee0', color: 'white' }}>Descargar CSV</Button>
+                <Button onClick={this.handleDownloadJSON} style={{ backgroundColor: '#46bee0', color: 'white' }}>Descargar JSON</Button>
+              </div>
             </Segment>
           </Grid.Column>
         </Grid>
