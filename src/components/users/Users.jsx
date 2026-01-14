@@ -93,7 +93,7 @@ class Users extends Component {
     return (
       <>
         <MenuNav/> 
-        <Grid stackable style={{ marginTop: '6em' }}>
+        <Grid stackable style={{ marginTop: '3em' }}>
           <Grid.Column>
             <Segment raised>
               <Label ribbon style={{color:"#28367b"}}>

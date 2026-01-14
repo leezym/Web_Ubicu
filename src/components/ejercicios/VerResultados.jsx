@@ -314,7 +314,7 @@ class VerResultados extends React.Component {
     return (
       <>
         <MenuNav />
-        <Grid style={{ marginTop: '5em' }} columns={1}>
+        <Grid style={{ marginTop: '3em' }} columns={1}>
           <Grid.Column>
             <Segment raised>
                 <Form >

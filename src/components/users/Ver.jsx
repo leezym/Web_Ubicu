@@ -146,9 +146,10 @@ class Ver extends Component {
         return (
             <>
                 <MenuNav/>
-                <Segment style={{ marginTop: '6em' }} >
-                    <Grid stackable>
-                        <Grid.Column>
+                <Grid stackable style={{ marginTop: '3em' }}>
+                    <Grid.Column>
+                        <Segment raised>
+
                             <Label ribbon style={{color:"#28367b"}}>
                             Paciente
                             </Label>
@@ -335,9 +336,9 @@ class Ver extends Component {
                                     <Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button>
                                 </Link>
                             </div>
-                        </Grid.Column>
-                    </Grid>
-                </Segment>
+                        </Segment>
+                    </Grid.Column>
+                </Grid>
 
                 <Confirm
                     open={openConfirm}

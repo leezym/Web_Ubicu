@@ -123,7 +123,7 @@ class Ejercicios extends Component {
     return (
       <>
         <MenuNav />
-        <Grid style={{ marginTop: '7em' }} columns={1}>
+        <Grid stackable style={{ marginTop: '3em' }} columns={1}>
           <Grid.Column>
             <Segment raised>
               <Label ribbon style={{color:"#28367b"}}>

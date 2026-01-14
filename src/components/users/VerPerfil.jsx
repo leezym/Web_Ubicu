@@ -168,9 +168,10 @@ class VerPerfil extends Component {
         return (
             <>
                 <MenuNav/>
-                <Segment style={{ marginTop: '6em' }}>
-                    <Grid stackable>
-                        <Grid.Column>
+                <Grid stackable style={{ marginTop: '3em' }}>
+                    <Grid.Column>
+                        <Segment raised>
+
                             <Label ribbon style={{color:"#28367b"}}>
                             Perfil
                             </Label>
@@ -307,9 +308,9 @@ class VerPerfil extends Component {
                             </Card> 
                         
                             <Link to={`/Fisioterapeuta/${user._id}`}><Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
-                        </Grid.Column>
-                    </Grid>
-                </Segment>
+                        </Segment>
+                    </Grid.Column>
+                </Grid>
 
                 <Confirm
                     open={openConfirm}

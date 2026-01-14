@@ -75,7 +75,7 @@ class LoginForm extends Component {
     
     return (
       <>
-        <Grid textAlign="center" style={{ height: '100vh' }} verticalAlign="middle">
+        <Grid textAlign="center" style={{ height: '80vh' }} verticalAlign="middle">
           <Grid.Column style={{ maxWidth: 450 }}>
             <Image src={logo} centered style={{ width: '350px', height: 'auto' }} />
             <Header as="h1" textAlign="center" size="large" style={{ color: '#28367b' }}>
