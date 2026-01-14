@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { Button, Table, Grid, Segment, Label, Card, TableBody, TableCell, TableRow, Confirm } from 'semantic-ui-react';
+import { Button, Table, Grid, Segment, Label, Card, TableBody, TableCell, TableRow, Confirm, Dropdown } from 'semantic-ui-react';
 import MenuNav from '../pages/MenuNav';
 import { Link, withRouter } from 'react-router-dom';
 import Ejercicio from './Ejercicio';
@@ -15,12 +15,14 @@ class Ejercicios extends Component {
     capacidad_vital: 0,
     ejercicios: [],
     ejercicioPredeterminado: null,
+    fecha_fin_max: "",
     pageCount: 1,
     currentPage: 0,
     exercisesPerPage: 5,
     openConfirm: false,
     confirmMessage: '',
-    id_user: this.props.location.state.id_user
+    id_user: this.props.location.state.id_user,
+    sortOrder: 'desc'
   };
 
   componentDidMount() {
@@ -65,12 +67,13 @@ class Ejercicios extends Component {
               });
             }
           })
-          .then(resp => {        
+          .then(resp => {
             const ejercicios = resp.filter(ejercicio => ejercicio.nombre !== "Predeterminado")
             const ejercicioPredeterminado = resp.find(ejercicio => ejercicio.nombre === "Predeterminado");
-            const pageCount = Math.ceil(ejercicios.length / this.state.exercisesPerPage); // Calcula el número de páginas
-           
-            this.setState({ ejercicios, ejercicioPredeterminado, pageCount });
+            const sortedEjercicios = this.sortEjercicios(ejercicios, this.state.sortOrder);
+            const pageCount = Math.ceil(sortedEjercicios.length / this.state.exercisesPerPage); // Calcula el número de páginas
+
+            this.setState({ ejercicios: sortedEjercicios, ejercicioPredeterminado, fecha_fin_max: sortedEjercicios[0].fecha_fin, pageCount });
           })
           .catch(err => {
             this.setState({
@@ -92,9 +95,17 @@ class Ejercicios extends Component {
       return (27.63 - (0.112 * patient.edad)) * patient.altura;
     else if (patient.sexo === 'F')
       return (21.78 - (0.101 * patient.edad)) * patient.altura;
-    
+
     return 0;
-  };  
+  };
+
+  sortEjercicios = (ejercicios, order) => {
+    return ejercicios.sort((a, b) => {
+      const dateA = moment(a.fecha_inicio, 'DD/MM/YYYY');
+      const dateB = moment(b.fecha_inicio, 'DD/MM/YYYY');
+      return order === 'desc' ? dateB.diff(dateA) : dateA.diff(dateB);
+    });
+  };
 
   handlePageClick = ({ selected }) => {
     this.setState({ currentPage: selected }, () => {
@@ -109,16 +120,21 @@ class Ejercicios extends Component {
     this.setState({ openConfirm: false });
   };
 
+  handleSortChange = (e, { value }) => {
+    this.setState({ sortOrder: value }, () => {
+      const sorted = this.sortEjercicios([...this.state.ejercicios], value);
+      this.setState({ ejercicios: sorted, currentPage: 0 });
+    });
+  };
+
   render() {
-    const { patient, capacidad_vital, ejercicios, ejercicioPredeterminado, currentPage, exercisesPerPage, openConfirm, confirmMessage, id_user } = this.state;
+    const { patient, capacidad_vital, ejercicios, ejercicioPredeterminado, fecha_fin_max, currentPage, exercisesPerPage, openConfirm, confirmMessage, id_user } = this.state;
     
     const offset = currentPage * exercisesPerPage;
     let currentExercises = 0;
     
     if (ejercicios.length > 0)
       currentExercises = ejercicios.slice(offset, offset + exercisesPerPage);
-
-    console.log("Ejercicios: ",id_user)
         
     return (
       <>
@@ -164,7 +180,7 @@ class Ejercicios extends Component {
                   (
                     <div>
                       <p style={{ marginBottom:"10px", marginTop:"10px" }}>No hay ejercicio predeterminado disponible, por favor agregar.</p>
-                      <Link to={{ pathname: `/AgregarEjercicio/${patient._id}`, nombre_terapia: "Predeterminado", state: { id_user: id_user }}}>
+                      <Link to={{ pathname: `/AgregarEjercicio/${patient._id}`, state: { id_user: id_user, nombre_terapia: "Predeterminado" }}}>
                         <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar ejercicio predeterminado</Button>
                       </Link>
                     </div>
@@ -173,30 +189,44 @@ class Ejercicios extends Component {
             </Segment>
             <Segment raised>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: "20px"}}>
+
                 {
                   
-                  ejercicios.length === 0 || (ejercicios.length > 0 && moment().isAfter(moment(ejercicios[ejercicios.length - 1].fecha_fin, 'DD/MM/YYYY'))) ? 
+                  ejercicios.length === 0 || (ejercicios.length > 0 && moment().isAfter(moment(fecha_fin_max, 'DD/MM/YYYY'), 'day')) ? 
                     (
-                      <Link to={{ pathname: `/AgregarEjercicio/${patient._id}`, nombre_terapia: "Inspiración profunda", state: { id_user: id_user }}}>
-                        <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>
+                      <Link to={{ pathname: `/AgregarEjercicio/${patient._id}`, state: { id_user: id_user, nombre_terapia: "Inspiración profunda", fecha_fin_max: this.state.fecha_fin_max }}}>
+                        <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar ejercicio</Button>
                       </Link>
                     ) 
                   : 
                     <></>
                 }
+                
                 <Link to={`/VerPaciente/${patient._id}`}>
                   <Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button>
                 </Link>
               </div>
-              <Label ribbon style={{color:"#28367b"}}>
-                Prescripciones
-              </Label>
-              <Card.Group style={{ marginTop: '1em' }}>
-              {        
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1em' }}>
+                <Label ribbon style={{color:"#28367b"}}>
+                  Prescripciones
+                </Label>
+                <Dropdown
+                  placeholder='Ordenar por'
+                  selection
+                  options={[
+                    { key: 'desc', text: 'Más reciente', value: 'desc' },
+                    { key: 'asc', text: 'Más antiguo', value: 'asc' }
+                  ]}
+                  value={this.state.sortOrder}
+                  onChange={this.handleSortChange}
+                />
+              </div>
+              <Card.Group>
+              {
                 currentExercises.length > 0 ?
                   currentExercises
                   .map((ejercicio, index) => {
-                    return <Ejercicio key={index} ejercicio={ejercicio} id_user={id_user}/>;
+                    return <Ejercicio key={ejercicio._id} ejercicio={ejercicio} id_user={id_user}/>;
                   })
                 :
                   <p style={{ marginBottom:"10px", marginTop:"10px" }}>No hay ejercicios disponibles.</p>

@@ -5,7 +5,6 @@ import {crearPatient} from "../../actions/patientsAction";
 import {Link, withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
 import ciudades from '../../colombia.json';
-import { URL } from '../../actions/url.js';
 
 class AgregarPaciente extends Component {
     state = {
@@ -61,8 +60,7 @@ class AgregarPaciente extends Component {
 
             this.props.history.push({
                 pathname: `/AgregarEjercicio/${resp._id}`,
-                nombre_terapia: "Predeterminado",
-                state: { id_user }
+                state: { id_user, nombre_terapia: "Predeterminado" }
             });
 
         } catch (err) {

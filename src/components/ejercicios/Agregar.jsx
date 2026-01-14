@@ -25,8 +25,9 @@ class Agregar extends Component {
         openConfirm: false,
         confirmMessage: ''
     };
-    
+
     handleSave = async (e) => {
+
         e.preventDefault();
         
         const submitButton = e.target.querySelector('button[type="submit"]');
@@ -83,6 +84,22 @@ class Agregar extends Component {
 
     render() {
         const { nombre, id_user, id_patient, openConfirm, confirmMessage } = this.state;
+
+        const fechaFinMax = this.props?.location?.state?.fecha_fin_max; // "DD/MM/YYYY"
+        const hoy = moment().startOf('day');
+
+        let minFechaInicio;
+
+        if (fechaFinMax) {
+        const finMax = moment(fechaFinMax, 'DD/MM/YYYY').startOf('day');
+
+        minFechaInicio = finMax.isSameOrAfter(hoy)
+            ? finMax.clone().add(1, 'day').format('YYYY-MM-DD')
+            : hoy.format('YYYY-MM-DD');
+        } else {
+        minFechaInicio = hoy.format('YYYY-MM-DD');
+        }
+       
         return (
             <>
             <MenuNav/>
@@ -194,7 +211,7 @@ class Agregar extends Component {
                                     <input
                                         name="fecha_inicio"
                                         type="date"
-                                        min={new Date().toISOString().split('T')[0]}
+                                        min={minFechaInicio}
                                         onChange={this.changeInput}
                                         placeholder='DD/MM/AAAA'
                                         required/>

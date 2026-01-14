@@ -21,20 +21,23 @@ class Ejercicio extends Component {
         if (prevProps.ejercicio !== this.props.ejercicio) {
             const { ejercicio } = this.props;
             const fechaInicio = moment(ejercicio.fecha_inicio, 'DD/MM/YYYY').format('YYYY-MM-DD').toString();
+            const fechaFin = moment(ejercicio.fecha_fin, 'DD/MM/YYYY').format('YYYY-MM-DD');
+            const isDisabled = moment(fechaFin).isBefore(moment(), 'day') && ejercicio.nombre !== "Predeterminado";
 
-            this.setState(prevState => ({
+            this.setState({
                 ejercicio: {
-                    ...prevState.ejercicio,
+                    ...ejercicio,
                     fecha_inicio: fechaInicio
-                }
-            }));
+                },
+                disabledEdit: isDisabled
+            });
         }
     }
     
     componentDidMount() {
         const { ejercicio } = this.state;
         const fechaInicio = moment(ejercicio.fecha_inicio, 'DD/MM/YYYY').format('YYYY-MM-DD').toString();
-        const fechaFin = moment(ejercicio.fecha_fin, 'DD/MM/YYYY').format('YYYY-MM-DD')
+        const fechaFin = moment(ejercicio.fecha_fin, 'DD/MM/YYYY').format('YYYY-MM-DD');
         const isDisabled = moment(fechaFin).isBefore(moment(), 'day') && ejercicio.nombre !== "Predeterminado";
 
         this.setState({
@@ -110,7 +113,6 @@ class Ejercicio extends Component {
     render() {
         const { readOnly, ejercicio, disabledEdit, openConfirm, confirmMessage, id_user } = this.state;
 
-        console.log("Ejercicio: ",id_user)
         return (
             <>
                 <Card fluid color="blue" >
@@ -248,7 +250,7 @@ class Ejercicio extends Component {
                                         <input  name="fecha_fin"
                                             type='text'
                                             disabled={true}
-                                            value={ejercicio.fecha_fin}/>
+                                            value={ejercicio.fecha_fin || null}/>
                                         </Form.Field>
                                     :
                                         <></>
