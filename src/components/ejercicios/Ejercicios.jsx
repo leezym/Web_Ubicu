@@ -8,6 +8,7 @@ import moment from "moment";
 import ReactPaginate from 'react-paginate';
 import '../../styles/pagination_style.css';
 import { URL } from '../../actions/url.js';
+import VerResultados from './VerResultados.jsx';
 
 class Ejercicios extends Component {
   state = {
@@ -21,8 +22,10 @@ class Ejercicios extends Component {
     exercisesPerPage: 5,
     openConfirm: false,
     confirmMessage: '',
-    id_user: this.props.location.state.id_user,
-    sortOrder: 'desc'
+    sortOrder: 'desc',
+    view: 'normal',
+    selectedEjercicioId: null,
+    selectedPatientId: null,
   };
 
   componentDidMount() {
@@ -68,12 +71,12 @@ class Ejercicios extends Component {
             }
           })
           .then(resp => {
-            const ejercicios = resp.filter(ejercicio => ejercicio.nombre !== "Predeterminado")
-            const ejercicioPredeterminado = resp.find(ejercicio => ejercicio.nombre === "Predeterminado");
-            const sortedEjercicios = this.sortEjercicios(ejercicios, this.state.sortOrder);
-            const pageCount = Math.ceil(sortedEjercicios.length / this.state.exercisesPerPage); // Calcula el número de páginas
+              const ejercicios = resp.filter(ejercicio => ejercicio.nombre !== "Predeterminado")
+              const ejercicioPredeterminado = resp.find(ejercicio => ejercicio.nombre === "Predeterminado");
+              const sortedEjercicios = this.sortEjercicios(ejercicios, this.state.sortOrder);
+              const pageCount = Math.ceil(sortedEjercicios.length / this.state.exercisesPerPage); // Calcula el número de páginas
 
-            this.setState({ ejercicios: sortedEjercicios, ejercicioPredeterminado, fecha_fin_max: sortedEjercicios[0].fecha_fin, pageCount });
+              this.setState({ ejercicios: sortedEjercicios, ejercicioPredeterminado, fecha_fin_max: sortedEjercicios[0]?.fecha_fin, pageCount });
           })
           .catch(err => {
             this.setState({
@@ -127,8 +130,24 @@ class Ejercicios extends Component {
     });
   };
 
+  handleVerResultados = (id_patient, id_ejercicio) => {
+    this.setState({
+      view: 'resultados',
+      selectedPatientId: id_patient,
+      selectedEjercicioId: id_ejercicio,
+    });
+  };
+
+  handleVolverVistaNormal = () => {
+    this.setState({
+      view: 'normal',
+      selectedPatientId: null,
+      selectedEjercicioId: null,
+    });
+  };
+
   render() {
-    const { patient, capacidad_vital, ejercicios, ejercicioPredeterminado, fecha_fin_max, currentPage, exercisesPerPage, openConfirm, confirmMessage, id_user } = this.state;
+    const { patient, capacidad_vital, ejercicios, ejercicioPredeterminado, fecha_fin_max, currentPage, exercisesPerPage, openConfirm, confirmMessage } = this.state;
     
     const offset = currentPage * exercisesPerPage;
     let currentExercises = 0;
@@ -169,84 +188,110 @@ class Ejercicios extends Component {
                   </TableRow>
                 </TableBody>
               </Table>
+            </Segment>
+            {
+              this.state.view === 'normal' ? (
+                <>
+                  <Segment raised>
+                    <Label ribbon style={{color:"#28367b"}}>
+                      Ejercicio Predeterminado
+                    </Label>
+                    {
+                      ejercicioPredeterminado ?
+                        <Ejercicio ejercicio={ejercicioPredeterminado} />
+                      :
+                        (
+                          <div>
+                            <p style={{ marginBottom:"10px", marginTop:"10px" }}>No hay ejercicio predeterminado disponible, por favor agregar.</p>
+                            <Link to={`/AgregarEjercicio/${patient._id}/Predeterminado`}>
+                              <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar ejercicio predeterminado</Button>
+                            </Link>
+                          </div>
+                        )
+                    }              
+                  </Segment>
+                  <Segment raised>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: "20px"}}>
 
-              <Label ribbon style={{color:"#28367b"}}>
-                Ejercicio Predeterminado
-              </Label>
-              {
-                ejercicioPredeterminado ?
-                  <Ejercicio ejercicio={ejercicioPredeterminado} />
-                :
-                  (
-                    <div>
-                      <p style={{ marginBottom:"10px", marginTop:"10px" }}>No hay ejercicio predeterminado disponible, por favor agregar.</p>
-                      <Link to={{ pathname: `/AgregarEjercicio/${patient._id}`, state: { id_user: id_user, nombre_terapia: "Predeterminado" }}}>
-                        <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar ejercicio predeterminado</Button>
+                      {
+                        
+                        ejercicios.length === 0 || (ejercicios.length > 0 && moment().isAfter(moment(fecha_fin_max, 'DD/MM/YYYY'), 'day')) ? 
+                          (
+                            <Link to={{ pathname: `/AgregarEjercicio/${patient._id}/Inspiración profunda`, state: { fecha_fin_max: this.state.fecha_fin_max }}}>
+                              <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar ejercicio</Button>
+                            </Link>
+                          ) 
+                        : 
+                          <></>
+                      }
+                      
+                      <Link to={`/VerPaciente/${patient._id}`}>
+                        <Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button>
                       </Link>
                     </div>
-                  )
-              }              
-            </Segment>
-            <Segment raised>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: "20px"}}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1em' }}>
+                      <Label ribbon style={{color:"#28367b"}}>
+                        Prescripciones
+                      </Label>
+                      <Dropdown
+                        placeholder='Ordenar por'
+                        selection
+                        options={[
+                          { key: 'desc', text: 'Más reciente', value: 'desc' },
+                          { key: 'asc', text: 'Más antiguo', value: 'asc' }
+                        ]}
+                        value={this.state.sortOrder}
+                        onChange={this.handleSortChange}
+                      />
+                    </div>
+                    <Card.Group>
+                    {
+                      currentExercises.length > 0 ?
+                        currentExercises
+                        .map((ejercicio, index) => {
+                          return <Ejercicio key={ejercicio._id} ejercicio={ejercicio} onVerResultados={this.handleVerResultados}/>;
+                        })
+                      :
+                        <p style={{ marginBottom:"10px", marginTop:"10px" }}>No hay ejercicios disponibles.</p>
+                    }
+                    </Card.Group>
+                  </Segment>
+                  <ReactPaginate
+                    previousLabel={"Anterior"}
+                    nextLabel={"Siguiente"}
+                    breakLabel={"..."}
+                    breakClassName={"break-me"}
+                    pageCount={this.state.pageCount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={this.handlePageClick}
+                    containerClassName={"pagination"}
+                    subContainerClassName={"pages pagination"}
+                    activeClassName={"active"}
+                    activeLinkClassName={"active-link"}
+                  />
+                </>
+              )
+              :
+              (
+                <Segment raised>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: "20px" }}>
+                    <Label ribbon style={{ color: "#28367b" }}>
+                      Resultados
+                    </Label>
+                  </div>
 
-                {
-                  
-                  ejercicios.length === 0 || (ejercicios.length > 0 && moment().isAfter(moment(fecha_fin_max, 'DD/MM/YYYY'), 'day')) ? 
-                    (
-                      <Link to={{ pathname: `/AgregarEjercicio/${patient._id}`, state: { id_user: id_user, nombre_terapia: "Inspiración profunda", fecha_fin_max: this.state.fecha_fin_max }}}>
-                        <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar ejercicio</Button>
-                      </Link>
-                    ) 
-                  : 
-                    <></>
-                }
-                
-                <Link to={`/VerPaciente/${patient._id}`}>
-                  <Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button>
-                </Link>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1em' }}>
-                <Label ribbon style={{color:"#28367b"}}>
-                  Prescripciones
-                </Label>
-                <Dropdown
-                  placeholder='Ordenar por'
-                  selection
-                  options={[
-                    { key: 'desc', text: 'Más reciente', value: 'desc' },
-                    { key: 'asc', text: 'Más antiguo', value: 'asc' }
-                  ]}
-                  value={this.state.sortOrder}
-                  onChange={this.handleSortChange}
-                />
-              </div>
-              <Card.Group>
-              {
-                currentExercises.length > 0 ?
-                  currentExercises
-                  .map((ejercicio, index) => {
-                    return <Ejercicio key={ejercicio._id} ejercicio={ejercicio} id_user={id_user}/>;
-                  })
-                :
-                  <p style={{ marginBottom:"10px", marginTop:"10px" }}>No hay ejercicios disponibles.</p>
-              }
-              </Card.Group>
-            </Segment>
-            <ReactPaginate
-              previousLabel={"Anterior"}
-              nextLabel={"Siguiente"}
-              breakLabel={"..."}
-              breakClassName={"break-me"}
-              pageCount={this.state.pageCount}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={5}
-              onPageChange={this.handlePageClick}
-              containerClassName={"pagination"}
-              subContainerClassName={"pages pagination"}
-              activeClassName={"active"}
-              activeLinkClassName={"active-link"}
-            />
+                  <VerResultados
+                    embedded={true}
+                    onBack={this.handleVolverVistaNormal}
+                    id_patient={this.state.selectedPatientId || patient._id}
+                    id_ejercicio={this.state.selectedEjercicioId}
+                    nombre_paciente = {patient.nombre}
+                  />
+                </Segment>
+              )
+            }
+            
           </Grid.Column>
         </Grid>
         

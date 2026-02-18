@@ -329,7 +329,7 @@ class Ver extends Component {
                                 </Card.Content >
                             </Card>
                             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Link to={{ pathname: `/VerEjercicios/${patient._id}`, state: { id_user: patient.id_user }}}>
+                                <Link to={`/VerEjercicios/${patient._id}`}>
                                     <Button style={{ backgroundColor: '#46bee0', color:"white" }}>Ejercicios</Button>
                                 </Link>
                                 <Link to={`/Fisioterapeuta/${patient.id_user}`}>

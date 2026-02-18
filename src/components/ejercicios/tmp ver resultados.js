@@ -1,25 +1,24 @@
 import React from 'react';
-import { Button, Segment, Confirm } from "semantic-ui-react";
+import { Form, Grid, Button, Segment, Confirm } from "semantic-ui-react";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import Chart from 'react-apexcharts';
+import Chart from 'react-apexcharts'
 import moment from "moment";
 import MenuNav from '../pages/MenuNav';
 import { URL } from '../../actions/url.js';
-import { allResultsByEjercicio } from "../../actions/resultsAction";
+import pako from "pako";
 
 function fillGraph(data) {
   const seriesGraph = [];
-
+  // Add series to options
   for (let i = 0; i < data.length; i++) {
     const series = {
       name: "Serie " + (i + 1),
       data: []
     };
 
-    const n = Math.min(data[i]?.flujo?.length || 0, data[i]?.tiempo?.length || 0);
-
-    for (let j = 0; j < n; j++) {
+    // Add data to series
+    for (let j = 0; j < data[i].flujo.length; j++) {
       const tiempo = data[i].tiempo[j] * 1000;
       const flujo = data[i].flujo[j];
       series.data.push([tiempo, flujo]);
@@ -27,7 +26,6 @@ function fillGraph(data) {
 
     seriesGraph.push(series);
   }
-
   return seriesGraph;
 }
 
@@ -50,13 +48,57 @@ function getDatesBetween(startDate, endDate) {
 function getHoursOptions(startHour, hourInterval) {
   const hours = [];
   let currentHour = startHour;
-  let i = 0;
+  let i = 0
   while (i < ((12 / hourInterval) + 1)) {
     hours.push(currentHour);
-    currentHour += hourInterval;
+    currentHour += hourInterval
     i++;
   }
   return hours;
+}
+
+async function fetchAndParseGz(downloadUrl) {
+  const r = await fetch(downloadUrl);
+  if (!r.ok) throw new Error("No se pudo descargar el archivo de S3");
+
+  const arrayBuffer = await r.arrayBuffer();
+  const uint8 = new Uint8Array(arrayBuffer);
+
+  // gunzip -> string
+  const jsonText = pako.ungzip(uint8, { to: "string" });
+
+  // parse JSON
+  return JSON.parse(jsonText);
+}
+
+function downloadJSON(data, filename = "result.json") {
+  const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function toCSV(series) {
+  let lines = ["serie,punto,tiempo,flujo"];
+  series.forEach((s, si) => {
+    const n = Math.min(s.tiempo.length, s.flujo.length);
+    for (let i = 0; i < n; i++) {
+      lines.push(`${si},${i},${s.tiempo[i]},${s.flujo[i]}`);
+    }
+  });
+  return lines.join("\n");
+}
+
+function downloadCSV(series, filename = "result.csv") {
+  const csv = toCSV(series);
+  const blob = new Blob([csv], { type: "text/csv" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
 }
 
 class VerResultados extends React.Component {
@@ -66,12 +108,13 @@ class VerResultados extends React.Component {
     fecha: "",
     dates: [],
     hours: [],
-    available: {},
+    available: {},      // { fecha: [hora1, hora2, ...] } (se conserva tal cual para el UI)
+    availableIds: {},   // { fecha: { hora: resultId } } (nuevo: para pedir downloadUrl)
     selectedDate: "",
     selectedHour: "",
     msg: "",
     series: [],
-    rawData: null,
+    rawData: null,      // ahora será ARRAY ya parseado (no string)
     openConfirm: false,
     confirmMessage: '',
     options: {
@@ -80,42 +123,19 @@ class VerResultados extends React.Component {
         toolbar: {
           show: true,
           tools: {
-            download: false,
-            customIcons: [
-              {
-                icon: `
-                  <svg xmlns="http://www.w3.org/2000/svg" 
-                      width="16" 
-                      height="16" 
-                      viewBox="0 0 24 24" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      stroke-width="2" 
-                      stroke-linecap="round" 
-                      stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="7 10 12 15 17 10"/>
-                    <line x1="12" y1="15" x2="12" y2="3"/>
-                  </svg>
-                `,
-                title: 'Descargar PNG',
-                class: 'apexcharts-custom-download',
-                index: -1,
-                click: (chart) => {
-                  chart.dataURI().then(({ imgURI }) => {
-                    const a = document.createElement('a');
-                    a.href = imgURI;
-                    a.download = `${this.props.nombre_paciente}.${this.state.fecha}.${this.state.hora}.png`;
-                    a.click();
-                  });
-                }
-              }
-            ]
+            download: true
           }
         }
       },
+      export: {
+        csv: {
+          enabled: false
+        }
+      },
       grid: {
-        padding: { top: 20 }
+        padding: {
+          top: 20
+        }
       },
       tooltip: {
         followCursor: true,
@@ -125,18 +145,27 @@ class VerResultados extends React.Component {
           }
         }
       },
-      dataLabels: { enabled: false },
-      stroke: { curve: 'smooth' },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        curve: 'smooth'
+      },
       fill: {
         type: 'gradient',
-        gradient: { opacityFrom: 0.6, opacityTo: 0.8 }
+        gradient: {
+          opacityFrom: 0.6,
+          opacityTo: 0.8,
+        }
       },
       legend: {
         position: 'top',
         horizontalAlign: 'left'
       },
       xaxis: {
-        title: { text: "Tiempo" },
+        title: {
+          text: "Tiempo"
+        },
         type: 'datetime'
       },
       yaxis: {
@@ -151,7 +180,10 @@ class VerResultados extends React.Component {
           label: {
             show: true,
             text: 'Meta',
-            style: { color: "#fff", background: 'red' }
+            style: {
+              color: "#fff",
+              background: 'red'
+            }
           }
         }]
       }
@@ -163,7 +195,6 @@ class VerResultados extends React.Component {
 
   componentDidMount() {
     const id_ejercicio = this.getIdEjercicio();
-    if (!id_ejercicio) return;
 
     fetch(URL + 'getEjerciciobyId', {
       method: 'POST',
@@ -173,7 +204,10 @@ class VerResultados extends React.Component {
         'x-access-token': localStorage.getItem('token')
       }
     })
-      .then(res => res.ok ? res.json() : res.json().then(error => { throw new Error(error.msg); }))
+      .then(res => {
+        if (res.ok) return res.json();
+        return res.json().then(error => { throw new Error(error.msg); });
+      })
       .then(resp => {
         const ejercicio = resp;
 
@@ -188,40 +222,48 @@ class VerResultados extends React.Component {
 
         this.setState({
           flujo: ejercicio.flujo,
-          dates,
-          hours
+          dates: dates,
+          hours: hours
         });
 
-        return fetch(URL + 'allResultsByDate', {
+        // IMPORTANTE: backend real => /results/allResultsByDate
+        fetch(URL + 'allResultsByDate', {
           method: 'POST',
           body: JSON.stringify({ id_ejercicio }),
           headers: {
             'Content-Type': 'application/json',
             'x-access-token': localStorage.getItem('token')
           }
-        });
-      })
-      .then(res => res ? res.json() : null)
-      .then(resp => {
-        if (!resp) return;
+        })
+          .then(res => res.json())
+          .then(resp => {
+            const available = {};
+            const availableIds = {};
 
-        const available = {};
-        resp.forEach(result => {
-          const date = result.fecha;
-          const hour = result.hora;
+            resp.forEach(result => {
+              const date = result.fecha;
+              const hour = result.hora;
 
-          if (!available[date]) available[date] = [];
-          if (!available[date].includes(hour) && result.datos !== "") {
-            available[date].push(hour);
-          }
-        });
+              // Para UI: array de horas (igual que antes)
+              if (!available[date]) available[date] = [];
+              if (result.hasData === true && !available[date].includes(hour)) {
+                available[date].push(hour);
+              }
 
-        this.setState({ available });
+              // Para lógica S3: mapa hora -> _id
+              if (!availableIds[date]) availableIds[date] = {};
+              if (result.hasData === true) {
+                availableIds[date][hour] = result._id;
+              }
+            });
+
+            this.setState({ available, availableIds });
+          })
       })
       .catch(err => {
         this.setState({
           openConfirm: true,
-          confirmMessage: 'Error al consultar ejercicio. ' + (err?.message || 'Error desconocido.')
+          confirmMessage: 'Error al consultar ejercicio. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
         });
       });
   }
@@ -239,6 +281,7 @@ class VerResultados extends React.Component {
           selectedDate: "",
           selectedHour: "",
           available: {},
+          availableIds: {},
           dates: [],
           hours: [],
           flujo: ""
@@ -248,57 +291,61 @@ class VerResultados extends React.Component {
     }
   }
 
-  handleClick = () => {
-    const id_ejercicio = this.getIdEjercicio();
-    const { allResultsByEjercicio } = this.props;
-    const { flujo, fecha, hora } = this.state;
+  // Nueva lógica: cargar completo desde S3 según fecha/hora seleccionada
+  handleClick = async () => {
+    const { flujo, fecha, hora, availableIds } = this.state;
 
-    if (!id_ejercicio || !fecha || hora === "") return;
-
-    // actualiza meta line
+    // Set meta line (igual que antes)
     this.setState(prevState => {
-      const options = { ...prevState.options };
+      let options = { ...prevState.options };
       options.annotations.yaxis[0].y = flujo;
       return { options };
     });
 
-    allResultsByEjercicio({ id_ejercicio, fecha, hora })
-      .then(resp => {
-        if (!resp || resp.datos === "") {
-          this.setState({
-            series: [],
-            rawData: null,
-            msg: resp?.msg || "No hay información"
-          });
-          return;
-        }
+    try {
+      const resultId = availableIds?.[fecha]?.[hora];
 
+      if (!resultId) {
         this.setState({
-          series: fillGraph(JSON.parse(resp.datos)),
-          rawData: resp.datos,
-          msg: ""
+          series: [],
+          rawData: null,
+          msg: "No hay información"
         });
+        return;
+      }
 
-        this.forceUpdate();
-      })
-      .catch(err => {
-        this.setState({
-          openConfirm: true,
-          confirmMessage: 'Error al consultar resultados. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
-        });
+      // 1) pedir presigned GET al backend
+      const r1 = await fetch(URL + `${resultId}/downloadUrl`, {
+        method: "GET",
+        headers: { 'x-access-token': localStorage.getItem('token') }
       });
+
+      const j1 = await r1.json();
+      if (!r1.ok || !j1.ok) {
+        throw new Error(j1.msg || j1.error || "No se pudo obtener el link de descarga");
+      }
+
+      // 2) bajar .json.gz de S3 y parsear
+      const data = await fetchAndParseGz(j1.url); // array de series
+
+      // 3) graficar completo
+      this.setState({
+        series: fillGraph(data),
+        rawData: data,
+        msg: ""
+      });
+
+      this.forceUpdate();
+    } catch (err) {
+      this.setState({
+        openConfirm: true,
+        confirmMessage: 'Error al consultar resultados. ' + (err?.response?.data?.msg || err.message || 'Error desconocido.')
+      });
+    }
   }
 
   handleSelectDate = (date) => {
-    this.setState({
-      selectedDate: date,
-      hora: '',
-      fecha: date,
-      selectedHour: '',
-      series: [],
-      rawData: null,
-      msg: ""
-    });
+    this.setState({ selectedDate: date, hora: '', fecha: date, selectedHour: '', series: [], rawData: null, msg: "" });
   }
 
   handleSelectHour = (hour) => {
@@ -307,10 +354,15 @@ class VerResultados extends React.Component {
     });
   }
 
+  changeInput = (event) => {
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
   handleCancel = () => {
     this.setState({ openConfirm: false });
   };
 
+  // ✅ Descargas ahora usan rawData ya parseado (array)
   handleDownloadCSV = () => {
     const { rawData } = this.state;
     if (!rawData) {
@@ -320,24 +372,7 @@ class VerResultados extends React.Component {
       });
       return;
     }
-
-    const data = JSON.parse(rawData);
-    const csvData = [['Series Name', 'Time', 'Flow']];
-
-    data.forEach((serie, index) => {
-      const n = Math.min(serie.tiempo.length, serie.flujo.length);
-      for (let j = 0; j < n; j++) {
-        csvData.push([`Serie ${index + 1}`, serie.tiempo[j], serie.flujo[j]]);
-      }
-    });
-
-    const csvString = csvData.map(row => row.map(cell => `${cell}`).join('|')).join('\n');
-    const dataUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvString);
-
-    const a = document.createElement('a');
-    a.href = dataUri;
-    a.download = 'chart_data.csv';
-    a.click();
+    downloadCSV(rawData, "chart_data.csv");
   };
 
   handleDownloadJSON = () => {
@@ -349,57 +384,40 @@ class VerResultados extends React.Component {
       });
       return;
     }
-
-    const data = JSON.parse(rawData);
-    const adjustedData = data.map((serie, index) => ({
-      name: `Serie ${index + 1}`,
-      tiempo: serie.tiempo,
-      flujo: serie.flujo
-    }));
-
-    const jsonString = JSON.stringify(adjustedData, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(jsonString);
-
-    const a = document.createElement('a');
-    a.href = dataUri;
-    a.download = 'chart_data.json';
-    a.click();
+    downloadJSON(rawData, "chart_data.json");
   };
 
   render() {
     const id_patient = this.getIdPatient();
-    const {
-      series, options, dates, hours, available,
-      selectedDate, selectedHour, msg, openConfirm, confirmMessage
-    } = this.state;
+    const { series, options, dates, hours, available, selectedDate, selectedHour, msg, openConfirm, confirmMessage } = this.state;
 
     return (
       <>
-        {!this.props.embedded && <MenuNav />}
+        { !this.props.embedded && <MenuNav /> }
 
         <Segment raised>
           <label>Para ver la gráfica de la fisioterapia por favor selecciona el día de la semana y la hora del día.</label>
-
           <div style={{ marginTop: '1em' }}>
             <label>Fecha de la fisioterapia:</label>
             <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '0.5em' }}>
-              {dates.map(date => (
-                <Button
-                  key={date}
-                  onClick={() => this.handleSelectDate(date)}
-                  style={{
-                    backgroundColor: selectedDate === date ? '#28a745' : '#46bee0',
-                    color: 'white',
-                    margin: '0.5em'
-                  }}
-                  type='button'
-                >
-                  {date}
-                </Button>
-              ))}
+              {dates.map(date => {
+                return (
+                  <Button
+                    key={date}
+                    onClick={() => this.handleSelectDate(date)}
+                    style={{
+                      backgroundColor: selectedDate === date ? '#28a745' : '#46bee0',
+                      color: 'white',
+                      margin: '0.5em'
+                    }}
+                    type='button'
+                  >
+                    {date}
+                  </Button>
+                );
+              })}
             </div>
           </div>
-
           {selectedDate && (
             <div style={{ marginTop: '1em' }}>
               <label>Hora de la fisioterapia:</label>
@@ -428,30 +446,26 @@ class VerResultados extends React.Component {
           {msg}
 
           <Chart type="area" height={350} series={series} options={options} />
-
           <div style={{ marginTop: '1em', display: 'flex', gap: '1em' }}>
-            <Button onClick={this.handleDownloadCSV} style={{ backgroundColor: '#46bee0', color: 'white' }}>
-              Descargar CSV
-            </Button>
-            <Button onClick={this.handleDownloadJSON} style={{ backgroundColor: '#46bee0', color: 'white' }}>
-              Descargar JSON
-            </Button>
-
-            {this.props.onBack ? (
-              <Button
-                type='button'
-                onClick={this.props.onBack}
-                style={{ backgroundColor: '#eb5a25', color: "white" }}
-              >
-                Regresar
-              </Button>
-            ) : (
-              <Link to={`/VerEjercicios/${id_patient}`}>
-                <Button type='button' style={{ backgroundColor: '#eb5a25', color: "white" }}>
+            <Button onClick={this.handleDownloadCSV} style={{ backgroundColor: '#46bee0', color: 'white' }}>Descargar CSV</Button>
+            <Button onClick={this.handleDownloadJSON} style={{ backgroundColor: '#46bee0', color: 'white' }}>Descargar JSON</Button>
+            {
+              this.props.onBack ? (
+                <Button
+                  type='button'
+                  onClick={this.props.onBack}
+                  style={{ backgroundColor: '#eb5a25', color: "white" }}
+                >
                   Regresar
                 </Button>
-              </Link>
-            )}
+              ) : (
+                <Link to={`/VerEjercicios/${id_patient}`}>
+                  <Button type='button' style={{ backgroundColor: '#eb5a25', color: "white" }}>
+                    Regresar
+                  </Button>
+                </Link>
+              )
+            }
           </div>
         </Segment>
 
@@ -467,4 +481,4 @@ class VerResultados extends React.Component {
   }
 }
 
-export default connect(null, { allResultsByEjercicio })(withRouter(VerResultados));
+export default connect(null, null)(withRouter(VerResultados));

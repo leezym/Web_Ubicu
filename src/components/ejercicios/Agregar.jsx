@@ -21,7 +21,6 @@ class Agregar extends Component {
         flujo: "",
         hora_inicio: "",
         id_patient: this.props.id_patient,
-        id_user: this.props.location.state.id_user,
         openConfirm: false,
         confirmMessage: ''
     };
@@ -33,7 +32,7 @@ class Agregar extends Component {
         const submitButton = e.target.querySelector('button[type="submit"]');
         submitButton.disabled = true;
 
-        const { nombre, duracion_total, frecuencia_dias, frecuencia_horas, repeticiones, series, periodos_descanso, fecha_inicio, apnea, flujo, hora_inicio, id_patient, id_user } = this.state;
+        const { nombre, duracion_total, frecuencia_dias, frecuencia_horas, repeticiones, series, periodos_descanso, fecha_inicio, apnea, flujo, hora_inicio, id_patient } = this.state;
 
         const duracion = nombre === "Predeterminado" ? 0 : duracion_total;
         const inicio = nombre === "Predeterminado" ? null : moment(fecha_inicio, 'YYYY-MM-DD').format('DD/MM/YYYY').toString();
@@ -60,10 +59,7 @@ class Agregar extends Component {
                 confirmMessage: 'Ejercicio creado.'
             });
 
-            this.props.history.push({
-                pathname: `/VerEjercicios/${id_patient}`,
-                state: { id_user: id_user }
-            });
+            this.props.history.push(`/VerEjercicios/${id_patient}`);
         })
         .catch(err => {
             submitButton.disabled = false;
@@ -83,9 +79,9 @@ class Agregar extends Component {
     };
 
     render() {
-        const { nombre, id_user, id_patient, openConfirm, confirmMessage } = this.state;
+        const { nombre, id_patient, openConfirm, confirmMessage } = this.state;
 
-        const fechaFinMax = this.props?.location?.state?.fecha_fin_max; // "DD/MM/YYYY"
+        const fechaFinMax = this.props?.fecha_fin_max; // "DD/MM/YYYY"
         const hoy = moment().startOf('day');
 
         let minFechaInicio;
@@ -264,7 +260,7 @@ class Agregar extends Component {
                             </select>
                             </Form.Field>
                             <Button type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>
-                            <Link to={{ pathname: `/VerEjercicios/${id_patient}`, state: { id_user: id_user }}}>                    
+                            <Link to={`/VerEjercicios/${id_patient}`}>                    
                                 <Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button>
                             </Link>
                         </Form>

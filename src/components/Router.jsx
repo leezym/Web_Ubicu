@@ -62,17 +62,19 @@ class Router extends Component {
 
             <Route
               exact
-              path="/AgregarEjercicio/:id_patient"
+              path="/AgregarEjercicio/:id_patient/:nombre_terapia"
               render={(props) => {
                 const id_patient = props.match.params.id_patient;
+                const nombre_terapia = props.match.params.nombre_terapia;
 
-                // Si lo mandas con history.push({ pathname, state: { nombre_terapia } })
-                const nombre_terapia = props.location?.state?.nombre_terapia;
+                // Si lo mandas con history.push({ pathname, state: { fecha_fin_max } })
+                const fecha_fin_max = props.location?.state?.fecha_fin_max;
 
                 return (
                   <AgregarEjercicio
                     id_patient={id_patient}
                     nombre_terapia={nombre_terapia}
+                    fecha_fin_max={fecha_fin_max}
                   />
                 );
               }}

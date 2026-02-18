@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Button, Form, Card, Confirm} from 'semantic-ui-react'
-import {Link,withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
 import moment from "moment";
 import { updateEjercicio } from '../../actions/ejerciciosAction';
@@ -13,8 +13,7 @@ class Ejercicio extends Component {
         ejercicio: this.props.ejercicio,
         disabledEdit: false,
         openConfirm: false,
-        confirmMessage: '',
-        id_user: this.props.id_user
+        confirmMessage: ''
     };
     
     componentDidUpdate(prevProps) {
@@ -111,7 +110,7 @@ class Ejercicio extends Component {
     };
 
     render() {
-        const { readOnly, ejercicio, disabledEdit, openConfirm, confirmMessage, id_user } = this.state;
+        const { readOnly, ejercicio, disabledEdit, openConfirm, confirmMessage } = this.state;
 
         return (
             <>
@@ -317,11 +316,10 @@ class Ejercicio extends Component {
                             }
                             {
                             ejercicio.nombre !== "Predeterminado" ?
-                                <Link to={{ pathname: `/VerResultados/${ejercicio.id_patient}/${ejercicio._id}`, state: { id_user: id_user }}}>
-                                    <Button style={{ backgroundColor: '#46bee0', color:"white" }} floated='right'>
+                                    <Button style={{ backgroundColor: '#46bee0', color:"white" }} floated='right'
+                                       onClick={() => this.props.onVerResultados?.(ejercicio.id_patient, ejercicio._id)}>
                                         Ver Gráfica
                                     </Button>
-                                </Link>
                                 :
                                 null              
                             }

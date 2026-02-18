@@ -58,10 +58,7 @@ class AgregarPaciente extends Component {
                 confirmMessage: 'Paciente creado',
             });
 
-            this.props.history.push({
-                pathname: `/AgregarEjercicio/${resp._id}`,
-                state: { id_user, nombre_terapia: "Predeterminado" }
-            });
+            this.props.history.push(`/AgregarEjercicio/${resp._id}/Predeterminado`);
 
         } catch (err) {
             this.setState({
