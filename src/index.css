@@ -1,13 +1,53 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import './styles/theme.css';
+
+:root {
+  --brand:        #28367b;
+  --brand-dark:   #1f2a5e;
+  --accent:       #46bee0;
+  --ink:          #0f1729;
+  --ink-muted:    #5a6380;
+  --surface:      #ffffff;
+  --surface-2:    #f4f6fb;
+  --border:       #e2e6f0;
+  --radius:       10px;
+  --radius-lg:    16px;
+  --font-heading: 'Schibsted Grotesk', sans-serif;
+  --font-body:    'Hanken Grotesk', sans-serif;
+  --shadow-sm:    0 2px 8px rgba(40, 54, 123, 0.08);
+  --shadow-md:    0 4px 24px rgba(40, 54, 123, 0.12);
+  /* Matches pages' marginTop: '3em' so nav height = content offset */
+  --nav-h:        3em;
+  --max-w:        1100px;
 }
 
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--surface-2);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--brand);
+  margin: 0 0 0.5em;
+  line-height: 1.2;
+}
+
+a { color: var(--brand); text-decoration: none; }
+a:hover { color: var(--brand-dark); }
+
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }

@@ -132,7 +132,7 @@ class Users extends Component {
                     <Table.HeaderCell />
                     <Table.HeaderCell colSpan='2'>
                       <Link to={`/AgregarPaciente/${this.props.id_user}`}>
-                        <Button floated='right' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>
+                        <Button floated='right' className="btn-action">Agregar</Button>
                       </Link>
                     </Table.HeaderCell>
                   </Table.Row>

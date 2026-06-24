@@ -161,7 +161,7 @@ class Ejercicios extends Component {
         <Grid stackable style={{ marginTop: '3em' }} columns={1}>
           <Grid.Column>
             <Segment raised>
-              <Label ribbon style={{color:"#28367b"}}>
+              <Label ribbon >
                 Paciente
               </Label>
               <Table>
@@ -193,7 +193,7 @@ class Ejercicios extends Component {
               this.state.view === 'normal' ? (
                 <>
                   <Segment raised>
-                    <Label ribbon style={{color:"#28367b"}}>
+                    <Label ribbon >
                       Ejercicio Predeterminado
                     </Label>
                     {
@@ -204,7 +204,7 @@ class Ejercicios extends Component {
                           <div>
                             <p style={{ marginBottom:"10px", marginTop:"10px" }}>No hay ejercicio predeterminado disponible, por favor agregar.</p>
                             <Link to={`/AgregarEjercicio/${patient._id}/Predeterminado`}>
-                              <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar ejercicio predeterminado</Button>
+                              <Button type='submit' className="btn-action">Agregar ejercicio predeterminado</Button>
                             </Link>
                           </div>
                         )
@@ -218,7 +218,7 @@ class Ejercicios extends Component {
                         ejercicios.length === 0 || (ejercicios.length > 0 && moment().isAfter(moment(fecha_fin_max, 'DD/MM/YYYY'), 'day')) ? 
                           (
                             <Link to={{ pathname: `/AgregarEjercicio/${patient._id}/Inspiración profunda`, state: { fecha_fin_max: this.state.fecha_fin_max }}}>
-                              <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar ejercicio</Button>
+                              <Button type='submit' className="btn-action">Agregar ejercicio</Button>
                             </Link>
                           ) 
                         : 
@@ -226,11 +226,11 @@ class Ejercicios extends Component {
                       }
                       
                       <Link to={`/VerPaciente/${patient._id}`}>
-                        <Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button>
+                        <Button className="btn-back">Regresar</Button>
                       </Link>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1em' }}>
-                      <Label ribbon style={{color:"#28367b"}}>
+                      <Label ribbon >
                         Prescripciones
                       </Label>
                       <Dropdown

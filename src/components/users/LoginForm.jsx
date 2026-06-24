@@ -104,7 +104,7 @@ class LoginForm extends Component {
                   value={password}
                   onChange={this.handleChange}
                 />
-                <Button type="submit" fluid size="large" disabled={!this.validateForm()} style={{ backgroundColor: '#28367b', color: "white" }}>
+                <Button type="submit" fluid size="large" disabled={!this.validateForm()} className="btn-brand">
                   Entrar
                 </Button>
               </Segment>

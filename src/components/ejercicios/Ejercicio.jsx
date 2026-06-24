@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import moment from "moment";
 import { updateEjercicio } from '../../actions/ejerciciosAction';
 
-
 class Ejercicio extends Component {
     state = {
         readOnly: true,
@@ -307,16 +306,16 @@ class Ejercicio extends Component {
 
                             {
                             readOnly ?
-                                <Button disabled={disabledEdit} onClick={()=>{ this.handleEdit(false); this.copyOriginal() }} type="button" style={{ backgroundColor: '#46bee0', color:"white" }}>Editar</Button>
+                                <Button disabled={disabledEdit} onClick={()=>{ this.handleEdit(false); this.copyOriginal() }} type="button" className="btn-action">Editar</Button>
                                 :
                                 <>
-                                    <Button type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Guardar</Button>
-                                    <Button onClick={()=>{ this.handleEdit(true); this.pasteOriginal(); }} type='button' style={{ backgroundColor: '#eb5a25', color:"white" }}>Cancelar</Button>
+                                    <Button type="submit" className="btn-action">Guardar</Button>
+                                    <Button onClick={()=>{ this.handleEdit(true); this.pasteOriginal(); }} type='button' className="btn-back">Cancelar</Button>
                                 </>
                             }
                             {
                             ejercicio.nombre !== "Predeterminado" ?
-                                    <Button style={{ backgroundColor: '#46bee0', color:"white" }} floated='right'
+                                    <Button className="btn-action" floated='right'
                                        onClick={() => this.props.onVerResultados?.(ejercicio.id_patient, ejercicio._id)}>
                                         Ver Gráfica
                                     </Button>

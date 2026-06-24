@@ -71,7 +71,7 @@ class Agregar extends Component {
                 <Grid stackable style={{ marginTop: '3em' }} columns={1}>
                     <Grid.Column>
                         <Segment raised>
-                            <Label ribbon style={{color:"#28367b"}}>
+                            <Label ribbon >
                             Registro de Fisioterapeuta
                             </Label>
                             <Form style={{ marginTop: '1em' }} onSubmit={this.handleSave}>
@@ -130,10 +130,10 @@ class Agregar extends Component {
                                     required
                                     icon={<Icon name={showPassword ? 'eye' : 'eye slash'} link onClick={this.togglePasswordVisibility} />}
                                 />
-                                <span style={{ color: 'blue', fontSize: 'small' }}>La contraseña debe contener al menos una mayúscula, un número y un caracter especial</span>                        
+                                <span className="pass-hint">La contraseña debe contener al menos una mayúscula, un número y un caracter especial</span>                        
                                 </Form.Field>
-                                <Button type='submit' style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>
-                                <Link to="/"><Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
+                                <Button type='submit' className="btn-action">Agregar</Button>
+                                <Link to="/"><Button type="button" className="btn-back">Regresar</Button></Link>
                             </Form>
                         </Segment>
                     </Grid.Column>

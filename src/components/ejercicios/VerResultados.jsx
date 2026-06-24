@@ -211,7 +211,7 @@ class VerResultados extends React.Component {
           const hour = result.hora;
 
           if (!available[date]) available[date] = [];
-          if (!available[date].includes(hour) && result.datos !== "") {
+          if (!available[date].includes(hour) && result.hasData === true) {
             available[date].push(hour);
           }
         });
@@ -255,7 +255,6 @@ class VerResultados extends React.Component {
 
     if (!id_ejercicio || !fecha || hora === "") return;
 
-    // actualiza meta line
     this.setState(prevState => {
       const options = { ...prevState.options };
       options.annotations.yaxis[0].y = flujo;
@@ -264,22 +263,38 @@ class VerResultados extends React.Component {
 
     allResultsByEjercicio({ id_ejercicio, fecha, hora })
       .then(resp => {
-        if (!resp || resp.datos === "") {
+        console.log('[VerResultados] resp:', resp);
+        if (!resp || !resp.hasData || !resp.s3Key) {
           this.setState({
             series: [],
             rawData: null,
             msg: resp?.msg || "No hay información"
           });
-          return;
+          return null;
         }
 
-        this.setState({
-          series: fillGraph(JSON.parse(resp.datos)),
-          rawData: resp.datos,
-          msg: ""
-        });
+        const resultId = resp._id?.$oid ?? resp._id;
 
-        this.forceUpdate();
+        return fetch(URL + resultId + '/downloadUrl', {
+          headers: { 'x-access-token': localStorage.getItem('token') }
+        })
+          .then(res => res.ok
+            ? res.json()
+            : res.text().then(text => { throw new Error(text || `Error ${res.status} en downloadUrl`); })
+          )
+          .then(({ url }) => fetch(url))
+          .then(res => res.ok
+            ? res.json()
+            : res.text().then(text => { throw new Error('Error al descargar de S3: ' + (text?.slice(0, 120) || res.status)); })
+          )
+          .then(data => {
+            this.setState({
+              series: fillGraph(data),
+              rawData: JSON.stringify(data),
+              msg: ""
+            });
+            this.forceUpdate();
+          });
       })
       .catch(err => {
         this.setState({

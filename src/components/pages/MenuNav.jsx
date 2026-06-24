@@ -1,21 +1,15 @@
 import React, { Component } from 'react';
-import { Container, Image, Menu, Icon, Confirm } from 'semantic-ui-react';
-import logo from '../../logo.png';
+import { Confirm } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
+import logo from '../../logo.svg';
+import '../../styles/nav.css';
 
 class MenuNav extends Component {
-  state = {
-    openConfirm: false, // controla el popup
-  };
+  state = { openConfirm: false };
 
-  handleOpenConfirm = () => {
-    this.setState({ openConfirm: true });
-  };
-
-  handleCancel = () => {
-    this.setState({ openConfirm: false });
-  };
+  handleOpenConfirm = () => this.setState({ openConfirm: true });
+  handleCancel     = () => this.setState({ openConfirm: false });
 
   handleConfirm = () => {
     this.setState({ openConfirm: false });
@@ -30,38 +24,45 @@ class MenuNav extends Component {
 
     return (
       <>
-        <Menu fixed='top' inverted style={{ backgroundColor: "#28367b" }}>
-          <Container>
-            
-            <Menu.Item as={Link} to={`/Fisioterapeuta/${id_user}`} header>
-              <Image size='mini' src={logo} style={{ marginRight: '1.5em' }} />
-              UBICU
-            </Menu.Item>
+        <header className="u-nav">
+          <div className="u-nav-inner">
+            <Link className="u-brand" to={`/Fisioterapeuta/${id_user}`}>
+              <img src={logo} alt="Ubicu" />
+              ubicu 
+            </Link>
 
-            <Menu.Menu position='right'>
-              <Menu.Item
-                as={Link}
+            <div className="u-nav-right">
+              <Link
+                className="u-icon-btn"
                 to={`/VerPerfil/${id_user}`}
                 title="Ver perfil"
               >
-                <Icon name='user circle' size='large' />
-              </Menu.Item>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+                </svg>
+              </Link>
 
-              <Menu.Item
+              <button
+                className="u-icon-btn"
                 onClick={this.handleOpenConfirm}
                 title="Cerrar sesión"
               >
-                <Icon name='sign-out' size='large' />
-              </Menu.Item>
-            </Menu.Menu>
-          </Container>
-        </Menu>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  <polyline points="16 17 21 12 16 7" />
+                  <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </header>
 
         <Confirm
           open={openConfirm}
-          content='¿Está seguro de que desea cerrar sesión?'
-          cancelButton='No'
-          confirmButton='Sí, cerrar sesión'
+          content="¿Está seguro de que desea cerrar sesión?"
+          cancelButton="No"
+          confirmButton="Sí, cerrar sesión"
           onCancel={this.handleCancel}
           onConfirm={this.handleConfirm}
         />

@@ -172,19 +172,19 @@ class VerPerfil extends Component {
                     <Grid.Column>
                         <Segment raised>
 
-                            <Label ribbon style={{color:"#28367b"}}>
+                            <Label ribbon >
                             Perfil
                             </Label>
                             <Card fluid color="blue" >
                                 <Card.Content >
                                     <Card.Header textAlign="center" style={{ marginBottom: '1em' }}>
-                                        <h3 style={{ color: '#28367b', margin: 0 }}>Actualizar Datos</h3>
+                                        <h3>Actualizar Datos</h3>
                                     </Card.Header>
 
                                     <Card.Description width="100%">                        
                                         <Form onSubmit={this.handleSave}>
                                             <Form.Group widths='equal'>
-                                                <Form.Field style={{ width: '300px' }}>
+                                                <Form.Field >
                                                 <label>Nombre *</label>
                                                 <input  
                                                     name="nombre"
@@ -195,7 +195,7 @@ class VerPerfil extends Component {
                                                     value={readOnly ? user.nombre : null}
                                                     required/>
                                                 </Form.Field>
-                                                <Form.Field style={{ width: '300px' }}>
+                                                <Form.Field >
                                                 <label>Cédula *</label>
                                                 <input  
                                                     name="cedula"
@@ -209,7 +209,7 @@ class VerPerfil extends Component {
                                                     value={readOnly ? user.cedula : null}
                                                     required/>
                                                 </Form.Field>
-                                                <Form.Field style={{ width: '300px' }}>
+                                                <Form.Field >
                                                 <label>Teléfono *</label>
                                                 <input
                                                     name="telefono"
@@ -223,7 +223,7 @@ class VerPerfil extends Component {
                                                     value={readOnly ? user.telefono : null}
                                                     required/>
                                                 </Form.Field>
-                                                <Form.Field style={{ width: '300px' }}>
+                                                <Form.Field >
                                                 <label>Correo *</label>
                                                 <input
                                                     name="email"
@@ -238,11 +238,11 @@ class VerPerfil extends Component {
                                                 </Form.Field>                                        
                                             </Form.Group >
                                             { readOnly ?
-                                                <Button onClick={()=>{ this.handleEdit(false); this.copyOriginal(); }} type='button' style={{ backgroundColor: '#46bee0', color:"white" }}>Actualizar</Button>
+                                                <Button onClick={()=>{ this.handleEdit(false); this.copyOriginal(); }} type='button' className="btn-action">Actualizar</Button>
                                                 :
                                                 <>
-                                                    <Button type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Guardar</Button>
-                                                    <Button onClick={()=>{ this.handleEdit(true); this.pasteOriginal(); }} type='button' style={{ backgroundColor: '#eb5a25', color:"white" }}>Cancelar</Button>
+                                                    <Button type="submit" className="btn-action">Guardar</Button>
+                                                    <Button onClick={()=>{ this.handleEdit(true); this.pasteOriginal(); }} type='button' className="btn-back">Cancelar</Button>
                                                 </>
                                             }                                   
                                         </Form>
@@ -253,13 +253,13 @@ class VerPerfil extends Component {
                             <Card fluid color="blue" >
                                 <Card.Content >
                                     <Card.Header textAlign="center" style={{ marginBottom: '1em' }}>
-                                        <h3 style={{ color: '#28367b', margin: 0 }}>Actualizar Contraseña</h3>
+                                        <h3>Actualizar Contraseña</h3>
                                     </Card.Header>
                                     <Card.Description width="100%">   
-                                        <span style={{ color: 'blue', fontSize: 'small'}}>La contraseña debe contener al menos una mayúscula, un número y un caracter especial.</span>                        
+                                        <span className="pass-hint">La contraseña debe contener al menos una mayúscula, un número y un caracter especial.</span>                        
                                         <Form onSubmit={this.handleUpdate} style={{ marginTop: '10px'}}>
                                             <Form.Group widths='equal'>
-                                                <Form.Field style={{ width: '400px' }}>
+                                                <Form.Field >
                                                 <label>Contraseña actual *</label>
                                                 <Input 
                                                     name="password_actual"
@@ -272,7 +272,7 @@ class VerPerfil extends Component {
                                                     iconPosition="right"
                                                 />                      
                                                 </Form.Field>
-                                                <Form.Field style={{ width: '400px' }}> 
+                                                <Form.Field > 
                                                 <label>Nueva contraseña *</label>
                                                 <Input 
                                                     name="password_nueva"
@@ -301,13 +301,13 @@ class VerPerfil extends Component {
                                                 />
                                                 </Form.Field>
                                             </Form.Group>    
-                                            <Button type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Actualizar</Button>
+                                            <Button type="submit" className="btn-action">Actualizar</Button>
                                         </Form>
                                     </Card.Description>
                                 </Card.Content >
                             </Card> 
                         
-                            <Link to={`/Fisioterapeuta/${user._id}`}><Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button></Link>
+                            <Link to={`/Fisioterapeuta/${user._id}`}><Button className="btn-back">Regresar</Button></Link>
                         </Segment>
                     </Grid.Column>
                 </Grid>

@@ -1,0 +1,296 @@
+/* ═══════════════════════════════════════════════════
+   Ubicu Theme — Semantic UI overrides + responsive
+   ═══════════════════════════════════════════════════ */
+
+/* ── Container max-width ────────────────────────────── */
+.ui.container {
+  max-width: 1100px !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+}
+
+/* ── Segment raised ─────────────────────────────────── */
+.ui.segment.raised {
+  border-radius: 16px !important;
+  box-shadow: 0 2px 12px rgba(40, 54, 123, 0.07) !important;
+  border: 1px solid var(--border) !important;
+  padding: 28px 28px 24px !important;
+  margin-bottom: 20px !important;
+}
+
+/* ── Ribbon label ───────────────────────────────────── */
+.ui.ribbon.label {
+  background-color: var(--brand) !important;
+  color: #fff !important;
+  border-color: var(--brand-dark) !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 600 !important;
+  font-size: 0.82rem !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 20px !important;
+  margin-left: -28px !important;
+}
+
+/* ── Card ───────────────────────────────────────────── */
+.ui.fluid.card {
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  border: 1px solid var(--border) !important;
+  margin-bottom: 18px !important;
+}
+
+.ui.fluid.card > .content {
+  padding: 20px 24px !important;
+}
+
+.ui.fluid.card .header h3 {
+  font-family: var(--font-heading) !important;
+  color: var(--brand) !important;
+  margin: 0 0 4px !important;
+}
+
+/* ── Buttons ────────────────────────────────────────── */
+.ui.button {
+  font-family: var(--font-body) !important;
+  border-radius: var(--radius) !important;
+  font-weight: 600 !important;
+  transition: background 0.18s, opacity 0.18s !important;
+}
+
+/* Acción principal (cian) */
+.ui.button.btn-action,
+.ui.buttons .button.btn-action {
+  background-color: var(--accent) !important;
+  color: #fff !important;
+}
+.ui.button.btn-action:hover {
+  background-color: #35a8c8 !important;
+}
+.ui.button.btn-action:disabled {
+  background-color: var(--accent) !important;
+  opacity: 0.5 !important;
+}
+
+/* Cancelar / Regresar (naranja) */
+.ui.button.btn-back,
+.ui.buttons .button.btn-back {
+  background-color: #eb5a25 !important;
+  color: #fff !important;
+}
+.ui.button.btn-back:hover {
+  background-color: #c94e1f !important;
+}
+
+/* Entrar / Login (brand) */
+.ui.button.btn-brand,
+.ui.buttons .button.btn-brand {
+  background-color: var(--brand) !important;
+  color: #fff !important;
+}
+.ui.button.btn-brand:hover {
+  background-color: var(--brand-dark) !important;
+}
+.ui.button.btn-brand:disabled {
+  background-color: var(--brand) !important;
+  opacity: 0.5 !important;
+}
+
+/* ── Form labels ────────────────────────────────────── */
+.ui.form .field > label {
+  font-family: var(--font-body) !important;
+  font-weight: 600 !important;
+  color: var(--ink) !important;
+  font-size: 0.85rem !important;
+  margin-bottom: 5px !important;
+}
+
+/* ── Form inputs / selects ──────────────────────────── */
+.ui.form input:not([type]),
+.ui.form input[type="text"],
+.ui.form input[type="email"],
+.ui.form input[type="number"],
+.ui.form input[type="password"],
+.ui.form input[type="date"],
+.ui.form select {
+  border: 1.5px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.925rem !important;
+  padding: 9px 13px !important;
+  transition: border-color 0.18s, box-shadow 0.18s !important;
+  color: var(--ink) !important;
+}
+
+.ui.form input:focus,
+.ui.form select:focus {
+  border-color: var(--brand) !important;
+  box-shadow: 0 0 0 3px rgba(40, 54, 123, 0.1) !important;
+  outline: none !important;
+}
+
+.ui.form input:disabled,
+.ui.form select:disabled {
+  background: var(--surface-2) !important;
+  color: var(--ink-muted) !important;
+  cursor: default !important;
+}
+
+/* Semantic UI Input with icon */
+.ui.input > input {
+  border: 1.5px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  font-family: var(--font-body) !important;
+}
+
+/* ── Password hint ──────────────────────────────────── */
+.pass-hint {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--brand);
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+/* ── Table ──────────────────────────────────────────── */
+.ui.table td {
+  font-family: var(--font-body) !important;
+  color: var(--ink) !important;
+  vertical-align: middle !important;
+}
+
+.ui.table thead th {
+  background: var(--surface-2) !important;
+  color: var(--brand) !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 700 !important;
+  font-size: 0.82rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+}
+
+/* ── Action bar ─────────────────────────────────────── */
+.action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.action-bar-start {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ── Pagination ─────────────────────────────────────── */
+.pagination {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 24px 0 !important;
+  gap: 4px !important;
+  flex-wrap: wrap !important;
+}
+
+.pagination li {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+.pagination li a,
+.pagination li span {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 36px !important;
+  height: 36px !important;
+  padding: 0 10px !important;
+  border: 1.5px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.875rem !important;
+  color: var(--ink-muted) !important;
+  cursor: pointer !important;
+  transition: all 0.18s !important;
+  text-decoration: none !important;
+  background: var(--surface) !important;
+}
+
+.pagination li a:hover {
+  background: var(--surface-2) !important;
+  border-color: var(--brand) !important;
+  color: var(--brand) !important;
+}
+
+.pagination li.active a,
+.pagination li.active span {
+  background: var(--brand) !important;
+  border-color: var(--brand) !important;
+  color: #fff !important;
+}
+
+.pagination li.disabled a,
+.pagination li.disabled span {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+}
+
+/* ── Responsive ─────────────────────────────────────── */
+@media (max-width: 767px) {
+  .ui.container {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .ui.segment.raised {
+    padding: 18px 16px !important;
+  }
+
+  /* Stack form groups vertically on mobile */
+  .ui.form .fields:not(.unstackable) {
+    flex-direction: column !important;
+  }
+
+  .ui.form .fields:not(.unstackable) > .field {
+    width: 100% !important;
+    margin-bottom: 12px !important;
+  }
+
+  /* Remove hard-coded widths */
+  .ui.form .field[style*="width"] {
+    width: 100% !important;
+  }
+
+  /* Card padding */
+  .ui.fluid.card > .content {
+    padding: 14px 16px !important;
+  }
+
+  /* Action bar stacks vertically */
+  .action-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .action-bar .ui.button {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Table scroll on small screens */
+  .ui.table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .ui.form .fields {
+    flex-wrap: wrap;
+  }
+}

@@ -102,7 +102,7 @@ class Agregar extends Component {
             <Grid stackable style={{ marginTop: '3em' }}>
                 <Grid.Column>
                     <Segment raised>
-                        <Label ribbon style={{color:"#28367b"}}>
+                        <Label ribbon >
                         {
                             nombre !== "Predeterminado" ?
                                 "Registrar Ejercicio Nuevo"
@@ -259,9 +259,9 @@ class Agregar extends Component {
                                 <option value="11">11:00 am</option>
                             </select>
                             </Form.Field>
-                            <Button type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Agregar</Button>
-                            <Link to={`/VerEjercicios/${id_patient}`}>                    
-                                <Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button>
+                            <Button type="submit" className="btn-action">Agregar</Button>
+                            <Link to={`/VerEjercicios/${id_patient}`}>
+                                <Button type="button" className="btn-back">Regresar</Button>
                             </Link>
                         </Form>
                     </Segment>

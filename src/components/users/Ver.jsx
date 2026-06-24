@@ -150,7 +150,7 @@ class Ver extends Component {
                     <Grid.Column>
                         <Segment raised>
 
-                            <Label ribbon style={{color:"#28367b"}}>
+                            <Label ribbon >
                             Paciente
                             </Label>
                             <Card fluid color="blue" >
@@ -242,7 +242,7 @@ class Ver extends Component {
                                                 </Form.Field>
                                             </Form.Group >
                                             <Form.Group widths='equal'>
-                                                <Form.Field style={{ width: '400px' }}>
+                                                <Form.Field>
                                                 <label>Teléfono *</label>
                                                 <input
                                                     name="telefono"
@@ -256,7 +256,7 @@ class Ver extends Component {
                                                     value={patient.telefono}
                                                     required/>
                                                 </Form.Field>
-                                                <Form.Field style={{ width: '800px' }}>
+                                                <Form.Field>
                                                 <label>Correo *</label>
                                                 <input
                                                     name="email"
@@ -317,23 +317,23 @@ class Ver extends Component {
                                                 </Form.Field>
                                             </Form.Group >
                                             { readOnly ?
-                                                <Button onClick={()=>{ this.handleEdit(false); this.copyOriginal(); }} type="button" style={{ backgroundColor: '#46bee0', color:"white" }}>Editar</Button>
+                                                <Button onClick={()=>{ this.handleEdit(false); this.copyOriginal(); }} type="button" className="btn-action">Editar</Button>
                                                 :
                                                 <>
-                                                    <Button type="submit" style={{ backgroundColor: '#46bee0', color:"white" }}>Guardar</Button>
-                                                    <Button onClick={()=>{this.handleEdit(true); this.pasteOriginal(); }} type='button' style={{ backgroundColor: '#eb5a25', color:"white" }}>Cancelar</Button>
+                                                    <Button type="submit" className="btn-action">Guardar</Button>
+                                                    <Button onClick={()=>{this.handleEdit(true); this.pasteOriginal(); }} type='button' className="btn-back">Cancelar</Button>
                                                 </>
                                             }
                                         </Form>
                                     </Card.Description>
                                 </Card.Content >
                             </Card>
-                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <div className="action-bar">
                                 <Link to={`/VerEjercicios/${patient._id}`}>
-                                    <Button style={{ backgroundColor: '#46bee0', color:"white" }}>Ejercicios</Button>
+                                    <Button className="btn-action">Ejercicios</Button>
                                 </Link>
                                 <Link to={`/Fisioterapeuta/${patient.id_user}`}>
-                                    <Button style={{ backgroundColor: '#eb5a25', color:"white" }}>Regresar</Button>
+                                    <Button className="btn-back">Regresar</Button>
                                 </Link>
                             </div>
                         </Segment>

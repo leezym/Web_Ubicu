@@ -14,7 +14,7 @@
         "react": "^16.8.6",
         "react-apexcharts": "^1.4.0",
         "react-bootstrap": "^2.7.2",
-        "react-datepicker": "^4.10.0",
+        "react-datepicker": "^4.25.0",
         "react-dom": "^16.8.6",
         "react-gmaps": "^1.9.0",
         "react-paginate": "^8.2.0",
@@ -29,7 +29,7 @@
     },
     "scripts": {
         "start": "react-scripts start",
-        "build": "react-scripts --max_old_space_size=4096 build",
+        "build": "react-scripts --max_old_space_size=1024 build",
         "test": "react-scripts test",
         "eject": "react-scripts eject"
     },
