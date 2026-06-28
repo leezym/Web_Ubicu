@@ -111,6 +111,8 @@ class LoginForm extends Component {
             </Form>
             <Message>
               ¿Nuevo Usuario? <Link to="/AgregarFisioterapeuta">Registrarse</Link>
+              {' · '}
+              <Link to="/RecuperarContrasena">¿Olvidaste tu contraseña?</Link>
             </Message>
           </Grid.Column>
         </Grid>

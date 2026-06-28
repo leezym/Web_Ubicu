@@ -13,6 +13,8 @@ import Ejercicios from "./ejercicios/Ejercicios";
 import AgregarEjercicio from "./ejercicios/Agregar";
 import VerResultados from "./ejercicios/VerResultados";
 import VerPerfil from "./users/VerPerfil";
+import ForgotPassword from "./users/ForgotPassword";
+import ResetPassword from "./users/ResetPassword";
 
 class Router extends Component {
   render() {
@@ -32,6 +34,17 @@ class Router extends Component {
             />
 
             <Route exact path="/AgregarFisioterapeuta" component={Agregar} />
+
+            <Route exact path="/RecuperarContrasena" component={ForgotPassword} />
+
+            <Route
+              exact
+              path="/ResetContrasena/:token"
+              render={(props) => {
+                const token = props.match.params.token;
+                return <ResetPassword token={token} history={props.history} />;
+              }}
+            />
 
             <Route
               exact

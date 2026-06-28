@@ -23,6 +23,7 @@ class AgregarPaciente extends Component {
         id_user: this.props.id_user,
         openConfirm: false,
         confirmMessage: '',
+        redirectTo: null,
     };
 
     handleSave = async (e) => {
@@ -46,8 +47,11 @@ class AgregarPaciente extends Component {
                 id_user
             });
 
-            this.setState({ openConfirm: true, confirmMessage: 'Paciente creado' });
-            this.props.history.push(`/AgregarEjercicio/${resp._id}/Predeterminado`);
+            this.setState({
+                openConfirm: true,
+                confirmMessage: 'Paciente creado',
+                redirectTo: `/AgregarEjercicio/${resp._id}/Predeterminado`
+            });
 
         } catch (err) {
             this.setState({
@@ -69,7 +73,11 @@ class AgregarPaciente extends Component {
     }
 
     handleCancel = () => {
-        this.setState({ openConfirm: false });
+        const { redirectTo } = this.state;
+        this.setState({ openConfirm: false, redirectTo: null });
+        if (redirectTo) {
+            this.props.history.push(redirectTo);
+        }
     };
 
     render() {

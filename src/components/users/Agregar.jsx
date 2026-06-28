@@ -15,6 +15,7 @@ class Agregar extends Component {
         showPassword: false,
         openConfirm: false,
         confirmMessage: '',
+        redirectTo: null,
     };
 
     togglePasswordVisibility = () => {
@@ -42,9 +43,9 @@ class Agregar extends Component {
             submitButton.disabled = false;
             this.setState({
                 openConfirm: true,
-                confirmMessage: 'Fisioterapeuta creado'
+                confirmMessage: 'Fisioterapeuta creado',
+                redirectTo: '/'
             });
-            history.push('/');
         })
         .catch(err => {
             submitButton.disabled = false;
@@ -60,7 +61,11 @@ class Agregar extends Component {
     }
     
     handleCancel = () => {
-        this.setState({ openConfirm: false });
+        const { redirectTo } = this.state;
+        this.setState({ openConfirm: false, redirectTo: null });
+        if (redirectTo) {
+            this.props.history.push(redirectTo);
+        }
     };
 
     render() {

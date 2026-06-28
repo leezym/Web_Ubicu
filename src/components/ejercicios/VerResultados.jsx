@@ -282,7 +282,10 @@ class VerResultados extends React.Component {
             ? res.json()
             : res.text().then(text => { throw new Error(text || `Error ${res.status} en downloadUrl`); })
           )
-          .then(({ url }) => fetch(url))
+          .then(({ url }) => {
+            if (!url) throw new Error('El servidor no devolvió URL de descarga. Verifique la configuración de S3.');
+            return fetch(url);
+          })
           .then(res => res.ok
             ? res.json()
             : res.text().then(text => { throw new Error('Error al descargar de S3: ' + (text?.slice(0, 120) || res.status)); })

@@ -22,7 +22,8 @@ class Agregar extends Component {
         hora_inicio: "",
         id_patient: this.props.id_patient,
         openConfirm: false,
-        confirmMessage: ''
+        confirmMessage: '',
+        redirectTo: null
     };
 
     handleSave = async (e) => {
@@ -56,10 +57,9 @@ class Agregar extends Component {
             submitButton.disabled = false;
             this.setState({
                 openConfirm: true,
-                confirmMessage: 'Ejercicio creado.'
+                confirmMessage: 'Ejercicio creado.',
+                redirectTo: `/VerEjercicios/${id_patient}`
             });
-
-            this.props.history.push(`/VerEjercicios/${id_patient}`);
         })
         .catch(err => {
             submitButton.disabled = false;
@@ -75,7 +75,11 @@ class Agregar extends Component {
     }
     
     handleCancel = () => {
-        this.setState({ openConfirm: false });
+        const { redirectTo } = this.state;
+        this.setState({ openConfirm: false, redirectTo: null });
+        if (redirectTo) {
+            this.props.history.push(redirectTo);
+        }
     };
 
     render() {
